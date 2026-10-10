@@ -1,0 +1,50 @@
+:root {
+  font-family: 'Manrope', 'Avenir Next', Avenir, 'Segoe UI', sans-serif;
+  color: #203331;
+  background: #f7f8f5;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  --ink: #203331;
+  --muted: #78817e;
+  --line: #e3e8e4;
+  --paper: #f7f8f5;
+  --white: #fff;
+  --forest: #153d3a;
+  --forest-deep: #102e2c;
+  --leaf: #b8d882;
+  --coral: #d8795c;
+  --focus: #287a70;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+}
+
+button, input { font: inherit; }
+button { cursor: pointer; }
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 3px solid #75b5a7;
+  outline-offset: 3px;
+}
+
+::selection { color: var(--forest-deep); background: #dce9c3; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

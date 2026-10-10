@@ -1,0 +1,9 @@
+# Cloudflare Worker Configuration
+name = "magomano-sacco"
+main = "server/index.ts"
+compatibility_date = "2026-10-08"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "magomano-db"
+database_id = "354377e1-fea7-4e32-bc6c-118b4f533d33"

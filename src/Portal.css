@@ -573,13 +573,7 @@
 .loan-application-edit-form input, .loan-application-edit-form textarea { width: 100%; min-height: 40px; padding: 9px 11px; border: 1px solid rgb(118 143 121 / 25%); border-radius: 9px; color: #344f40; background: #fff; font: inherit; font-size: 12px; }
 .loan-application-edit-form textarea { min-height: 90px; resize: vertical; }
 .loan-application-edit-form .submit-button { justify-self: start; display: inline-flex; align-items: center; gap: 10px; }
-.loan-signatory-picker { display: grid; gap: 8px; margin: 8px 0 13px; padding: 14px; border: 1px solid rgb(118 143 121 / 18%); border-radius: 12px; background: #fff; }
-.loan-signatory-picker h3 { margin: 0 0 3px; color: #365442; font-size: 12px; }
-.loan-signatory-picker > label { display: flex; align-items: center; gap: 8px; color: #435d4a; font-size: 11px; }
-.loan-signatory-picker input { accent-color: #39754e; }
-.loan-signatory-picker small { margin-left: auto; color: #829084; }
 .print-application-button { display: inline-flex; min-height: 39px; align-items: center; gap: 8px; padding: 0 13px; border: 0; border-radius: 9px; color: #fff; background: #2e6344; font-size: 11px; font-weight: 700; }
-.print-application-button:disabled { cursor: not-allowed; opacity: .5; }
 .loan-print-document { display: none; }
 
 @media (max-width: 720px) {
@@ -598,7 +592,6 @@
   .loan-application-dialog { position: absolute; inset: 0; display: block; padding: 0; background: #fff; backdrop-filter: none; }
   .loan-application-dialog-card { position: absolute; inset: 0; width: 100%; max-height: none; overflow: visible; padding: 0; border: 0; border-radius: 0; background: #fff; box-shadow: none; }
   .loan-application-dialog-heading,
-  .loan-signatory-picker,
   .print-application-button,
   .loan-application-dialog-card > .admin-empty,
   .loan-application-edit-form { display: none !important; }

@@ -118,19 +118,17 @@ export function AdminPortal({
   const [viewingDividendId, setViewingDividendId] = useState<number | null>(null)
   const [editingApplicationId, setEditingApplicationId] = useState<number | null>(null)
   const [applicationForm, setApplicationForm] = useState({ requestedAmount: '', repaymentMonths: '', purpose: '' })
-  const [selectedSignatoryIds, setSelectedSignatoryIds] = useState<number[]>([])
   const [termsSaving, setTermsSaving] = useState(false)
   const [termsMessage, setTermsMessage] = useState('')
   const approvedMembers = members.filter((member) => member.accountStatus === 'approved')
   const selectedMember = approvedMembers.find((member) => String(member.id) === memberId)
   const pendingMembers = members.filter((member) => member.accountStatus === 'pending')
   const pendingApplications = applications.filter((application) => application.status === 'pending')
-  const signatories = approvedMembers.filter((member) => member.memberRole === 'signatory')
+  const signatories = members.filter((member) => member.memberRole === 'signatory')
   const viewingApplication = applications.find((application) => application.id === viewingApplicationId)
   const viewingApplicationMember = viewingApplication
     ? members.find((member) => member.nationalId === viewingApplication.nationalId)
     : undefined
-  const selectedSignatories = signatories.filter((member) => selectedSignatoryIds.includes(member.id))
   const navigationItems = [
     { section: 'overview', label: 'Overview', Icon: LayoutDashboard },
     { section: 'members', label: 'Members', Icon: UsersRound },
@@ -174,7 +172,6 @@ export function AdminPortal({
       repaymentMonths: String(application.repaymentMonths),
       purpose: application.purpose,
     })
-    setSelectedSignatoryIds([])
   }
 
   async function saveApplication(event: FormEvent<HTMLFormElement>) {
@@ -398,7 +395,7 @@ export function AdminPortal({
                       <td>{formatDate(application.appliedAt)}</td>
                       <td><span className={`status-label ${application.status}`}>{application.status}</span></td>
                       <td><div className="admin-table-actions">
-                        <button type="button" className="table-action-button" onClick={() => { setViewingApplicationId(application.id); setEditingApplicationId(null); setSelectedSignatoryIds([]) }}><Eye size={14} /> View / Print</button>
+                        <button type="button" className="table-action-button" onClick={() => { setViewingApplicationId(application.id); setEditingApplicationId(null) }}><Eye size={14} /> View / Print</button>
                         <button type="button" className="table-action-button" disabled={application.status !== 'pending'} onClick={() => beginApplicationEdit(application)}><Pencil size={14} /> Edit</button>
                         <button type="button" className="table-action-button danger" disabled={application.status === 'approved' || reviewingId === `delete-loan-${application.id}`} onClick={() => removeApplication(application)}><Trash2 size={14} /> Delete</button>
                         {application.status === 'pending' && <>
@@ -427,19 +424,8 @@ export function AdminPortal({
                     </form>
                   ) : (
                     <>
-                      <div className="loan-signatory-picker">
-                        <h3>Select loan signatories</h3>
-                        {signatories.length ? signatories.map((signatory) => (
-                          <label key={signatory.id}>
-                            <input type="checkbox" checked={selectedSignatoryIds.includes(signatory.id)} onChange={(event) => setSelectedSignatoryIds((current) => event.target.checked
-                              ? [...current, signatory.id]
-                              : current.filter((id) => id !== signatory.id))} />
-                            <span>{signatory.fullName}</span><small>{signatory.nationalId}</small>
-                          </label>
-                        )) : <p className="admin-empty">No approved signatories are available. Set an approved member’s role to Signatory first.</p>}
-                      </div>
-                      <button type="button" className="print-application-button" disabled={!selectedSignatoryIds.length} onClick={() => window.print()}><Printer size={16} /> Print loan application</button>
-                      {!selectedSignatoryIds.length && signatories.length > 0 && <p className="admin-empty">Select at least one signatory to include signature lines.</p>}
+                      <p className="admin-empty">The form includes all accounts currently set as signatories.</p>
+                      <button type="button" className="print-application-button" onClick={() => window.print()}><Printer size={16} /> Print loan application</button>
                     </>
                   )}
                   <article className="loan-print-document">
@@ -479,14 +465,14 @@ export function AdminPortal({
                     </section>
                     <section className="loan-print-signers">
                       <h2>SACCO authorization</h2>
-                      <div className="loan-print-signatory-grid">{selectedSignatories.map((signatory) => (
+                      <div className="loan-print-signatory-grid">{signatories.map((signatory) => (
                         <div className="loan-print-signature-block" key={signatory.id}>
                           <strong>{signatory.fullName}</strong>
                           <span>Authorized signatory</span>
                           <i></i>
                           <div><span>Signature</span><span>Date</span></div>
                         </div>
-                      ))}</div>
+                      ))}{!signatories.length && <p>No signatories have been assigned.</p>}</div>
                     </section>
                     <footer>Generated by Magomano SACCO administration · This form records the submitted loan application and does not itself constitute approval.</footer>
                   </article>

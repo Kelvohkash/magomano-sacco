@@ -72,7 +72,6 @@ function App() {
   const [loanSubmitting, setLoanSubmitting] = useState(false)
 
   const [signedInAdmin, setSignedInAdmin] = useState<string | null>(null)
-  const [isSuperAdmin, setIsSuperAdmin] = useState(false)
   const [adminView, setAdminView] = useState<AdminView>('overview')
   const [adminMembers, setAdminMembers] = useState<AdminMember[]>([])
   const [adminApplications, setAdminApplications] = useState<AdminLoanApplication[]>([])
@@ -103,14 +102,12 @@ function App() {
           authenticated: boolean
           role?: 'member' | 'admin'
           admin?: { displayName: string }
-          isSuperAdmin?: boolean
         }
 
         if (!session.authenticated) return
         if (session.role === 'member') await refreshDashboard()
         if (session.role === 'admin') {
           setSignedInAdmin(session.admin?.displayName ?? 'Administrator')
-          setIsSuperAdmin(session.isSuperAdmin ?? false)
           await refreshAdminData()
         }
       })
@@ -259,7 +256,6 @@ function App() {
       }
       if (isAdminLogin) {
         setSignedInAdmin(result.admin?.displayName ?? result.admin?.username ?? 'Administrator')
-        setIsSuperAdmin(result.admin?.isSuperAdmin ?? false)
         await refreshAdminData()
         return
       }
@@ -306,7 +302,6 @@ function App() {
     } finally {
       setDashboard(null)
       setSignedInAdmin(null)
-      setIsSuperAdmin(false)
       setAdminMembers([])
       setAdminApplications([])
       setAdminOpenLoans([])
@@ -393,22 +388,52 @@ function App() {
     }
   }
 
-  async function promoteMemberAccount(memberId: number) {
-    setAdminReviewingId(`promote-${memberId}`)
+  async function runAdminMutation(
+    path: string,
+    method: 'PUT' | 'DELETE',
+    body: Record<string, string | number> | undefined,
+    actionId: string,
+    fallbackMessage: string,
+  ): Promise<boolean> {
+    setAdminReviewingId(actionId)
     setAdminMessage('')
     try {
-      const response = await fetch(`/api/admin/members/${memberId}/promote`, { method: 'POST' })
+      const response = await fetch(path, {
+        method,
+        ...(body ? {
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        } : {}),
+      })
       const result = await response.json() as { message?: string; error?: string }
-      if (!response.ok) throw new Error(result.error ?? 'Could not promote this member account.')
+      if (!response.ok) throw new Error(result.error ?? fallbackMessage)
       await refreshAdminData()
-      setAdminMessage(result.message ?? 'Member account promoted to administrator.')
+      setAdminMessage(result.message ?? fallbackMessage)
       setAdminMessageSuccess(true)
+      return true
     } catch (error) {
-      setAdminMessage(error instanceof Error ? error.message : 'Unable to promote member account.')
+      setAdminMessage(error instanceof Error ? error.message : fallbackMessage)
       setAdminMessageSuccess(false)
+      return false
     } finally {
       setAdminReviewingId(null)
     }
+  }
+
+  async function setMemberRole(memberId: number, role: AdminMember['memberRole']) {
+    await runAdminMutation(`/api/admin/members/${memberId}/role`, 'PUT', { role }, `member-role-${memberId}`, 'Could not update member role.')
+  }
+
+  async function deleteMember(memberId: number) {
+    return runAdminMutation(`/api/admin/members/${memberId}`, 'DELETE', undefined, `delete-member-${memberId}`, 'Could not delete this member.')
+  }
+
+  async function updateLoanApplication(applicationId: number, details: Pick<AdminLoanApplication, 'requestedAmount' | 'repaymentMonths' | 'purpose'>) {
+    return runAdminMutation(`/api/admin/loan-applications/${applicationId}`, 'PUT', details, `edit-loan-${applicationId}`, 'Could not update this loan application.')
+  }
+
+  async function deleteLoanApplication(applicationId: number) {
+    return runAdminMutation(`/api/admin/loan-applications/${applicationId}`, 'DELETE', undefined, `delete-loan-${applicationId}`, 'Could not delete this loan application.')
   }
 
   async function reviewLoanApplication(applicationId: number, decision: 'approve' | 'reject') {
@@ -531,7 +556,6 @@ function App() {
     return (
       <AdminPortal
         signedInAdmin={signedInAdmin}
-        isSuperAdmin={isSuperAdmin}
         view={adminView}
         setView={setAdminView}
         summary={adminSummary}
@@ -567,8 +591,11 @@ function App() {
         onLoanRepayment={handleLoanRepayment}
         onDividendPayment={handleDividendPayment}
         onReviewMember={reviewMemberAccount}
-        onPromoteMember={promoteMemberAccount}
+        onSetMemberRole={setMemberRole}
+        onDeleteMember={deleteMember}
         onReviewLoan={reviewLoanApplication}
+        onUpdateLoanApplication={updateLoanApplication}
+        onDeleteLoanApplication={deleteLoanApplication}
         onUpdateMember={updateMemberDetails}
         terms={adminTerms}
         setTerms={setAdminTerms}

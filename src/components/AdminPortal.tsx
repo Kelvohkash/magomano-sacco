@@ -1,5 +1,5 @@
-import { useState, type Dispatch, type FormEvent, type FormEventHandler, type SetStateAction } from 'react'
-import { ArrowRight, CircleDollarSign, ClipboardList, FileSpreadsheet, FileText, Landmark, LayoutDashboard, LogOut, RefreshCcw, UsersRound, WalletCards } from 'lucide-react'
+import { Fragment, useState, type Dispatch, type FormEvent, type FormEventHandler, type SetStateAction } from 'react'
+import { ArrowRight, CircleDollarSign, ClipboardList, Eye, FileSpreadsheet, FileText, Landmark, LayoutDashboard, LogOut, Pencil, Printer, RefreshCcw, Trash2, UsersRound, WalletCards } from 'lucide-react'
 import { AnimatedFigure } from './AnimatedFigure'
 import { BulkImportPanel } from './BulkImportPanel'
 import { AdminStatementPanel } from './AdminStatementPanel'
@@ -8,7 +8,6 @@ import type { AdminDividend, AdminLoanApplication, AdminMember, AdminOpenLoan, A
 
 interface AdminPortalProps {
   signedInAdmin: string
-  isSuperAdmin: boolean
   view: AdminView
   setView: Dispatch<SetStateAction<AdminView>>
   summary: AdminSummary | null
@@ -44,8 +43,11 @@ interface AdminPortalProps {
   onLoanRepayment: FormEventHandler<HTMLFormElement>
   onDividendPayment: FormEventHandler<HTMLFormElement>
   onReviewMember: (memberId: number, decision: 'approve' | 'reject') => void
-  onPromoteMember: (memberId: number) => void
+  onSetMemberRole: (memberId: number, role: AdminMember['memberRole']) => void
+  onDeleteMember: (memberId: number) => Promise<boolean>
   onReviewLoan: (applicationId: number, decision: 'approve' | 'reject') => void
+  onUpdateLoanApplication: (applicationId: number, details: Pick<AdminLoanApplication, 'requestedAmount' | 'repaymentMonths' | 'purpose'>) => Promise<boolean>
+  onDeleteLoanApplication: (applicationId: number) => Promise<boolean>
   onUpdateMember: (memberId: number, details: MemberProfileUpdate) => Promise<boolean>
   terms: string
   setTerms: Dispatch<SetStateAction<string>>
@@ -56,7 +58,6 @@ interface AdminPortalProps {
 
 export function AdminPortal({
   signedInAdmin,
-  isSuperAdmin,
   view,
   setView,
   summary,
@@ -92,8 +93,11 @@ export function AdminPortal({
   onLoanRepayment,
   onDividendPayment,
   onReviewMember,
-  onPromoteMember,
+  onSetMemberRole,
+  onDeleteMember,
   onReviewLoan,
+  onUpdateLoanApplication,
+  onDeleteLoanApplication,
   onUpdateMember,
   terms,
   setTerms,
@@ -109,12 +113,24 @@ export function AdminPortal({
     location: '', maritalStatus: '', nextKinName: '', nextKinRelationship: '', nextKinPhone: '',
   })
   const [memberSaving, setMemberSaving] = useState(false)
+  const [viewingMemberId, setViewingMemberId] = useState<number | null>(null)
+  const [viewingApplicationId, setViewingApplicationId] = useState<number | null>(null)
+  const [viewingDividendId, setViewingDividendId] = useState<number | null>(null)
+  const [editingApplicationId, setEditingApplicationId] = useState<number | null>(null)
+  const [applicationForm, setApplicationForm] = useState({ requestedAmount: '', repaymentMonths: '', purpose: '' })
+  const [selectedSignatoryIds, setSelectedSignatoryIds] = useState<number[]>([])
   const [termsSaving, setTermsSaving] = useState(false)
   const [termsMessage, setTermsMessage] = useState('')
   const approvedMembers = members.filter((member) => member.accountStatus === 'approved')
   const selectedMember = approvedMembers.find((member) => String(member.id) === memberId)
   const pendingMembers = members.filter((member) => member.accountStatus === 'pending')
   const pendingApplications = applications.filter((application) => application.status === 'pending')
+  const signatories = approvedMembers.filter((member) => member.memberRole === 'signatory')
+  const viewingApplication = applications.find((application) => application.id === viewingApplicationId)
+  const viewingApplicationMember = viewingApplication
+    ? members.find((member) => member.nationalId === viewingApplication.nationalId)
+    : undefined
+  const selectedSignatories = signatories.filter((member) => selectedSignatoryIds.includes(member.id))
   const navigationItems = [
     { section: 'overview', label: 'Overview', Icon: LayoutDashboard },
     { section: 'members', label: 'Members', Icon: UsersRound },
@@ -148,6 +164,38 @@ export function AdminPortal({
       nextKinRelationship: member.nextKinRelationship,
       nextKinPhone: member.nextKinPhone,
     })
+  }
+
+  function beginApplicationEdit(application: AdminLoanApplication) {
+    setViewingApplicationId(application.id)
+    setEditingApplicationId(application.id)
+    setApplicationForm({
+      requestedAmount: String(application.requestedAmount),
+      repaymentMonths: String(application.repaymentMonths),
+      purpose: application.purpose,
+    })
+    setSelectedSignatoryIds([])
+  }
+
+  async function saveApplication(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    if (editingApplicationId === null) return
+    const saved = await onUpdateLoanApplication(editingApplicationId, {
+      requestedAmount: Number(applicationForm.requestedAmount),
+      repaymentMonths: Number(applicationForm.repaymentMonths),
+      purpose: applicationForm.purpose,
+    })
+    if (saved) setEditingApplicationId(null)
+  }
+
+  async function removeMember(member: AdminMember) {
+    if (!window.confirm(`Delete ${member.fullName}? Accounts with financial or loan history cannot be deleted.`)) return
+    await onDeleteMember(member.id)
+  }
+
+  async function removeApplication(application: AdminLoanApplication) {
+    if (!window.confirm(`Delete the ${application.status} loan application from ${application.fullName}?`)) return
+    await onDeleteLoanApplication(application.id)
   }
 
   async function saveMemberDetails(event: FormEvent<HTMLFormElement>) {
@@ -252,33 +300,7 @@ export function AdminPortal({
 
         {view === 'members' && (
           <section className="admin-record-list" aria-label="Member accounts">
-            {pendingMembers.length > 0 && <h2 className="admin-list-heading">Waiting for approval</h2>}
-            {pendingMembers.map((member) => (
-              <article className="admin-record" key={member.id}>
-                <div className="admin-record-main">
-                  <strong>{member.fullName}</strong>
-                  <span>National ID {member.nationalId} · {member.phoneNumber}</span>
-                  <small>Registered {member.accountStatus}</small>
-                  <details className="admin-member-review-details">
-                    <summary>Review application details</summary>
-                    <div>
-                      <p><strong>Location</strong> {[member.county, member.subCounty, member.location].filter(Boolean).join(' · ') || 'Not provided'}</p>
-                      <p><strong>Email</strong> {member.email || 'Not provided'}</p>
-                      <p><strong>Bank accounts</strong> {[member.bankName && `${member.bankName}${member.bankBranch ? `, ${member.bankBranch}` : ''} · ${member.bankAccountNumber}`, member.bankTwoName && `${member.bankTwoName}${member.bankTwoBranch ? `, ${member.bankTwoBranch}` : ''} · ${member.bankTwoAccountNumber}`].filter(Boolean).join(' · ') || 'Not provided'}</p>
-                      <p><strong>Contact persons</strong> {member.contacts.length ? member.contacts.map((contact) => `${contact.fullName} (${contact.relationship}, ${contact.phoneNumber})`).join(' · ') : 'Not provided'}</p>
-                      <p><strong>Terms acceptance recorded</strong> {member.termsAcceptedAt || 'Not recorded'}</p>
-                    </div>
-                  </details>
-                </div>
-                <div className="admin-record-actions">
-                  <button type="button" className="approve-button" onClick={() => beginMemberEdit(member)}>Edit details</button>
-                  <button type="button" className="approve-button" disabled={reviewingId === `member-${member.id}`} onClick={() => onReviewMember(member.id, 'approve')}>{reviewingId === `member-${member.id}` ? 'Saving…' : 'Approve'}</button>
-                  <button type="button" className="reject-button" disabled={reviewingId === `member-${member.id}`} onClick={() => onReviewMember(member.id, 'reject')}>Reject</button>
-                </div>
-              </article>
-            ))}
-            {!pendingMembers.length && <p className="admin-empty">No member accounts are waiting for review.</p>}
-              <h2 className="admin-list-heading all-members-heading">All member accounts <span><AnimatedFigure value={summary?.members.totalMembers ?? members.length} format="number" /></span></h2>
+            <h2 className="admin-list-heading all-members-heading">All member accounts <span><AnimatedFigure value={summary?.members.totalMembers ?? members.length} format="number" /></span></h2>
             {editingMemberId !== null && (
               <form className="member-details-form" onSubmit={saveMemberDetails}>
                 <div className="member-details-form-heading">
@@ -315,26 +337,44 @@ export function AdminPortal({
             )}
             <div className="admin-table-wrap">
               <table className="admin-table">
-                <thead><tr><th>Member</th><th>National ID</th><th>Phone</th><th>Savings</th><th>Status</th><th>Profile</th>{isSuperAdmin && <th>Admin access</th>}</tr></thead>
+                <thead><tr><th>Member</th><th>National ID</th><th>Phone</th><th>Savings</th><th>Status</th><th>Account role</th><th>System access</th><th>Actions</th></tr></thead>
                 <tbody>{members.map((member) => (
-                  <tr key={member.id}>
-                    <td>{member.fullName}</td>
-                    <td>{member.nationalId}</td>
-                    <td>{member.phoneNumber || '—'}</td>
-                    <td><AnimatedFigure value={member.savingsBalance} /></td>
-                    <td><span className={`status-label ${member.accountStatus}`}>{member.accountStatus}</span></td>
-                    <td><button type="button" className="approve-button" onClick={() => beginMemberEdit(member)}>Edit details</button></td>
-                    {isSuperAdmin && <td>{member.isAdmin
-                      ? <span className="status-label approved">Administrator</span>
-                      : <button
-                        type="button"
-                        className="approve-button"
-                        disabled={reviewingId === `promote-${member.id}`}
-                        onClick={() => onPromoteMember(member.id)}
-                      >
-                        {reviewingId === `promote-${member.id}` ? 'Promoting…' : 'Promote'}
-                      </button>}</td>}
-                  </tr>
+                  <Fragment key={member.id}>
+                    <tr>
+                      <td>{member.fullName}</td>
+                      <td>{member.nationalId}</td>
+                      <td>{member.phoneNumber || '—'}</td>
+                      <td><AnimatedFigure value={member.savingsBalance} /></td>
+                      <td><span className={`status-label ${member.accountStatus}`}>{member.accountStatus}</span></td>
+                      <td>{member.isAdmin ? <span className="status-label approved">Administrator</span> : 'Member account'}</td>
+                      <td>
+                        <fieldset className="member-role-switch" aria-label={`Role for ${member.fullName}`}>
+                          <label><input type="radio" name={`member-role-${member.id}`} value="member" checked={member.memberRole === 'member'} disabled={reviewingId === `member-role-${member.id}`} onChange={() => onSetMemberRole(member.id, 'member')} /> Member</label>
+                          <label><input type="radio" name={`member-role-${member.id}`} value="signatory" checked={member.memberRole === 'signatory'} disabled={reviewingId === `member-role-${member.id}`} onChange={() => onSetMemberRole(member.id, 'signatory')} /> Signatory</label>
+                        </fieldset>
+                      </td>
+                      <td>
+                        <div className="admin-table-actions">
+                          <button type="button" className="table-action-button" onClick={() => setViewingMemberId(viewingMemberId === member.id ? null : member.id)}><Eye size={14} /> {viewingMemberId === member.id ? 'Hide' : 'View'}</button>
+                          <button type="button" className="table-action-button" onClick={() => beginMemberEdit(member)}><Pencil size={14} /> Edit</button>
+                          <button type="button" className="table-action-button danger" disabled={reviewingId === `delete-member-${member.id}`} onClick={() => removeMember(member)}><Trash2 size={14} /> Delete</button>
+                          {member.accountStatus === 'pending' && <>
+                            <button type="button" className="table-action-button" disabled={reviewingId === `member-${member.id}`} onClick={() => onReviewMember(member.id, 'approve')}>Approve</button>
+                            <button type="button" className="table-action-button danger" disabled={reviewingId === `member-${member.id}`} onClick={() => onReviewMember(member.id, 'reject')}>Reject</button>
+                          </>}
+                        </div>
+                      </td>
+                    </tr>
+                    {viewingMemberId === member.id && <tr className="admin-table-detail-row"><td colSpan={8}>
+                      <div className="member-table-details">
+                        <p><strong>Contact</strong> {member.email || 'Email not provided'} · {member.phoneNumber || 'Phone not provided'}</p>
+                        <p><strong>Location</strong> {[member.county, member.subCounty, member.location].filter(Boolean).join(' · ') || 'Not provided'} · <strong>Marital status</strong> {member.maritalStatus || 'Not provided'}</p>
+                        <p><strong>Bank accounts</strong> {[member.bankName && `${member.bankName}${member.bankBranch ? `, ${member.bankBranch}` : ''} · ${member.bankAccountName} · ${member.bankAccountNumber}`, member.bankTwoName && `${member.bankTwoName}${member.bankTwoBranch ? `, ${member.bankTwoBranch}` : ''} · ${member.bankTwoAccountName} · ${member.bankTwoAccountNumber}`].filter(Boolean).join(' | ') || 'Not provided'}</p>
+                        <p><strong>Next of kin</strong> {[member.nextKinName, member.nextKinRelationship, member.nextKinPhone].filter(Boolean).join(' · ') || 'Not provided'}</p>
+                        <p><strong>Contacts</strong> {member.contacts.length ? member.contacts.map((contact) => `${contact.fullName} (${contact.relationship}, ${contact.phoneNumber})`).join(' · ') : 'Not provided'}</p>
+                      </div>
+                    </td></tr>}
+                  </Fragment>
                 ))}</tbody>
               </table>
             </div>
@@ -343,23 +383,116 @@ export function AdminPortal({
 
         {view === 'loans' && (
           <>
-            <section className="admin-record-list" aria-label="Loan applications awaiting review">
-              {applications.length ? applications.map((application) => (
-                <article className="admin-record" key={application.id}>
-                  <div className="admin-record-main">
-                    <strong>{application.fullName} <span className="admin-inline-id">· {application.nationalId}</span></strong>
-                    <span><AnimatedFigure value={application.requestedAmount} /> principal · 10% interest · {application.repaymentMonths} months · Savings security · {application.purpose}</span>
-                    <small>Applied {formatDate(application.appliedAt)} · <span className={`status-label ${application.status}`}>{application.status}</span></small>
-                  </div>
-                  {application.status === 'pending' && (
-                    <div className="admin-record-actions">
-                      <button type="button" className="approve-button" disabled={reviewingId === `loan-${application.id}`} onClick={() => onReviewLoan(application.id, 'approve')}>Approve &amp; issue</button>
-                      <button type="button" className="reject-button" disabled={reviewingId === `loan-${application.id}`} onClick={() => onReviewLoan(application.id, 'reject')}>Reject</button>
-                    </div>
-                  )}
-                </article>
-              )) : <p className="admin-empty">No loan applications have been submitted.</p>}
+            <section className="admin-record-list" aria-label="Loan applications">
+              <h2 className="admin-list-heading">All loan applications <span><AnimatedFigure value={applications.length} format="number" /></span></h2>
+              {applications.length ? <div className="admin-table-wrap">
+                <table className="admin-table">
+                  <thead><tr><th>Member</th><th>National ID</th><th>Requested</th><th>Term</th><th>Purpose</th><th>Applied</th><th>Status</th><th>Actions</th></tr></thead>
+                  <tbody>{applications.map((application) => (
+                    <tr key={application.id}>
+                      <td>{application.fullName}</td>
+                      <td>{application.nationalId}</td>
+                      <td>{currency.format(application.requestedAmount)}</td>
+                      <td>{application.repaymentMonths} months</td>
+                      <td className="application-purpose-cell">{application.purpose}</td>
+                      <td>{formatDate(application.appliedAt)}</td>
+                      <td><span className={`status-label ${application.status}`}>{application.status}</span></td>
+                      <td><div className="admin-table-actions">
+                        <button type="button" className="table-action-button" onClick={() => { setViewingApplicationId(application.id); setEditingApplicationId(null); setSelectedSignatoryIds([]) }}><Eye size={14} /> View / Print</button>
+                        <button type="button" className="table-action-button" disabled={application.status !== 'pending'} onClick={() => beginApplicationEdit(application)}><Pencil size={14} /> Edit</button>
+                        <button type="button" className="table-action-button danger" disabled={application.status === 'approved' || reviewingId === `delete-loan-${application.id}`} onClick={() => removeApplication(application)}><Trash2 size={14} /> Delete</button>
+                        {application.status === 'pending' && <>
+                          <button type="button" className="table-action-button" disabled={reviewingId === `loan-${application.id}`} onClick={() => onReviewLoan(application.id, 'approve')}>Approve &amp; issue</button>
+                          <button type="button" className="table-action-button danger" disabled={reviewingId === `loan-${application.id}`} onClick={() => onReviewLoan(application.id, 'reject')}>Reject</button>
+                        </>}
+                      </div></td>
+                    </tr>
+                  ))}</tbody>
+                </table>
+              </div> : <p className="admin-empty">No loan applications have been submitted.</p>}
             </section>
+            {viewingApplication && (
+              <div className="loan-application-dialog" role="dialog" aria-modal="true" aria-labelledby="loan-application-dialog-title">
+                <div className="loan-application-dialog-card">
+                  <div className="loan-application-dialog-heading">
+                    <div><p className="section-kicker">APPLICATION #{viewingApplication.id}</p><h2 id="loan-application-dialog-title">{editingApplicationId === viewingApplication.id ? 'Edit loan application' : 'Loan application'}</h2></div>
+                    <button type="button" className="member-details-cancel" onClick={() => { setViewingApplicationId(null); setEditingApplicationId(null) }}>Close</button>
+                  </div>
+                  {editingApplicationId === viewingApplication.id ? (
+                    <form className="loan-application-edit-form" onSubmit={saveApplication}>
+                      <label>Requested amount (KES)<input type="number" min="0.01" step="0.01" max="100000000" value={applicationForm.requestedAmount} onChange={(event) => setApplicationForm((current) => ({ ...current, requestedAmount: event.target.value }))} required /></label>
+                      <label>Repayment term (months)<input type="number" min="1" max="120" step="1" value={applicationForm.repaymentMonths} onChange={(event) => setApplicationForm((current) => ({ ...current, repaymentMonths: event.target.value }))} required /></label>
+                      <label>Loan purpose<textarea minLength={3} maxLength={500} value={applicationForm.purpose} onChange={(event) => setApplicationForm((current) => ({ ...current, purpose: event.target.value }))} required /></label>
+                      <button className="submit-button" type="submit" disabled={reviewingId === `edit-loan-${viewingApplication.id}`}><span>{reviewingId === `edit-loan-${viewingApplication.id}` ? 'Saving…' : 'Save application'}</span><ArrowRight size={16} /></button>
+                    </form>
+                  ) : (
+                    <>
+                      <div className="loan-signatory-picker">
+                        <h3>Select loan signatories</h3>
+                        {signatories.length ? signatories.map((signatory) => (
+                          <label key={signatory.id}>
+                            <input type="checkbox" checked={selectedSignatoryIds.includes(signatory.id)} onChange={(event) => setSelectedSignatoryIds((current) => event.target.checked
+                              ? [...current, signatory.id]
+                              : current.filter((id) => id !== signatory.id))} />
+                            <span>{signatory.fullName}</span><small>{signatory.nationalId}</small>
+                          </label>
+                        )) : <p className="admin-empty">No approved signatories are available. Set an approved member’s role to Signatory first.</p>}
+                      </div>
+                      <button type="button" className="print-application-button" disabled={!selectedSignatoryIds.length} onClick={() => window.print()}><Printer size={16} /> Print loan application</button>
+                      {!selectedSignatoryIds.length && signatories.length > 0 && <p className="admin-empty">Select at least one signatory to include signature lines.</p>}
+                    </>
+                  )}
+                  <article className="loan-print-document">
+                    <header><p>MAGOMANO SACCO</p><h1>LOAN APPLICATION FORM</h1><span>Application No. {viewingApplication.id} · Applied {formatDate(viewingApplication.appliedAt)}</span></header>
+                    <section>
+                      <h2>Member details</h2>
+                      <dl>
+                        <div><dt>Full name</dt><dd>{viewingApplication.fullName}</dd></div>
+                        <div><dt>National ID</dt><dd>{viewingApplication.nationalId}</dd></div>
+                        <div><dt>Phone</dt><dd>{viewingApplicationMember?.phoneNumber || '—'}</dd></div>
+                        <div><dt>Email</dt><dd>{viewingApplicationMember?.email || '—'}</dd></div>
+                        <div><dt>County / Sub-county</dt><dd>{[viewingApplicationMember?.county, viewingApplicationMember?.subCounty].filter(Boolean).join(' / ') || '—'}</dd></div>
+                        <div><dt>Location</dt><dd>{viewingApplicationMember?.location || '—'}</dd></div>
+                        <div><dt>Marital status</dt><dd>{viewingApplicationMember?.maritalStatus || '—'}</dd></div>
+                        <div><dt>Bank account</dt><dd>{[viewingApplicationMember?.bankName, viewingApplicationMember?.bankBranch, viewingApplicationMember?.bankAccountName, viewingApplicationMember?.bankAccountNumber].filter(Boolean).join(' · ') || '—'}</dd></div>
+                        <div><dt>Second bank account</dt><dd>{[viewingApplicationMember?.bankTwoName, viewingApplicationMember?.bankTwoBranch, viewingApplicationMember?.bankTwoAccountName, viewingApplicationMember?.bankTwoAccountNumber].filter(Boolean).join(' · ') || '—'}</dd></div>
+                        <div><dt>Next of kin</dt><dd>{[viewingApplicationMember?.nextKinName, viewingApplicationMember?.nextKinRelationship, viewingApplicationMember?.nextKinPhone].filter(Boolean).join(' · ') || '—'}</dd></div>
+                        <div><dt>Contact persons</dt><dd>{viewingApplicationMember?.contacts.map((contact) => `${contact.fullName} (${contact.relationship}, ${contact.phoneNumber})`).join(' · ') || '—'}</dd></div>
+                      </dl>
+                    </section>
+                    <section>
+                      <h2>Loan details</h2>
+                      <dl>
+                        <div><dt>Amount requested</dt><dd>{currency.format(viewingApplication.requestedAmount)}</dd></div>
+                        <div><dt>Interest rate</dt><dd>10%</dd></div>
+                        <div><dt>Estimated total repayable</dt><dd>{currency.format(viewingApplication.requestedAmount * 1.1)}</dd></div>
+                        <div><dt>Repayment period</dt><dd>{viewingApplication.repaymentMonths} months</dd></div>
+                        <div><dt>Security</dt><dd>Savings</dd></div>
+                        <div><dt>Application status</dt><dd>{viewingApplication.status}</dd></div>
+                        <div className="loan-print-purpose"><dt>Purpose</dt><dd>{viewingApplication.purpose}</dd></div>
+                      </dl>
+                    </section>
+                    <section className="loan-print-declaration">
+                      <h2>Member declaration</h2>
+                      <p>I confirm that the information provided above is true and correct, and I agree to repay the loan in accordance with the SACCO’s terms and conditions.</p>
+                      <div className="loan-print-signature"><span>Member signature</span><i></i><span>Date</span><i></i></div>
+                    </section>
+                    <section className="loan-print-signers">
+                      <h2>SACCO authorization</h2>
+                      <div className="loan-print-signatory-grid">{selectedSignatories.map((signatory) => (
+                        <div className="loan-print-signature-block" key={signatory.id}>
+                          <strong>{signatory.fullName}</strong>
+                          <span>Authorized signatory</span>
+                          <i></i>
+                          <div><span>Signature</span><span>Date</span></div>
+                        </div>
+                      ))}</div>
+                    </section>
+                    <footer>Generated by Magomano SACCO administration · This form records the submitted loan application and does not itself constitute approval.</footer>
+                  </article>
+                </div>
+              </div>
+            )}
             <AdminStatementPanel type="applications" title="Loan application history" refreshKey={statementRefreshKey} />
             <AdminStatementPanel type="loans" title="Issued loan statement" refreshKey={statementRefreshKey} />
           </>
@@ -383,12 +516,16 @@ export function AdminPortal({
               </form>
               <section className="admin-recent-dividends">
                 <h2>Open loans</h2>
-                {openLoans.length ? openLoans.map((loan) => (
-                  <article className="dividend-row" key={loan.id}>
-                    <div><strong>{loan.fullName} · {loan.reference}</strong><span>{loan.repaymentMonths} months · <AnimatedFigure value={loan.totalRepayable} /> total due</span></div>
-                    <strong><AnimatedFigure value={loan.outstandingBalance} /> due</strong>
-                  </article>
-                )) : <p className="admin-empty">No outstanding loan payments.</p>}
+                {openLoans.length ? <div className="admin-table-wrap">
+                  <table className="admin-table">
+                    <thead><tr><th>Reference</th><th>Member</th><th>Term</th><th>Total repayable</th><th>Balance due</th><th>Actions</th></tr></thead>
+                    <tbody>{openLoans.map((loan) => <tr key={loan.id}>
+                      <td>{loan.reference}</td><td>{loan.fullName}</td><td>{loan.repaymentMonths} months</td>
+                      <td>{currency.format(loan.totalRepayable)}</td><td>{currency.format(loan.outstandingBalance)}</td>
+                      <td><button type="button" className="table-action-button" onClick={() => setRepaymentLoanId(String(loan.id))}>Select loan</button></td>
+                    </tr>)}</tbody>
+                  </table>
+                </div> : <p className="admin-empty">No outstanding loan payments.</p>}
               </section>
             </div>
             <AdminStatementPanel type="repayments" title="Loan repayment statement" refreshKey={statementRefreshKey} />
@@ -441,9 +578,20 @@ export function AdminPortal({
               </form>
               <section className="admin-recent-dividends">
                 <h2>Recent recorded payments</h2>
-                {dividends.length ? dividends.slice(0, 8).map((payment) => (
-                  <article className="dividend-row" key={payment.id}><div><strong>{payment.fullName}</strong><span>{payment.financialPeriod} · {formatDate(payment.paidAt)}</span></div><strong><AnimatedFigure value={payment.amount} /></strong></article>
-                )) : <p className="admin-empty">No dividend payments recorded yet.</p>}
+                {dividends.length ? <div className="admin-table-wrap">
+                  <table className="admin-table">
+                    <thead><tr><th>Member</th><th>Period</th><th>Date paid</th><th>Amount</th><th>Actions</th></tr></thead>
+                    <tbody>{dividends.slice(0, 8).map((payment) => (
+                      <Fragment key={payment.id}>
+                        <tr>
+                          <td>{payment.fullName}</td><td>{payment.financialPeriod}</td><td>{formatDate(payment.paidAt)}</td><td>{currency.format(payment.amount)}</td>
+                          <td><button type="button" className="table-action-button" onClick={() => setViewingDividendId(viewingDividendId === payment.id ? null : payment.id)}><Eye size={14} /> {viewingDividendId === payment.id ? 'Hide' : 'View'}</button></td>
+                        </tr>
+                        {viewingDividendId === payment.id && <tr className="admin-table-detail-row"><td colSpan={5}><div className="member-table-details"><p><strong>Description</strong> {payment.description || 'No description provided.'}</p><p><strong>National ID</strong> {payment.nationalId}</p></div></td></tr>}
+                      </Fragment>
+                    ))}</tbody>
+                  </table>
+                </div> : <p className="admin-empty">No dividend payments recorded yet.</p>}
               </section>
             </div>
             <AdminStatementPanel type="dividends" title="Dividend payment statement" refreshKey={statementRefreshKey} />

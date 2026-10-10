@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { Fragment, useEffect, useState } from 'react'
+import { ArrowLeft, ArrowRight, Eye } from 'lucide-react'
 import { StatementFilterPopover, type StatementFilterValues } from './StatementFilterPopover'
 import { currency, formatDate } from '../format'
 
@@ -58,6 +58,7 @@ export function AdminStatementPanel({ type, title, refreshKey }: { type: Stateme
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [filters, setFilters] = useState<StatementFilterValues>({ search: '', from: '', to: '', status: '' })
+  const [viewingRowId, setViewingRowId] = useState<string | null>(null)
 
   useEffect(() => {
     let active = true
@@ -124,16 +125,22 @@ export function AdminStatementPanel({ type, title, refreshKey }: { type: Stateme
       {items.length > 0 ? (
         <div className="admin-table-wrap">
           <table className="admin-table">
-            <thead><tr>{columns[type].map((column) => <th key={column.key}>{column.label}</th>)}</tr></thead>
+            <thead><tr>{columns[type].map((column) => <th key={column.key}>{column.label}</th>)}<th>Actions</th></tr></thead>
             <tbody>{items.map((item) => (
-              <tr key={item.id}>
-                {columns[type].map(({ key }) => {
-                  const value = item[key]
-                  const isDate = ['occurredAt', 'issuedAt', 'paidAt', 'appliedAt'].includes(key)
-                  const isAmount = ['amount', 'principalAmount', 'outstandingBalance', 'requestedAmount'].includes(key)
-                  return <td key={key}>{value == null ? '—' : isDate ? formatDate(String(value)) : isAmount ? currency.format(Number(value)) : String(value)}</td>
-                })}
-              </tr>
+              <Fragment key={String(item.id)}>
+                <tr>
+                  {columns[type].map(({ key }) => {
+                    const value = item[key]
+                    const isDate = ['occurredAt', 'issuedAt', 'paidAt', 'appliedAt'].includes(key)
+                    const isAmount = ['amount', 'principalAmount', 'outstandingBalance', 'requestedAmount'].includes(key)
+                    return <td key={key}>{value == null ? '—' : isDate ? formatDate(String(value)) : isAmount ? currency.format(Number(value)) : String(value)}</td>
+                  })}
+                  <td><button type="button" className="table-action-button" onClick={() => setViewingRowId(viewingRowId === String(item.id) ? null : String(item.id))}><Eye size={14} /> {viewingRowId === String(item.id) ? 'Hide' : 'View'}</button></td>
+                </tr>
+                {viewingRowId === String(item.id) && <tr className="admin-table-detail-row"><td colSpan={columns[type].length + 1}>
+                  <div className="member-table-details">{Object.entries(item).map(([key, value]) => <p key={key}><strong>{key}</strong> {value == null || value === '' ? '—' : String(value)}</p>)}</div>
+                </td></tr>}
+              </Fragment>
             ))}</tbody>
           </table>
         </div>

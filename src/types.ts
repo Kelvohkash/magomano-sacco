@@ -110,6 +110,7 @@ export interface AdminMember {
   contacts: MemberContact[]
   termsAcceptedAt: string | null
   savingsBalance: number
+  memberRole: 'member' | 'signatory'
   isAdmin: boolean
 }
 

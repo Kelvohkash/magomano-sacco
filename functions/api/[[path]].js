@@ -817,7 +817,7 @@ async function handleAdmin(path, request, env) {
         m.bank_two_account_number AS bankTwoAccountNumber,
         m.location, m.marital_status AS maritalStatus,
         m.next_kin_name AS nextKinName, m.next_kin_relationship AS nextKinRelationship,
-        m.next_kin_phone AS nextKinPhone,
+        m.next_kin_phone AS nextKinPhone, m.member_role AS memberRole,
         (SELECT accepted_at FROM member_terms_acceptances ta WHERE ta.member_id = m.id) AS termsAcceptedAt,
         COALESCE(SUM(CASE WHEN s.entry_type = 'deposit' THEN s.amount ELSE -s.amount END), 0) AS savingsBalance,
         EXISTS (SELECT 1 FROM admins a WHERE a.member_id = m.id) AS isAdmin
@@ -915,6 +915,42 @@ async function handleAdmin(path, request, env) {
     return json({ message: 'Member details updated.' })
   }
 
+  const memberRole = path.match(/^\/admin\/members\/(\d+)\/role$/)
+  if (memberRole && method === 'PUT') {
+    const memberId = Number(memberRole[1])
+    const role = (await readJson(request)).role
+    if (!['member', 'signatory'].includes(role)) {
+      throw new ApiError('Choose member or signatory for this account.')
+    }
+    const result = await db.prepare('UPDATE members SET member_role = ? WHERE id = ?')
+      .bind(role, memberId).run()
+    if (!result.meta.changes) {
+      const member = await db.prepare('SELECT id FROM members WHERE id = ?').bind(memberId).first()
+      if (!member) throw new ApiError('Member account was not found.', 404)
+    }
+    return json({ message: `Member role changed to ${role}.`, role })
+  }
+
+  const deleteMember = path.match(/^\/admin\/members\/(\d+)$/)
+  if (deleteMember && method === 'DELETE') {
+    const memberId = Number(deleteMember[1])
+    const member = await db.prepare('SELECT full_name AS fullName FROM members WHERE id = ?')
+      .bind(memberId).first()
+    if (!member) throw new ApiError('Member account was not found.', 404)
+    const result = await db.prepare(`
+      DELETE FROM members WHERE id = ?
+        AND NOT EXISTS (SELECT 1 FROM savings_transactions WHERE member_id = members.id)
+        AND NOT EXISTS (SELECT 1 FROM member_loans WHERE member_id = members.id)
+        AND NOT EXISTS (SELECT 1 FROM loan_applications WHERE member_id = members.id)
+        AND NOT EXISTS (SELECT 1 FROM dividend_payments WHERE member_id = members.id)
+        AND NOT EXISTS (SELECT 1 FROM admins WHERE member_id = members.id)
+    `).bind(memberId).run()
+    if (!result.meta.changes) {
+      throw new ApiError('This account has financial, loan, or administrator history and cannot be deleted.')
+    }
+    return json({ message: `${member.fullName} was deleted.` })
+  }
+
   const promoteMember = path.match(/^\/admin\/members\/(\d+)\/promote$/)
   if (promoteMember && method === 'POST') {
     if (session.adminRole !== 'superadmin') {
@@ -976,6 +1012,51 @@ async function handleAdmin(path, request, env) {
       LIMIT 100
     `).all()
     return json({ applications: applications.results })
+  }
+
+  const editApplication = path.match(/^\/admin\/loan-applications\/(\d+)$/)
+  if (editApplication && method === 'PUT') {
+    const applicationId = Number(editApplication[1])
+    const body = await readJson(request)
+    const requestedAmount = Number(body.requestedAmount)
+    const repaymentMonths = Number(body.repaymentMonths)
+    const purpose = typeof body.purpose === 'string' ? body.purpose.trim() : ''
+    if (!Number.isFinite(requestedAmount) || requestedAmount <= 0 || requestedAmount > 100000000) {
+      throw new ApiError('Enter a valid loan amount.')
+    }
+    if (!Number.isInteger(repaymentMonths) || repaymentMonths < 1 || repaymentMonths > 120) {
+      throw new ApiError('Repayment term must be between 1 and 120 months.')
+    }
+    if (purpose.length < 3 || purpose.length > 500) {
+      throw new ApiError('Loan purpose must be between 3 and 500 characters.')
+    }
+    const result = await db.prepare(`
+      UPDATE loan_applications
+      SET requested_amount = ?, repayment_months = ?, purpose = ?
+      WHERE id = ? AND status = 'pending'
+    `).bind(requestedAmount, repaymentMonths, purpose, applicationId).run()
+    if (!result.meta.changes) {
+      const application = await db.prepare('SELECT status FROM loan_applications WHERE id = ?')
+        .bind(applicationId).first()
+      throw new ApiError(application
+        ? 'Only pending loan applications can be edited.'
+        : 'Loan application was not found.', application ? 409 : 404)
+    }
+    return json({ message: 'Loan application updated.' })
+  }
+
+  const deleteApplication = path.match(/^\/admin\/loan-applications\/(\d+)$/)
+  if (deleteApplication && method === 'DELETE') {
+    const applicationId = Number(deleteApplication[1])
+    const result = await db.prepare("DELETE FROM loan_applications WHERE id = ? AND status != 'approved'")
+      .bind(applicationId).run()
+    if (!result.meta.changes) {
+      const application = await db.prepare('SELECT status FROM loan_applications WHERE id = ?')
+        .bind(applicationId).first()
+      if (!application) throw new ApiError('Loan application was not found.', 404)
+      throw new ApiError('An approved application cannot be deleted because its loan has already been issued.')
+    }
+    return json({ message: 'Loan application deleted.' })
   }
 
   const applicationDecision = path.match(/^\/admin\/loan-applications\/(\d+)\/decision$/)

@@ -429,9 +429,20 @@ export function AdminPortal({
                     </>
                   )}
                   <article className="loan-print-document">
-                    <header><p>MAGOMANO SACCO</p><h1>LOAN APPLICATION FORM</h1><span>Application No. {viewingApplication.id} · Applied {formatDate(viewingApplication.appliedAt)}</span></header>
-                    <section>
-                      <h2>Member details</h2>
+                    <header className="loan-print-header">
+                      <div className="loan-print-brand">
+                        <span className="loan-print-mark"><Landmark size={22} /></span>
+                        <div><strong>MAGOMANO</strong><small>SAVINGS &amp; CREDIT CO-OPERATIVE</small></div>
+                      </div>
+                      <div className="loan-print-title">
+                        <span>MEMBER FINANCE</span>
+                        <h1>Loan application</h1>
+                        <p>Review, sign, and submit this form to complete your application.</p>
+                      </div>
+                      <div className="loan-print-reference"><small>APPLICATION</small><strong>#{String(viewingApplication.id).padStart(5, '0')}</strong><span>{formatDate(viewingApplication.appliedAt)}</span></div>
+                    </header>
+                    <section className="loan-print-member">
+                      <div className="loan-print-section-heading"><span>01</span><h2>Member details</h2></div>
                       <dl>
                         <div><dt>Full name</dt><dd>{viewingApplication.fullName}</dd></div>
                         <div><dt>National ID</dt><dd>{viewingApplication.nationalId}</dd></div>
@@ -440,37 +451,43 @@ export function AdminPortal({
                           viewingApplicationMember?.subCounty,
                           viewingApplicationMember?.county,
                         ].filter(Boolean).join(', ') || '—'}</dd></div>
-                        <div><dt>Loan deposit account</dt><dd>{[
-                          viewingApplication.payoutBankName,
-                          viewingApplication.payoutBankBranch,
-                          viewingApplication.payoutAccountName,
-                          viewingApplication.payoutAccountNumber,
-                        ].filter(Boolean).join(' · ') || 'Not recorded on this application'}</dd></div>
+                        <div className="loan-print-payout">
+                          <dt>Deposit account selected</dt>
+                          <dd>{viewingApplication.payoutBankName || 'Not recorded on this application'}</dd>
+                          <span>{[
+                            viewingApplication.payoutBankBranch,
+                            viewingApplication.payoutAccountName,
+                            viewingApplication.payoutAccountNumber,
+                          ].filter(Boolean).join(' · ')}</span>
+                        </div>
                       </dl>
                     </section>
-                    <section>
-                      <h2>Loan details</h2>
-                      <dl>
-                        <div><dt>Amount requested</dt><dd>{currency.format(viewingApplication.requestedAmount)}</dd></div>
-                        <div><dt>Interest rate</dt><dd>10%</dd></div>
-                        <div><dt>Estimated total repayable</dt><dd>{currency.format(viewingApplication.requestedAmount * 1.1)}</dd></div>
-                        <div><dt>Repayment period</dt><dd>{viewingApplication.repaymentMonths} months</dd></div>
-                        <div><dt>Security</dt><dd>Savings</dd></div>
-                        <div><dt>Application status</dt><dd>{viewingApplication.status}</dd></div>
-                        <div className="loan-print-purpose"><dt>Purpose</dt><dd>{viewingApplication.purpose}</dd></div>
-                      </dl>
+                    <section className="loan-print-loan">
+                      <div className="loan-print-section-heading"><span>02</span><h2>Loan requested</h2></div>
+                      <div className="loan-print-loan-summary">
+                        <div className="loan-print-principal"><small>AMOUNT REQUESTED</small><strong>{currency.format(viewingApplication.requestedAmount)}</strong><span>Principal</span></div>
+                        <dl>
+                          <div><dt>Repayment period</dt><dd>{viewingApplication.repaymentMonths} months</dd></div>
+                          <div><dt>Interest rate</dt><dd>10% flat</dd></div>
+                          <div><dt>Estimated total repayable</dt><dd>{currency.format(viewingApplication.requestedAmount * 1.1)}</dd></div>
+                          <div><dt>Security</dt><dd>Savings</dd></div>
+                        </dl>
+                      </div>
+                      <div className="loan-print-purpose"><span>LOAN PURPOSE</span><p>{viewingApplication.purpose}</p></div>
                     </section>
                     <section className="loan-print-declaration">
-                      <h2>Member declaration</h2>
-                      <p>I confirm that the information provided above is true and correct, and I agree to repay the loan in accordance with the SACCO’s terms and conditions.</p>
-                      <div className="loan-print-electronic-signature">
-                        <span>Member electronic signature</span>
-                        <strong>{viewingApplication.electronicSignatureName || viewingApplication.fullName}</strong>
-                        <small>Electronically signed {viewingApplication.electronicallySignedAt ? formatDate(viewingApplication.electronicallySignedAt) : formatDate(viewingApplication.appliedAt)}</small>
+                      <div className="loan-print-section-heading"><span>03</span><h2>Member declaration</h2></div>
+                      <div className="loan-print-declaration-card">
+                        <p>I confirm the details on this form are correct and authorize Magomano SACCO to process my loan application. I agree to repay any loan granted under the SACCO’s terms and conditions.</p>
+                        <div className="loan-print-electronic-signature">
+                          <span>ELECTRONICALLY SIGNED BY MEMBER</span>
+                          <strong>{viewingApplication.electronicSignatureName || viewingApplication.fullName}</strong>
+                          <small>{viewingApplication.electronicallySignedAt ? formatDate(viewingApplication.electronicallySignedAt) : formatDate(viewingApplication.appliedAt)}</small>
+                        </div>
                       </div>
                     </section>
                     <section className="loan-print-signers">
-                      <h2>SACCO authorization</h2>
+                      <div className="loan-print-section-heading"><span>04</span><h2>SACCO authorization</h2><small>Signatories</small></div>
                       <div className="loan-print-signatory-grid">{signatories.map((signatory) => (
                         <div className="loan-print-signature-block" key={signatory.id}>
                           <strong>{signatory.fullName}</strong>
@@ -480,7 +497,10 @@ export function AdminPortal({
                         </div>
                       ))}{!signatories.length && <p>No signatories have been assigned.</p>}</div>
                     </section>
-                    <footer>Electronically signed by the member on application · SACCO approval remains subject to review.</footer>
+                    <footer>
+                      <span>MAGOMANO SACCO <i /> LOAN SERVICES</span>
+                      <span>Application #{String(viewingApplication.id).padStart(5, '0')} · Submitted {formatDate(viewingApplication.appliedAt)}</span>
+                    </footer>
                   </article>
                 </div>
               </div>

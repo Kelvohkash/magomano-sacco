@@ -593,7 +593,7 @@
 
 @media print {
   @page { size: A4; margin: 0; }
-  html, body { width: 210mm; height: 297mm; margin: 0 !important; padding: 0 !important; }
+  html, body { width: 210mm; height: 297mm; margin: 0 !important; padding: 0 !important; background: #f2f5ef !important; }
   body * { visibility: hidden !important; }
   .loan-application-dialog,
   .loan-application-dialog-card,
@@ -605,31 +605,89 @@
   .print-application-button,
   .loan-application-dialog-card > .admin-empty,
   .loan-application-edit-form { display: none !important; }
-  .loan-print-document { display: block !important; box-sizing: border-box; width: 210mm; height: 297mm; overflow: hidden; padding: 10mm 13mm; color: #17251c; background: #fff; font-family: Arial, sans-serif; font-size: 9pt; }
-  .loan-print-document header { padding-bottom: 5mm; border-bottom: 2px solid #315f43; text-align: center; }
-  .loan-print-document header p { margin: 0 0 2mm; color: #315f43; font-size: 10pt; font-weight: 700; letter-spacing: .12em; }
-  .loan-print-document header h1 { margin: 0 0 1.5mm; font-size: 15pt; }
-  .loan-print-document header span { color: #52645a; font-size: 8pt; }
-  .loan-print-document section { margin-top: 4mm; break-inside: avoid; }
-  .loan-print-document section h2 { margin: 0 0 2mm; padding-bottom: 1mm; border-bottom: 1px solid #b8c4ba; font-size: 10pt; }
-  .loan-print-document dl { display: grid; grid-template-columns: 1fr 1fr; gap: 2mm 6mm; margin: 0; }
-  .loan-print-document dl > div { min-width: 0; }
-  .loan-print-document dt { margin-bottom: .5mm; color: #59685e; font-size: 7pt; }
-  .loan-print-document dd { margin: 0; font-weight: 600; overflow-wrap: anywhere; }
-  .loan-print-document .loan-print-purpose { grid-column: 1 / -1; }
-  .loan-print-declaration p { margin: 2mm 0; line-height: 1.35; }
-  .loan-print-electronic-signature { display: grid; justify-items: start; gap: 1mm; min-height: 15mm; }
-  .loan-print-electronic-signature > span { color: #59685e; font-size: 7pt; }
-  .loan-print-electronic-signature > strong { color: #234d38; font-family: 'URW Chancery L', 'Segoe Script', 'Brush Script MT', cursive; font-size: 21pt; font-style: italic; font-weight: 500; line-height: 1; transform: rotate(-3deg); transform-origin: left center; }
-  .loan-print-electronic-signature > small { color: #59685e; font-size: 7pt; }
-  .loan-print-signatory-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3mm 6mm; }
-  .loan-print-signature-block { display: grid; gap: .7mm; break-inside: avoid; }
-  .loan-print-signature-block strong { font-size: 8pt; }
+  .loan-print-document {
+    display: flex !important;
+    box-sizing: border-box;
+    width: 210mm;
+    height: 297mm;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 0 12mm 8mm;
+    color: #20352b;
+    background: #fff;
+    font-family: 'Manrope', Arial, sans-serif;
+    font-size: 9pt;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .loan-print-document header {
+    display: grid;
+    grid-template-columns: 1fr 1.35fr auto;
+    align-items: center;
+    gap: 7mm;
+    min-height: 43mm;
+    margin: 0 -12mm;
+    padding: 8mm 12mm;
+    color: #fff;
+    background: linear-gradient(118deg, #173f32, #286449 72%, #397656);
+  }
+  .loan-print-brand { display: flex; align-items: center; gap: 3mm; min-width: 0; }
+  .loan-print-mark { display: grid; width: 13mm; height: 13mm; flex: 0 0 13mm; place-items: center; border: .3mm solid rgb(255 255 255 / 36%); border-radius: 4mm; color: #e6d7a7; }
+  .loan-print-brand > div { display: grid; gap: 1mm; }
+  .loan-print-brand strong { font-size: 12pt; letter-spacing: .08em; }
+  .loan-print-brand small { color: #d6e3d9; font-size: 5.5pt; letter-spacing: .1em; }
+  .loan-print-title { border-left: .4mm solid rgb(255 255 255 / 30%); padding-left: 6mm; }
+  .loan-print-title > span { color: #e2d4a8; font-size: 6pt; font-weight: 700; letter-spacing: .2em; }
+  .loan-print-title h1 { margin: 1mm 0; color: #fff; font-family: 'Manrope', Arial, sans-serif; font-size: 19pt; font-weight: 700; letter-spacing: -.05em; }
+  .loan-print-title p { margin: 0; color: #d6e3d9; font-size: 6.5pt; line-height: 1.45; }
+  .loan-print-reference { display: grid; justify-items: end; gap: 1mm; min-width: 24mm; }
+  .loan-print-reference small { color: #e2d4a8; font-size: 6pt; font-weight: 700; letter-spacing: .15em; }
+  .loan-print-reference strong { color: #fff; font-size: 15pt; }
+  .loan-print-reference span { color: #d6e3d9; font-size: 7pt; }
+  .loan-print-document section { margin-top: 6mm; break-inside: avoid; }
+  .loan-print-section-heading { display: flex; align-items: center; gap: 2.5mm; margin-bottom: 3mm; }
+  .loan-print-section-heading > span { display: grid; width: 7mm; height: 7mm; flex: 0 0 7mm; place-items: center; border-radius: 50%; color: #fff; background: #2b6848; font-size: 7pt; font-weight: 700; }
+  .loan-print-section-heading h2 { margin: 0; color: #244535; font-size: 10pt; font-weight: 700; }
+  .loan-print-section-heading > small { margin-left: auto; color: #74857a; font-size: 7pt; }
+  .loan-print-member dl { display: grid; grid-template-columns: 1.3fr .8fr 1.4fr; gap: 0; overflow: hidden; margin: 0; border: .25mm solid #dce6dd; border-radius: 3mm; background: #fbfcfa; }
+  .loan-print-member dl > div { min-width: 0; min-height: 18mm; padding: 3mm 4mm; border-right: .25mm solid #e1e9e2; border-bottom: .25mm solid #e1e9e2; }
+  .loan-print-member dl > div:nth-child(3n) { border-right: 0; }
+  .loan-print-member dl > div:nth-child(n+4) { border-bottom: 0; }
+  .loan-print-document dt { margin: 0 0 1mm; color: #718178; font-size: 6.5pt; font-weight: 600; }
+  .loan-print-document dd { margin: 0; color: #263d31; font-size: 8.5pt; font-weight: 700; line-height: 1.35; overflow-wrap: anywhere; }
+  .loan-print-member .loan-print-payout { grid-column: 1 / -1; min-height: 16mm; border-right: 0; border-bottom: 0; background: #f0f6ef; }
+  .loan-print-payout dd { color: #2b6848; }
+  .loan-print-payout > span { display: block; margin-top: 1mm; color: #566c5d; font-size: 7pt; overflow-wrap: anywhere; }
+  .loan-print-loan-summary { display: grid; grid-template-columns: .9fr 2.1fr; overflow: hidden; border: .25mm solid #dce6dd; border-radius: 3mm; }
+  .loan-print-principal { display: flex; min-height: 29mm; flex-direction: column; justify-content: center; gap: 1mm; padding: 4mm 5mm; color: #fff; background: linear-gradient(135deg, #20543b, #34774f); }
+  .loan-print-principal small { color: #d9e6dc; font-size: 6pt; font-weight: 700; letter-spacing: .13em; }
+  .loan-print-principal strong { color: #fff; font-size: 19pt; font-weight: 700; letter-spacing: -.045em; white-space: nowrap; }
+  .loan-print-principal span { color: #d9e6dc; font-size: 7pt; }
+  .loan-print-loan-summary dl { display: grid; grid-template-columns: 1fr 1fr; align-content: center; gap: 0; margin: 0; background: #fbfcfa; }
+  .loan-print-loan-summary dl > div { padding: 3mm 4mm; border-bottom: .25mm solid #e1e9e2; }
+  .loan-print-loan-summary dl > div:nth-child(2n) { border-left: .25mm solid #e1e9e2; }
+  .loan-print-loan-summary dl > div:nth-child(n+3) { border-bottom: 0; }
+  .loan-print-loan-summary dd { font-size: 8pt; }
+  .loan-print-purpose { margin-top: 2.5mm; padding: 3mm 4mm; border-left: 1mm solid #c7a963; border-radius: 0 2mm 2mm 0; background: #f7f5ed; }
+  .loan-print-purpose > span { color: #7b704e; font-size: 6pt; font-weight: 700; letter-spacing: .13em; }
+  .loan-print-purpose p { margin: 1mm 0 0; color: #31473a; font-size: 8pt; line-height: 1.4; overflow-wrap: anywhere; }
+  .loan-print-declaration-card { display: grid; grid-template-columns: 1.2fr .8fr; align-items: center; gap: 6mm; padding: 4mm 5mm; border: .25mm solid #dce6dd; border-radius: 3mm; background: #fbfcfa; }
+  .loan-print-declaration-card > p { margin: 0; color: #485d4f; font-size: 7.5pt; line-height: 1.5; }
+  .loan-print-electronic-signature { display: grid; justify-items: center; gap: .5mm; min-height: 22mm; align-content: center; padding: 1mm 3mm; border-left: .25mm solid #dce6dd; }
+  .loan-print-electronic-signature > span { color: #718178; font-size: 5.5pt; font-weight: 700; letter-spacing: .1em; text-align: center; }
+  .loan-print-electronic-signature > strong { color: #18472f; font-family: 'Caveat', cursive; font-size: 35pt; font-weight: 600; line-height: .95; text-align: center; }
+  .loan-print-electronic-signature > small { color: #718178; font-size: 6pt; }
+  .loan-print-signers { flex: 1 1 auto; }
+  .loan-print-signatory-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3mm; }
+  .loan-print-signature-block { display: grid; min-height: 22mm; grid-template-rows: auto auto 1fr auto; gap: .7mm; padding: 2.5mm 3mm; break-inside: avoid; border: .25mm solid #dce6dd; border-radius: 2mm; background: #fbfcfa; }
+  .loan-print-signature-block strong { color: #2c4436; font-size: 7.5pt; overflow-wrap: anywhere; }
   .loan-print-signature-block > span,
-  .loan-print-signature-block > div { color: #59685e; font-size: 6pt; }
-  .loan-print-signature-block > i { display: block; height: 5mm; border-bottom: 1px solid #29382e; }
+  .loan-print-signature-block > div { color: #718178; font-size: 5.5pt; }
+  .loan-print-signature-block > i { display: block; min-height: 5mm; border-bottom: .25mm solid #75867b; }
   .loan-print-signature-block > div { display: flex; justify-content: space-between; }
-  .loan-print-document footer { margin-top: 4mm; padding-top: 2mm; border-top: 1px solid #b8c4ba; color: #66736a; font-size: 7pt; }
+  .loan-print-document footer { display: flex; justify-content: space-between; gap: 5mm; margin-top: auto; padding-top: 3mm; border-top: .35mm solid #dce6dd; color: #718178; font-size: 6pt; }
+  .loan-print-document footer > span:first-child { color: #2b6848; font-weight: 700; letter-spacing: .09em; }
+  .loan-print-document footer i { display: inline-block; width: 1mm; height: 1mm; margin: 0 1mm; border-radius: 50%; background: #c7a963; vertical-align: middle; }
 }
 
 .admin-dashboard {

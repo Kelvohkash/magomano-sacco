@@ -276,10 +276,18 @@ function App() {
     setLoanMessage('')
     setLoanMessageSuccess(false)
     try {
+      const formData = new FormData(event.currentTarget)
       const response = await fetch('/api/member/loan-applications', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ requestedAmount: loanAmount, repaymentMonths, purpose: loanPurpose, securityType: 'savings' }),
+        body: JSON.stringify({
+          requestedAmount: loanAmount,
+          repaymentMonths,
+          purpose: loanPurpose,
+          securityType: 'savings',
+          payoutAccount: formData.get('payoutAccount'),
+          electronicSignature: formData.get('electronicSignature') === 'on',
+        }),
       })
       const result = await response.json() as { message?: string; error?: string }
       if (!response.ok) throw new Error(result.error ?? 'Could not submit your application.')

@@ -1,5 +1,15 @@
 export interface DashboardData {
-  member: { national_id: string; full_name: string }
+  member: {
+    national_id: string
+    full_name: string
+    bankAccounts: {
+      id: 'primary' | 'secondary'
+      bankName: string
+      branch: string
+      accountName: string
+      accountNumber: string
+    }[]
+  }
   borrowingCapacity: {
     savingsBalance: number
     activeLoanBalance: number
@@ -187,6 +197,12 @@ export interface AdminLoanApplication {
   appliedAt: string
   nationalId: string
   fullName: string
+  payoutBankName: string
+  payoutBankBranch: string
+  payoutAccountName: string
+  payoutAccountNumber: string
+  electronicSignatureName: string
+  electronicallySignedAt: string | null
 }
 
 export interface AdminOpenLoan {

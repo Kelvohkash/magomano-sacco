@@ -387,7 +387,12 @@ async function getMemberBorrowingCapacity(env, memberId) {
 async function memberDashboard(session, env) {
   const memberId = session.memberId
   const member = await env.DB.prepare(`
-    SELECT national_id, full_name FROM members WHERE id = ?
+    SELECT national_id, full_name,
+      bank_name AS bankName, bank_branch AS bankBranch,
+      bank_account_name AS bankAccountName, bank_account_number AS bankAccountNumber,
+      bank_two_name AS bankTwoName, bank_two_branch AS bankTwoBranch,
+      bank_two_account_name AS bankTwoAccountName, bank_two_account_number AS bankTwoAccountNumber
+    FROM members WHERE id = ?
   `).bind(memberId).first()
   if (!member) throw new ApiError('Please sign in to continue.', 401)
 
@@ -399,7 +404,26 @@ async function memberDashboard(session, env) {
     `).bind(memberId).first(),
   ])
   return json({
-    member,
+    member: {
+      national_id: member.national_id,
+      full_name: member.full_name,
+      bankAccounts: [
+        {
+          id: 'primary',
+          bankName: member.bankName,
+          branch: member.bankBranch,
+          accountName: member.bankAccountName,
+          accountNumber: member.bankAccountNumber,
+        },
+        {
+          id: 'secondary',
+          bankName: member.bankTwoName,
+          branch: member.bankTwoBranch,
+          accountName: member.bankTwoAccountName,
+          accountNumber: member.bankTwoAccountNumber,
+        },
+      ].filter((account) => account.bankName && account.accountNumber),
+    },
     borrowingCapacity,
     savings: { balance: borrowingCapacity.savingsBalance, statement: [] },
     loans: {
@@ -507,6 +531,7 @@ async function applyForLoan(request, session, env) {
   const requestedAmount = Number(body.requestedAmount)
   const repaymentMonths = Number(body.repaymentMonths)
   const purpose = typeof body.purpose === 'string' ? body.purpose.trim() : ''
+  const payoutAccount = body.payoutAccount
   if (body.securityType !== undefined && body.securityType !== 'savings') {
     throw new ApiError('Savings is the only accepted loan security.')
   }
@@ -519,14 +544,36 @@ async function applyForLoan(request, session, env) {
   if (purpose.length < 3 || purpose.length > 500) {
     throw new ApiError('Describe the purpose in 3 to 500 characters.')
   }
+  if (!['primary', 'secondary'].includes(payoutAccount)) {
+    throw new ApiError('Choose the bank account where loan funds should be deposited.')
+  }
+  if (body.electronicSignature !== true) {
+    throw new ApiError('Confirm your electronic signature to submit the application.')
+  }
+
+  const member = await env.DB.prepare(`
+    SELECT full_name AS fullName,
+      CASE WHEN ? = 'primary' THEN bank_name ELSE bank_two_name END AS bankName,
+      CASE WHEN ? = 'primary' THEN bank_branch ELSE bank_two_branch END AS bankBranch,
+      CASE WHEN ? = 'primary' THEN bank_account_name ELSE bank_two_account_name END AS accountName,
+      CASE WHEN ? = 'primary' THEN bank_account_number ELSE bank_two_account_number END AS accountNumber
+    FROM members WHERE id = ?
+  `).bind(payoutAccount, payoutAccount, payoutAccount, payoutAccount, session.memberId).first()
+  if (!member?.bankName || !member.accountNumber) {
+    throw new ApiError('The selected bank account is incomplete. Update your member profile before applying.')
+  }
 
   const capacity = await getMemberBorrowingCapacity(env, session.memberId)
   if (requestedAmount > capacity.availableBalance) {
     throw new ApiError(`Requested loan exceeds your available borrowing balance of ${Number(capacity.availableBalance).toFixed(2)}.`)
   }
   const result = await env.DB.prepare(`
-    INSERT INTO loan_applications (member_id, requested_amount, repayment_months, purpose, security_type)
-    SELECT ?, ?, ?, ?, 'savings'
+    INSERT INTO loan_applications (
+      member_id, requested_amount, repayment_months, purpose, security_type,
+      payout_bank_name, payout_bank_branch, payout_account_name, payout_account_number,
+      electronic_signature_name, electronically_signed_at
+    )
+    SELECT ?, ?, ?, ?, 'savings', ?, ?, ?, ?, ?, CURRENT_TIMESTAMP
     WHERE ? <= MAX(0,
       COALESCE((SELECT SUM(CASE WHEN entry_type = 'deposit' THEN amount ELSE -amount END)
         FROM savings_transactions WHERE member_id = ?), 0)
@@ -536,6 +583,7 @@ async function applyForLoan(request, session, env) {
         FROM loan_applications WHERE member_id = ? AND status = 'pending'), 0)
     )
   `).bind(session.memberId, requestedAmount, repaymentMonths, purpose,
+    member.bankName, member.bankBranch, member.accountName, member.accountNumber, member.fullName,
     requestedAmount, session.memberId, session.memberId, session.memberId).run()
   if (!result.meta.changes) {
     const latestCapacity = await getMemberBorrowingCapacity(env, session.memberId)
@@ -741,7 +789,7 @@ async function handleAdmin(path, request, env) {
         from: 'a.applied_at',
         fromTable: 'loan_applications a JOIN members m ON m.id = a.member_id',
         where: [],
-        fields: 'a.id, a.requested_amount AS requestedAmount, a.repayment_months AS repaymentMonths, a.purpose, a.status, a.security_type AS securityType, a.applied_at AS appliedAt, m.full_name AS fullName, m.national_id AS nationalId',
+        fields: 'a.id, a.requested_amount AS requestedAmount, a.repayment_months AS repaymentMonths, a.purpose, a.status, a.security_type AS securityType, a.applied_at AS appliedAt, m.full_name AS fullName, m.national_id AS nationalId, a.payout_bank_name AS payoutBankName, a.payout_bank_branch AS payoutBankBranch, a.payout_account_name AS payoutAccountName, a.payout_account_number AS payoutAccountNumber, a.electronic_signature_name AS electronicSignatureName, a.electronically_signed_at AS electronicallySignedAt',
         order: "CASE WHEN a.status = 'pending' THEN 0 ELSE 1 END, a.applied_at DESC, a.id DESC",
         search: '(m.full_name LIKE ? OR m.national_id LIKE ? OR a.purpose LIKE ? OR a.status LIKE ?)',
       },
@@ -1006,7 +1054,11 @@ async function handleAdmin(path, request, env) {
       SELECT a.id, a.requested_amount AS requestedAmount,
         a.repayment_months AS repaymentMonths, a.purpose, a.status,
         a.security_type AS securityType,
-        a.applied_at AS appliedAt, m.national_id AS nationalId, m.full_name AS fullName
+        a.applied_at AS appliedAt, m.national_id AS nationalId, m.full_name AS fullName,
+        a.payout_bank_name AS payoutBankName, a.payout_bank_branch AS payoutBankBranch,
+        a.payout_account_name AS payoutAccountName, a.payout_account_number AS payoutAccountNumber,
+        a.electronic_signature_name AS electronicSignatureName,
+        a.electronically_signed_at AS electronicallySignedAt
       FROM loan_applications a JOIN members m ON m.id = a.member_id
       ORDER BY CASE WHEN a.status = 'pending' THEN 0 ELSE 1 END, a.applied_at DESC, a.id DESC
       LIMIT 100

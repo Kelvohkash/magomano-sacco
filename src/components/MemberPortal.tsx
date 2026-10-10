@@ -211,6 +211,8 @@ export function MemberPortal({
   onLogout,
 }: MemberPortalProps) {
   const firstName = dashboard.member.full_name.trim().split(/\s+/)[0] || 'Member'
+  const bankAccounts = dashboard.member.bankAccounts
+  const [payoutAccount, setPayoutAccount] = useState<'primary' | 'secondary'>(bankAccounts[0]?.id ?? 'primary')
   const [savingsPage, setSavingsPage] = useState<StatementState<SavingsTransaction>>({
     items: dashboard.savings.statement, total: dashboard.savings.statement.length, page: 1, pageSize: 10, loading: true, error: '', filters: { search: '', from: '', to: '', status: '' },
   })
@@ -529,6 +531,24 @@ export function MemberPortal({
           </div>
           <form className="loan-application-form" onSubmit={onLoanApplication}>
             <div className="loan-security-note"><span>Savings</span><strong>Required loan security</strong><small>Member savings are the only security accepted for SACCO loans.</small></div>
+            <fieldset className="loan-payout-accounts" disabled={!bankAccounts.length}>
+              <legend>Where should we deposit the loan?</legend>
+              {bankAccounts.map((account) => (
+                <label className="loan-payout-account" key={account.id}>
+                  <input
+                    type="radio"
+                    name="payoutAccount"
+                    value={account.id}
+                    checked={payoutAccount === account.id}
+                    onChange={() => setPayoutAccount(account.id)}
+                    required
+                  />
+                  <span><strong>{account.bankName}</strong>{account.branch && <small>{account.branch}</small>}</span>
+                  <small>{account.accountName}{account.accountName ? ' · ' : ''}{account.accountNumber}</small>
+                </label>
+              ))}
+              {!bankAccounts.length && <p className="form-message error">Add a bank name and account number to your member profile before applying.</p>}
+            </fieldset>
             <label htmlFor="loan-amount">Amount requested</label>
             <div className="amount-input-wrap"><span>KES</span><input id="loan-amount" name="requestedAmount" type="number" min="1" max={dashboard.borrowingCapacity.availableBalance} step="1" value={loanAmount} onChange={(event) => setLoanAmount(event.target.value)} required /></div>
             <label htmlFor="repayment-months">Repayment period</label>
@@ -541,8 +561,12 @@ export function MemberPortal({
             </div>
             <label htmlFor="loan-purpose">Purpose of the loan</label>
             <textarea id="loan-purpose" name="purpose" rows={4} maxLength={500} value={loanPurpose} onChange={(event) => setLoanPurpose(event.target.value)} placeholder="Briefly tell us what the loan is for" required />
+            <label className="loan-electronic-consent">
+              <input type="checkbox" name="electronicSignature" required />
+              <span>I agree to use my typed name as my electronic signature for this loan application.</span>
+            </label>
             {loanMessage && <p className={`form-message ${loanMessageSuccess ? 'success' : 'error'}`} role="status">{loanMessage}</p>}
-            <button className="submit-button" type="submit" disabled={loanSubmitting}>
+            <button className="submit-button" type="submit" disabled={loanSubmitting || !bankAccounts.length}>
               <span>{loanSubmitting ? 'Submitting…' : 'Submit application'}</span>
               {!loanSubmitting && <ArrowRight size={18} />}
             </button>

@@ -195,6 +195,17 @@ export function AdminPortal({
     await onDeleteLoanApplication(application.id)
   }
 
+  async function printLoanApplication() {
+    try {
+      const loadedFonts = await document.fonts.load('700 35pt "Dancing Script"')
+      if (!loadedFonts.length) throw new Error('The signature font did not load.')
+      window.print()
+    } catch (error) {
+      console.error('Unable to load the loan form signature font.', error)
+      window.alert('The signature font could not be loaded. Please try again before printing.')
+    }
+  }
+
   async function saveMemberDetails(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (editingMemberId === null) return
@@ -425,7 +436,7 @@ export function AdminPortal({
                   ) : (
                     <>
                       <p className="admin-empty">The form includes all accounts currently set as signatories.</p>
-                      <button type="button" className="print-application-button" onClick={() => window.print()}><Printer size={16} /> Print loan application</button>
+                      <button type="button" className="print-application-button" onClick={() => { void printLoanApplication() }}><Printer size={16} /> Print loan application</button>
                     </>
                   )}
                   <article className="loan-print-document">

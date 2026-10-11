@@ -441,16 +441,18 @@ export function AdminPortal({
                   )}
                   <article className="loan-print-document">
                     <header className="loan-print-header">
-                      <div className="loan-print-brand">
-                        <span className="loan-print-mark"><Landmark size={22} /></span>
-                        <div><strong>MAGOMANO</strong><small>SAVINGS &amp; CREDIT CO-OPERATIVE</small></div>
+                      <div className="loan-print-masthead">
+                        <div className="loan-print-brand">
+                          <span className="loan-print-mark"><Landmark size={22} /></span>
+                          <div><strong>MAGOMANO</strong><small>SAVINGS &amp; CREDIT CO-OPERATIVE</small></div>
+                        </div>
+                        <div className="loan-print-reference"><small>APPLICATION NO.</small><strong>#{String(viewingApplication.id).padStart(5, '0')}</strong><span>{formatDate(viewingApplication.appliedAt)}</span></div>
                       </div>
                       <div className="loan-print-title">
-                        <span>MEMBER FINANCE</span>
+                        <span>MEMBER FINANCE <i /> APPLICATION FORM</span>
                         <h1>Loan application</h1>
                         <p>Review, sign, and submit this form to complete your application.</p>
                       </div>
-                      <div className="loan-print-reference"><small>APPLICATION</small><strong>#{String(viewingApplication.id).padStart(5, '0')}</strong><span>{formatDate(viewingApplication.appliedAt)}</span></div>
                     </header>
                     <section className="loan-print-member">
                       <div className="loan-print-section-heading"><span>01</span><h2>Member details</h2></div>

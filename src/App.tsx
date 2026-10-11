@@ -5,6 +5,7 @@ import { MemberPortal } from './components/MemberPortal'
 import { currency } from './format'
 import './App.css'
 import './Portal.css'
+import './Admin.css'
 import type {
   AdminDividend,
   AdminLoanApplication,

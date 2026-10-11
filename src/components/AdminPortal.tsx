@@ -446,45 +446,52 @@ export function AdminPortal({
                           <span className="loan-print-mark"><Landmark size={22} /></span>
                           <div><strong>MAGOMANO</strong><small>SAVINGS &amp; CREDIT CO-OPERATIVE</small></div>
                         </div>
-                        <div className="loan-print-reference"><small>APPLICATION NO.</small><strong>#{String(viewingApplication.id).padStart(5, '0')}</strong><span>{formatDate(viewingApplication.appliedAt)}</span></div>
+                        <div className="loan-print-reference"><small>APPLICATION NO. <strong>#{String(viewingApplication.id).padStart(5, '0')}</strong></small><span>{formatDate(viewingApplication.appliedAt)}</span></div>
                       </div>
                       <div className="loan-print-title">
-                        <span>MEMBER FINANCE <i /> APPLICATION FORM</span>
+                        <span>MEMBER FINANCE / APPLICATION FORM</span>
                         <h1>Loan application</h1>
                         <p>Review, sign, and submit this form to complete your application.</p>
                       </div>
                     </header>
                     <section className="loan-print-member">
                       <div className="loan-print-section-heading"><span>01</span><h2>Member details</h2></div>
-                      <dl>
-                        <div><dt>Full name</dt><dd>{viewingApplication.fullName}</dd></div>
-                        <div><dt>National ID</dt><dd>{viewingApplication.nationalId}</dd></div>
-                        <div><dt>Location</dt><dd>{[
+                      <dl className="loan-print-member-grid">
+                        <div className="loan-print-member-field"><dt>Full name</dt><dd>{viewingApplication.fullName}</dd></div>
+                        <div className="loan-print-member-field"><dt>National ID</dt><dd>{viewingApplication.nationalId}</dd></div>
+                        <div className="loan-print-member-field"><dt>Location</dt><dd>{[
                           viewingApplicationMember?.location,
                           viewingApplicationMember?.subCounty,
                           viewingApplicationMember?.county,
                         ].filter(Boolean).join(', ') || '—'}</dd></div>
                         <div className="loan-print-payout">
                           <dt>Deposit account selected</dt>
-                          <dd>{viewingApplication.payoutBankName || 'Not recorded on this application'}</dd>
-                          <span>{[
+                          <dd>{[
                             viewingApplication.payoutBankBranch,
                             viewingApplication.payoutAccountName,
                             viewingApplication.payoutAccountNumber,
-                          ].filter(Boolean).join(' · ')}</span>
+                          ].filter(Boolean).join(' · ') || 'Not recorded on this application'}</dd>
+                        </div>
+                        <div className="loan-print-bank">
+                          <dt>Bank</dt>
+                          <dd>{viewingApplication.payoutBankName || '—'}</dd>
                         </div>
                       </dl>
                     </section>
                     <section className="loan-print-loan">
                       <div className="loan-print-section-heading"><span>02</span><h2>Loan requested</h2></div>
                       <div className="loan-print-loan-summary">
-                        <div className="loan-print-principal"><small>AMOUNT REQUESTED</small><strong>{currency.format(viewingApplication.requestedAmount)}</strong><span>Principal</span></div>
-                        <dl>
-                          <div><dt>Repayment period</dt><dd>{viewingApplication.repaymentMonths} months</dd></div>
-                          <div><dt>Interest rate</dt><dd>10% flat</dd></div>
-                          <div><dt>Estimated total repayable</dt><dd>{currency.format(viewingApplication.requestedAmount * 1.1)}</dd></div>
-                          <div><dt>Security</dt><dd>Savings</dd></div>
-                        </dl>
+                        <div className="loan-print-principal"><dt>Amount requested</dt><dd>{currency.format(viewingApplication.requestedAmount)}</dd></div>
+                        <div><dt>Repayment period</dt><dd>{viewingApplication.repaymentMonths} months</dd></div>
+                        <div><dt>Interest rate</dt><dd>10% flat</dd></div>
+                        <div>
+                          <dt>Estimated total repayable</dt>
+                          <dd>{currency.format(viewingApplication.requestedAmount * 1.1)}</dd>
+                        </div>
+                        <div>
+                          <dt>Security</dt>
+                          <dd>Savings</dd>
+                        </div>
                       </div>
                       <div className="loan-print-purpose"><span>LOAN PURPOSE</span><p>{viewingApplication.purpose}</p></div>
                     </section>
@@ -505,8 +512,8 @@ export function AdminPortal({
                         <div className="loan-print-signature-block" key={signatory.id}>
                           <strong>{signatory.fullName}</strong>
                           <span>Authorized signatory</span>
-                          <i></i>
-                          <div><span>Signature</span><span>Date</span></div>
+                          <div className="loan-print-signature-line"><i></i><span>Signature</span></div>
+                          <div className="loan-print-date-line"><i></i><span>Date</span></div>
                         </div>
                       ))}{!signatories.length && <p>No signatories have been assigned.</p>}</div>
                     </section>

@@ -8,7 +8,7 @@
     "demo": "npm run build && wrangler d1 migrations apply magomano-db --local && node scripts/seed-demo.js && wrangler pages dev dist --local --port 8788",
     "dev:api": "wrangler pages dev dist --port 8788",
     "dev:web": "vite --host 127.0.0.1",
-    "build": "tsc -b && vite build && wrangler pages functions build pages-functions --outdir .wrangler/pages-worker --minify --compatibility-date=2026-10-08 --compatibility-flag=nodejs_compat && node scripts/finalize-pages-worker.js",
+    "build": "tsc -b && vite build && wrangler pages functions build pages-functions --outdir .wrangler/pages-worker --compatibility-date=2026-10-08 --compatibility-flag=nodejs_compat && node scripts/finalize-pages-worker.js",
     "lint": "oxlint",
     "seed:admin": "node scripts/seed-admin.js",
     "seed:demo": "node scripts/seed-demo.js",

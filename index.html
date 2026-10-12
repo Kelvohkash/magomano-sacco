@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <meta name="theme-color" content="#153d3a" />
     <meta name="description" content="Sign in to your Magomano SACCO member account.." />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -12,6 +12,30 @@
     <link rel="icon" type="image/svg+xml" href="/pwa-icon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <title>Member sign in | Magomano SACCO</title>
+    <script>
+      (function() {
+        try {
+          var root = document.documentElement;
+          var probe = document.createElement('div');
+          probe.style.cssText = 'position:fixed;left:-9999px;top:-9999px;font-size:16px !important;line-height:1;visibility:hidden;pointer-events:none;padding:0;margin:0;border:0;';
+          probe.textContent = 'M';
+          root.appendChild(probe);
+          var computed = parseFloat(window.getComputedStyle(probe).fontSize) || 16;
+          root.removeChild(probe);
+          var fontScale = computed > 0 ? computed / 16 : 1;
+          var width = window.innerWidth || root.clientWidth || 390;
+          if (width < 768) {
+            var fontRatio = fontScale > 1.04 ? 1 / fontScale : 1;
+            var widthRatio = width < 380 ? Math.max(0.76, width / 380) : 1;
+            var targetScale = Math.max(0.70, Math.min(1.0, Math.min(fontRatio, widthRatio)));
+            if (Math.abs(targetScale - 1.0) > 0.02) {
+              root.style.zoom = String(targetScale);
+              root.style.setProperty('--app-scale', String(targetScale));
+            }
+          }
+        } catch(e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

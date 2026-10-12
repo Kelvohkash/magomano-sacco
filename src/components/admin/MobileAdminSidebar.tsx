@@ -1,14 +1,18 @@
-import { AdminSidebar } from './AdminSidebar';
-import type { Dispatch, SetStateAction } from 'react';
-import type { AdminView } from '../../types';
+import type { Dispatch, SetStateAction } from 'react'
+import type { AdminView } from '../../types'
+import { MobileAdminDrawer } from './MobileAdminDrawer'
 
-interface MobileAdminSidebarProps {
-  currentView: AdminView;
-  setView: Dispatch<SetStateAction<AdminView>>;
-  pendingMembersCount: number;
-  pendingApplicationsCount: number;
-  onClose: () => void;
-  sidebarOpen: boolean;
+export interface MobileAdminSidebarProps {
+  currentView: AdminView
+  setView: Dispatch<SetStateAction<AdminView>>
+  pendingMembersCount: number
+  pendingApplicationsCount: number
+  onClose: () => void
+  sidebarOpen: boolean
+  signedInAdmin?: string
+  isRefreshing?: boolean
+  onRefresh?: () => void
+  onLogout?: () => void
 }
 
 export function MobileAdminSidebar({
@@ -18,21 +22,23 @@ export function MobileAdminSidebar({
   pendingApplicationsCount,
   onClose,
   sidebarOpen,
+  signedInAdmin = 'Administrator',
+  isRefreshing = false,
+  onRefresh = () => {},
+  onLogout = () => {},
 }: MobileAdminSidebarProps) {
   return (
-    <div className={`mobile-admin-sidebar ${sidebarOpen ? 'open' : ''}`}>
-      <div className="sidebar-header">
-        <h3>Magomano Admin</h3>
-        <button className="sidebar-close-btn" onClick={onClose} aria-label="Close menu">
-          ×
-        </button>
-      </div>
-      <AdminSidebar
-        currentView={currentView}
-        setView={setView}
-        pendingMembersCount={pendingMembersCount}
-        pendingApplicationsCount={pendingApplicationsCount}
-      />
-    </div>
-  );
+    <MobileAdminDrawer
+      currentView={currentView}
+      setView={setView}
+      pendingMembersCount={pendingMembersCount}
+      pendingApplicationsCount={pendingApplicationsCount}
+      signedInAdmin={signedInAdmin}
+      isRefreshing={isRefreshing}
+      isOpen={sidebarOpen}
+      onClose={onClose}
+      onRefresh={onRefresh}
+      onLogout={onLogout}
+    />
+  )
 }

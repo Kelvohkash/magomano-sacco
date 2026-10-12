@@ -1,8 +1,9 @@
 import type { Dispatch, FormEvent, FormEventHandler, SetStateAction } from 'react'
 import { useState } from 'react'
-import { AlertCircle, CheckCircle2 } from 'lucide-react'
+import { AlertCircle, CheckCircle2, RefreshCcw, WalletCards } from 'lucide-react'
 import { MobileAdminTopbar } from './MobileAdminTopbar'
-import { MobileAdminSidebar } from './MobileAdminSidebar'
+import { MobileAdminBottomNav } from './MobileAdminBottomNav'
+import { MobileAdminDrawer } from './MobileAdminDrawer'
 import { AdminDashboardView } from './views/AdminDashboardView'
 import { AdminMembersView } from './views/AdminMembersView'
 import { AdminLoansView } from './views/AdminLoansView'
@@ -69,56 +70,99 @@ export interface MobileAdminPortalProps {
 }
 
 export function MobileAdminPortal({
-  signedInAdmin, view, setView, summary, statementRefreshKey,
-  members, applications,
-  message, messageSuccess, reviewingId,
+  signedInAdmin,
+  view,
+  setView,
+  summary,
+  statementRefreshKey,
+  members,
+  applications,
+  message,
+  messageSuccess,
+  reviewingId,
   onLogout,
-  onReviewMember, onSetMemberRole, onDeleteMember,
-  onReviewLoan, onUpdateLoanApplication, onDeleteLoanApplication, onUpdateMember,
-  terms, setTerms, termsUpdatedAt, onSaveTerms,
+  onReviewMember,
+  onSetMemberRole,
+  onDeleteMember,
+  onReviewLoan,
+  onUpdateLoanApplication,
+  onDeleteLoanApplication,
+  onUpdateMember,
+  terms,
+  setTerms,
+  termsUpdatedAt,
+  onSaveTerms,
   onRefresh,
 }: MobileAdminPortalProps) {
   const ui = useAdminPortalState(
-    members, applications,
-    onUpdateLoanApplication, onUpdateMember, onDeleteMember, onDeleteLoanApplication,
+    members,
+    applications,
+    onUpdateLoanApplication,
+    onUpdateMember,
+    onDeleteMember,
+    onDeleteLoanApplication,
     onRefresh,
   )
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [drawerOpen, setDrawerOpen] = useState(false)
 
   async function saveTerms(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     ui.setTermsSaving(true)
     ui.setTermsMessage('')
-    if (await onSaveTerms(terms)) ui.setTermsMessage('Terms and conditions published successfully.')
+    if (await onSaveTerms(terms)) {
+      ui.setTermsMessage('Terms and conditions published successfully.')
+    }
     ui.setTermsSaving(false)
   }
 
+  const totalPending = ui.pendingMembers.length + ui.pendingApplications.length
+
   return (
     <div className="mobile-admin-root-layout">
+      {/* Top Header */}
       <MobileAdminTopbar
         signedInAdmin={signedInAdmin}
         isRefreshing={ui.isRefreshing}
+        pendingCount={totalPending}
         onRefresh={() => void ui.handleRefreshClick()}
-        onLogout={onLogout}
-        onToggleMenu={() => setSidebarOpen(prev => !prev)}
+        onToggleMenu={() => setDrawerOpen(true)}
       />
-      
-      {sidebarOpen && (
-        <div className="mobile-admin-sidebar-backdrop" onClick={() => setSidebarOpen(false)}>
-          <MobileAdminSidebar
-            currentView={view}
-            setView={setView}
-            pendingMembersCount={ui.pendingMembers.length}
-            pendingApplicationsCount={ui.pendingApplications.length}
-            onClose={() => setSidebarOpen(false)}
-            sidebarOpen={sidebarOpen}
-          />
+
+      {/* Segmented ledger switcher when looking at financial ledgers */}
+      {(view === 'repayments' || view === 'savings') && (
+        <div className="mobile-admin-ledger-bar">
+          <div className="mobile-ledger-segmented-control" role="tablist">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={view === 'repayments'}
+              className={`mobile-ledger-tab-btn ${view === 'repayments' ? 'is-active' : ''}`}
+              onClick={() => setView('repayments')}
+            >
+              <RefreshCcw size={14} />
+              <span>Loan Repayments</span>
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={view === 'savings'}
+              className={`mobile-ledger-tab-btn ${view === 'savings' ? 'is-active' : ''}`}
+              onClick={() => setView('savings')}
+            >
+              <WalletCards size={14} />
+              <span>Savings Deposits</span>
+            </button>
+          </div>
         </div>
       )}
 
+      {/* Main Scrollable Viewport */}
       <main className="mobile-admin-viewport">
         {message && (
-          <div className={`admin-banner-alert ${messageSuccess ? 'alert-success' : 'alert-error'}`} role="status">
+          <div
+            className={`admin-banner-alert ${messageSuccess ? 'alert-success' : 'alert-error'}`}
+            role="status"
+          >
             {messageSuccess ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
             <span className="banner-alert-text">{message}</span>
           </div>
@@ -203,13 +247,40 @@ export function MobileAdminPortal({
         )}
       </main>
 
+      {/* Bottom Navigation Dock */}
+      <MobileAdminBottomNav
+        currentView={view}
+        setView={setView}
+        pendingMembersCount={ui.pendingMembers.length}
+        pendingApplicationsCount={ui.pendingApplications.length}
+        onOpenMore={() => setDrawerOpen(true)}
+      />
+
+      {/* Slide-over Drawer Menu */}
+      <MobileAdminDrawer
+        currentView={view}
+        setView={setView}
+        pendingMembersCount={ui.pendingMembers.length}
+        pendingApplicationsCount={ui.pendingApplications.length}
+        signedInAdmin={signedInAdmin}
+        isRefreshing={ui.isRefreshing}
+        isOpen={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        onRefresh={() => void ui.handleRefreshClick()}
+        onLogout={onLogout}
+      />
+
+      {/* Modals & Profile Sheets */}
       {ui.viewingMember && (
         <MemberProfileDrawer
           member={ui.viewingMember}
           onClose={() => ui.setViewingMemberId(null)}
           onReviewMember={onReviewMember}
           onSetMemberRole={onSetMemberRole}
-          onEditMember={(m) => { ui.beginMemberEdit(m); ui.setViewingMemberId(null) }}
+          onEditMember={(m) => {
+            ui.beginMemberEdit(m)
+            ui.setViewingMemberId(null)
+          }}
           onDeleteMember={ui.removeMember}
           reviewingId={reviewingId}
         />
@@ -241,7 +312,10 @@ export function MobileAdminPortal({
           setApplicationForm={ui.setApplicationForm}
           onSaveApplication={ui.saveApplication}
           saving={reviewingId === `edit-loan-${ui.viewingApplication.id}`}
-          onClose={() => { ui.setViewingApplicationId(null); ui.setEditingApplicationId(null) }}
+          onClose={() => {
+            ui.setViewingApplicationId(null)
+            ui.setEditingApplicationId(null)
+          }}
           onApprove={() => onReviewLoan(ui.viewingApplication!.id, 'approve')}
           onReject={() => onReviewLoan(ui.viewingApplication!.id, 'reject')}
           isActionLoading={reviewingId === `loan-${ui.viewingApplication.id}`}

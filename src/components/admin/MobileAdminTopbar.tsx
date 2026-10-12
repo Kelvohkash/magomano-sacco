@@ -1,85 +1,70 @@
-import { Hamburger } from 'lucide-react';
+import { Landmark, Menu, RefreshCcw } from 'lucide-react'
 
 interface MobileAdminTopbarProps {
-  signedInAdmin: string;
-  isRefreshing: boolean;
-  onRefresh: () => void;
-  onLogout: () => void;
-  onToggleMenu: () => void;
+  signedInAdmin: string
+  isRefreshing: boolean
+  pendingCount?: number
+  onRefresh: () => void
+  onToggleMenu: () => void
 }
 
 export function MobileAdminTopbar({
   signedInAdmin,
   isRefreshing,
+  pendingCount = 0,
   onRefresh,
-  onLogout,
   onToggleMenu,
 }: MobileAdminTopbarProps) {
+  // Extract initial for avatar
+  const initial = signedInAdmin.trim().charAt(0).toUpperCase() || 'A'
+
   return (
     <header className="mobile-admin-topbar">
       <div className="mobile-admin-topbar-left">
-        <button className="mobile-admin-menu-btn" onClick={onToggleMenu} aria-label="Open menu">
-          <Hamburger size={24} />
+        <button
+          type="button"
+          className="mobile-admin-icon-btn menu-btn"
+          onClick={onToggleMenu}
+          aria-label="Open administration menu"
+        >
+          <Menu size={22} />
+          {pendingCount > 0 && <span className="mobile-admin-btn-badge" />}
         </button>
-        <a className="mobile-admin-topbar-brand" href="/" aria-label="Magomano SACCO core administration">
-          <div className="mobile-admin-brand-icon">
-            {/* Use same landmark icon */}
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3 9L12 3L21 9" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"/>
-            </svg>
+
+        <a className="mobile-admin-brand" href="/" aria-label="Magomano SACCO core administration">
+          <div className="mobile-admin-brand-crest">
+            <Landmark size={18} strokeWidth={2.4} />
           </div>
-          <div className="mobile-admin-brand-titles">
-            <span className="mobile-brand-title-main">MAGOMANO SACCO</span>
-            <span className="mobile-brand-title-badge">ADMINISTRATION CONSOLE</span>
+          <div className="mobile-admin-brand-meta">
+            <span className="mobile-brand-title">MAGOMANO</span>
+            <span className="mobile-brand-tag">ADMIN</span>
           </div>
         </a>
       </div>
+
       <div className="mobile-admin-topbar-right">
         <button
           type="button"
-          className="mobile-admin-header-refresh-btn"
+          className={`mobile-admin-icon-btn refresh-btn ${isRefreshing ? 'is-spinning' : ''}`}
           onClick={onRefresh}
           disabled={isRefreshing}
-          title="Refresh SACCO data"
+          aria-label="Refresh SACCO data"
+          title="Refresh SACCO records"
         >
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 4V9L15 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-            <path d="M4 12H9V15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-            <path d="M20 12H15V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-            <path d="M12 20V15L9 18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-            <path d="M2 12C2 6.48 6.48 2 12 2S22 6.48 22 12C22 17.52 17.52 22 12 22S2 17.52 2 12Z" stroke="currentColor" strokeWidth="1.5"/>
-          </svg>
-          <span>Refresh</span>
+          <RefreshCcw size={18} className={isRefreshing ? 'spin-icon' : ''} />
         </button>
-
-        <div className="mobile-admin-user-pill">
-          <div className="mobile-admin-user-avatar">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5"/>
-              <path d="M9 9V7C9 5.34 10.34 4 12 4S15 5.34 15 7V9H9Z" fill="currentColor"/>
-            </svg>
-          </div>
-          <div className="mobile-admin-user-details">
-            <strong className="mobile-admin-user-name">{signedInAdmin}</strong>
-            <small className="mobile-admin-user-role">System Administrator</small>
-          </div>
-        </div>
 
         <button
           type="button"
-          className="mobile-admin-header-logout-btn"
-          onClick={onLogout}
-          title="Sign out of administration"
+          className="mobile-admin-avatar-btn"
+          onClick={onToggleMenu}
+          aria-label={`Admin account: ${signedInAdmin}`}
+          title={`Signed in as ${signedInAdmin}`}
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            <path d="M12 17V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-            <path d="M16 13L20 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-            <path d="M12 9L8 13" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-          </svg>
-          <span>Sign out</span>
+          <span className="mobile-admin-avatar-initial">{initial}</span>
+          <span className="mobile-admin-avatar-online" />
         </button>
       </div>
     </header>
-  );
+  )
 }

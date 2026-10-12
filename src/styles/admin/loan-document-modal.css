@@ -145,3 +145,65 @@
   align-items: center;
   gap: 8px;
 }
+
+.loan-modal-scroll-hint {
+  display: none;
+  background-color: #0f1c3d;
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 8px 12px;
+  text-align: center;
+  border-bottom: 1px solid var(--admin-dark-border);
+}
+
+@media (max-width: 768px) {
+  .loan-modal-overlay {
+    padding: 0;
+  }
+
+  .loan-modal-container {
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    max-height: 100dvh;
+    border-radius: 0;
+    border: none;
+  }
+
+  .loan-modal-toolbar {
+    padding: 10px 12px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .loan-modal-toolbar-meta {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .loan-modal-actions {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .loan-modal-scroll-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .loan-sheet-wrapper {
+    padding: 14px 10px 60px 10px;
+    overflow-x: auto;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .official-loan-document {
+    width: 210mm !important;
+    min-width: 210mm !important;
+    max-width: none !important;
+  }
+}

@@ -5,6 +5,7 @@ import { AuthWelcomeAside } from './AuthWelcomeAside'
 import { MemberLoginForm } from './MemberLoginForm'
 import { RegistrationForm } from './RegistrationForm'
 import { RegistrationStepsIndicator } from './RegistrationStepsIndicator'
+import { useMobileBackHandler } from '../../hooks/useMobileBackHandler'
 
 export interface AuthScreenProps {
   mode: AuthMode
@@ -73,8 +74,28 @@ export function AuthScreen({
     form.closest<HTMLElement>('.registration-panel')?.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  // Back Button Navigation & Double-Back to Exit
+  let activeModalClose: (() => void) | null = null
+  if (mode === 'register' && step > 0) {
+    activeModalClose = () => setStep((s) => Math.max(0, s - 1))
+  }
+
+  const isRoot = mode === 'login'
+
+  const { showExitToast } = useMobileBackHandler({
+    activeModalClose,
+    currentView: mode,
+    onGoToRoot: () => onChangeMode('login'),
+    isRoot,
+  })
+
   return (
     <main className={`login-shell ${mode === 'register' ? 'join-shell' : ''}`}>
+      {showExitToast && (
+        <div className="mobile-exit-toast" role="status" aria-live="polite">
+          Swipe back again to exit
+        </div>
+      )}
       <AuthWelcomeAside />
 
       <section className={`form-panel ${mode === 'register' ? 'registration-panel' : ''}`}>

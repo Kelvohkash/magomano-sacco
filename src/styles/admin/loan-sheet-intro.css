@@ -3,20 +3,29 @@
    ========================================================================== */
 
 .loan-sheet-wrapper {
-  padding: 32px 24px;
+  padding: 24px 16px;
   background-color: #0b1329;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   overflow-x: auto;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* The Exact Physical A4 Document */
+@media (min-width: 900px) {
+  .loan-sheet-wrapper {
+    justify-content: center;
+  }
+}
+
 /* The Exact Physical A4 Document */
 .official-loan-document {
   box-sizing: border-box;
   width: 210mm;
+  min-width: 210mm;
   min-height: 297mm;
-  max-width: 100%;
   margin: 0 auto;
   padding: 12mm 15mm 10mm;
   background-color: #ffffff;

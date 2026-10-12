@@ -173,6 +173,12 @@ export function LoanDocumentModal({
           </div>
         </header>
 
+        {!isEditing && (
+          <div className="loan-modal-scroll-hint">
+            <span>↔ Pan &amp; scroll to inspect the full A4 agreement</span>
+          </div>
+        )}
+
         {/* Content Area */}
         <div className="loan-modal-body">
           {isEditing ? (

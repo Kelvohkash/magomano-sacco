@@ -1,6 +1,7 @@
 import type { Dispatch, SetStateAction } from 'react'
 import {
   ChevronRight,
+  Download,
   FileSpreadsheet,
   FileText,
   Landmark,
@@ -13,6 +14,7 @@ import {
   X,
 } from 'lucide-react'
 import type { AdminView } from '../../types'
+import { usePwaInstall } from '../../hooks/usePwaInstall'
 
 interface MobileAdminDrawerProps {
   currentView: AdminView
@@ -103,6 +105,8 @@ export function MobileAdminDrawer({
     onClose()
   }
 
+  const { canInstall, triggerInstall } = usePwaInstall()
+
   return (
     <div className="mobile-admin-drawer-backdrop" onClick={onClose}>
       <aside
@@ -179,6 +183,17 @@ export function MobileAdminDrawer({
 
         {/* Drawer Actions Footer */}
         <div className="drawer-footer-actions">
+          {canInstall && (
+            <button
+              type="button"
+              className="drawer-install-btn"
+              onClick={() => void triggerInstall()}
+            >
+              <Download size={16} />
+              <span>Install Magomano App</span>
+            </button>
+          )}
+
           <button
             type="button"
             className={`drawer-refresh-btn ${isRefreshing ? 'is-spinning' : ''}`}

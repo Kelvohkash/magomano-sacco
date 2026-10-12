@@ -16,6 +16,7 @@ import { MemberLoanApplicationView } from './views/MemberLoanApplicationView'
 import { MemberLoanStatusView } from './views/MemberLoanStatusView'
 import { MemberOverviewView } from './views/MemberOverviewView'
 import { readJsonResponse, requestErrorMessage } from '../../networkErrors'
+import { useMobileBackHandler } from '../../hooks/useMobileBackHandler'
 
 export interface MemberPortalProps {
   dashboard: DashboardData
@@ -183,8 +184,28 @@ export function MemberPortal({
     updateState((current) => ({ ...current, page: 1, loading: true, filters }))
   }
 
+  // Back Button Navigation & Double-Back to Exit
+  let activeModalClose: (() => void) | null = null
+  if (menuOpen) {
+    activeModalClose = () => setMenuOpen(false)
+  }
+
+  const isRoot = view === 'overview' && activeModalClose === null
+
+  const { showExitToast } = useMobileBackHandler({
+    activeModalClose,
+    currentView: view,
+    onGoToRoot: () => setView('overview'),
+    isRoot,
+  })
+
   return (
     <main className="member-dashboard">
+      {showExitToast && (
+        <div className="mobile-exit-toast" role="status" aria-live="polite">
+          Swipe back again to exit
+        </div>
+      )}
       <MemberHeader
         firstName={firstName}
         view={view}

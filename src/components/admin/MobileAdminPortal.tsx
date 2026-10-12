@@ -15,6 +15,7 @@ import { MemberProfileDrawer } from './modals/MemberProfileDrawer'
 import { MemberEditModal } from './modals/MemberEditModal'
 import { LoanDocumentModal } from './loan-document/LoanDocumentModal'
 import { useAdminPortalState } from '../../hooks/useAdminPortalState'
+import { useMobileBackHandler } from '../../hooks/useMobileBackHandler'
 import type {
   AdminLoanApplication,
   AdminMember,
@@ -115,10 +116,40 @@ export function MobileAdminPortal({
     ui.setTermsSaving(false)
   }
 
+  // Back Button Navigation & Double-Back to Exit
+  let activeModalClose: (() => void) | null = null
+  if (ui.viewingApplicationId !== null) {
+    activeModalClose = () => {
+      ui.setViewingApplicationId(null)
+      ui.setEditingApplicationId(null)
+    }
+  } else if (ui.viewingMemberId !== null) {
+    activeModalClose = () => ui.setViewingMemberId(null)
+  } else if (ui.editingMemberId !== null) {
+    activeModalClose = () => ui.setEditingMemberId(null)
+  } else if (drawerOpen) {
+    activeModalClose = () => setDrawerOpen(false)
+  }
+
+  const isRoot = view === 'overview' && activeModalClose === null
+
+  const { showExitToast } = useMobileBackHandler({
+    activeModalClose,
+    currentView: view,
+    onGoToRoot: () => setView('overview'),
+    isRoot,
+  })
+
   const totalPending = ui.pendingMembers.length + ui.pendingApplications.length
 
   return (
     <div className="mobile-admin-root-layout">
+      {showExitToast && (
+        <div className="mobile-exit-toast" role="status" aria-live="polite">
+          Swipe back again to exit
+        </div>
+      )}
+
       {/* Top Header */}
       <MobileAdminTopbar
         signedInAdmin={signedInAdmin}

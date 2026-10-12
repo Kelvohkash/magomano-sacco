@@ -1,0 +1,198 @@
+/* Action Buttons inside Table */
+.row-actions-group {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  white-space: nowrap;
+  flex-wrap: nowrap;
+}
+
+.loan-row-actions {
+  display: flex;
+  width: max-content;
+  max-width: 100%;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px;
+  white-space: normal;
+}
+
+.loan-row-actions .table-btn-primary,
+.loan-row-actions .table-btn-edit,
+.loan-row-actions .table-btn-approve,
+.loan-row-actions .table-btn-reject,
+.loan-row-actions .table-btn-delete {
+  width: 36px;
+  height: 36px;
+  justify-content: center;
+  padding: 0;
+}
+
+.loan-row-actions .table-btn-primary {
+  width: auto;
+  padding: 0 12px;
+}
+
+.table-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 13px;
+  border-radius: 8px;
+  border: 1px solid var(--admin-primary);
+  background-color: var(--admin-primary-light);
+  color: var(--admin-primary);
+  font-size: 11.5px;
+  font-weight: 750;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.16s ease;
+  cursor: pointer;
+}
+
+.table-btn-primary:hover {
+  background-color: var(--admin-primary);
+  color: #ffffff;
+}
+
+.table-btn-role {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  background-color: #ffffff;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+.table-btn-role:hover:not(:disabled) {
+  border-color: #0f766e;
+  color: #0f766e;
+  background-color: #f0fdfa;
+}
+
+.table-btn-role.active {
+  border-color: #86efac;
+  background-color: #f0fdf4;
+  color: #15803d;
+}
+
+.table-btn-role.active:hover:not(:disabled) {
+  border-color: #fecaca;
+  background-color: #fef2f2;
+  color: #b91c1c;
+}
+
+.table-btn-view,
+.table-btn-edit {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 8px;
+  border: 1px solid var(--admin-border);
+  background-color: #ffffff;
+  color: var(--admin-text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.16s ease;
+  cursor: pointer;
+}
+
+.table-btn-view:hover,
+.table-btn-edit:hover {
+  background-color: #f1f5f9;
+  color: var(--admin-text-dark);
+  border-color: #cbd5e1;
+}
+
+.table-btn-approve {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 8px;
+  border: 1px solid #10b981;
+  background-color: #ecfdf5;
+  color: #047857;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+.table-btn-approve:hover {
+  background-color: #10b981;
+  color: #ffffff;
+}
+
+.table-btn-reject {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 8px;
+  border: 1px solid #f43f5e;
+  background-color: #fff1f2;
+  color: #be123c;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+.table-btn-reject:hover {
+  background-color: #f43f5e;
+  color: #ffffff;
+}
+
+.table-btn-delete {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #94a3b8;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+.table-btn-delete:hover:not(:disabled) {
+  background-color: #fff1f2;
+  color: #e11d48;
+}
+
+.table-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 60px 20px;
+  color: var(--admin-text-muted);
+  text-align: center;
+}
+
+.table-empty-state svg {
+  color: #cbd5e1;
+}

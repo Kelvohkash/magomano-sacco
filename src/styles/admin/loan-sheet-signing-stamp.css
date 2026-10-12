@@ -1,0 +1,47 @@
+/* Dedicated Open Signing Area for Pen Signature */
+.signatory-signing-zone {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 15mm;
+  margin: 1mm 0 1.5mm;
+  position: relative;
+}
+
+.sign-line {
+  height: 0.8pt;
+  background-color: #475569;
+  width: 100%;
+}
+
+.sign-label {
+  font-size: 5.6pt;
+  font-weight: 800;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 0.8mm;
+}
+
+.date-line-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 0.5pt dashed #cbd5e1;
+  padding-top: 1.2mm;
+  margin-top: auto;
+}
+
+.date-label {
+  font-size: 6pt;
+  font-weight: 800;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.date-blank {
+  font-size: 6.8pt;
+  font-family: monospace;
+  color: #64748b;
+  letter-spacing: 0.05em;
+}

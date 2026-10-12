@@ -1,0 +1,42 @@
+@media (max-width: 720px) {
+  .dashboard-header { height: 68px; padding-inline: 18px; }
+  .member-greeting { gap: 8px; font-size: 12px; }
+  .member-avatar { width: 31px; height: 31px; }
+  .menu-toggle { width: 38px; height: 38px; margin-left: 3px; }
+  .dashboard-menu { top: 59px; right: 18px; }
+  .dashboard-content { width: calc(100% - 36px); padding: 36px 0 48px; }
+  .dashboard-intro h1 { font-size: 33px; }
+  .balance-grid { grid-template-columns: 1fr; gap: 10px; }
+  .balance-panel { min-height: 145px; padding: 19px; }
+  .balance-amount { margin-top: 15px; font-size: 25px; }
+  .statement-grid { grid-template-columns: 1fr; gap: 27px; margin-top: 32px; }
+  .repayment-history-section { margin-top: 30px; }
+  .admin-workspace { grid-template-columns: 1fr; gap: 27px; margin-top: 24px; }
+  .admin-entry-form { padding: 19px; }
+  .admin-member-summary { padding-top: 18px; }
+  .admin-header-actions { gap: 8px; font-size: 11px; }
+  .admin-signout { min-height: 36px; gap: 6px; padding-inline: 9px; font-size: 11px; }
+  .admin-tabs { margin-right: -18px; margin-left: -18px; padding: 0 18px; }
+  .admin-tabs button { padding-inline: 10px; font-size: 11px; }
+  .admin-metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+  .admin-metric { gap: 8px; padding: 14px 13px; }
+  .admin-metric > strong { font-size: 18px; }
+  .admin-queue-grid { grid-template-columns: 1fr; gap: 10px; margin-top: 17px; }
+  .admin-record { align-items: flex-start; flex-direction: column; gap: 12px; }
+  .admin-record-actions { width: 100%; }
+  .admin-record-actions button { flex: 1; }
+  .bulk-import-guidance { align-items: flex-start; flex-wrap: wrap; }
+  .bulk-import-guidance > div { flex: 1 1 calc(100% - 38px); }
+  .template-button { margin-left: 32px; }
+  .bulk-preview { margin-inline: -2px; padding: 13px; }
+}
+
+@media (max-width: 380px) {
+  .dashboard-brand { gap: 8px; }
+  .dashboard-brand .brand-mark { width: 35px; height: 35px; flex-basis: 35px; }
+  .dashboard-brand .brand-name { font-size: 15px; }
+  .member-greeting { gap: 6px; }
+  .member-avatar { display: none; }
+  .statement-row { gap: 9px; }
+  .statement-amount { font-size: 11px; }
+}

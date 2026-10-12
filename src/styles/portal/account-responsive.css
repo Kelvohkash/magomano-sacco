@@ -1,0 +1,18 @@
+@media (max-width: 1100px) and (min-width: 901px) {
+  .member-dashboard:not(.admin-dashboard) .member-desktop-nav,
+  .member-dashboard:not(.admin-dashboard) .member-desktop-signout { display: none; }
+  .member-dashboard:not(.admin-dashboard) .member-greeting { margin-left: auto; }
+  .member-dashboard:not(.admin-dashboard) .menu-toggle { display: grid; }
+}
+
+@media (max-width: 720px) {
+  .member-account-page { width: calc(100% - 36px); padding: 35px 0 52px; }
+  .member-account-grid { grid-template-columns: 1fr; gap: 13px; }
+  .member-account-card { padding: 18px; border-radius: 17px; }
+  .member-details-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+}
+
+@media (max-width: 430px) {
+  .member-details-fields { grid-template-columns: 1fr; }
+  .member-details-form-heading { align-items: flex-start; }
+}

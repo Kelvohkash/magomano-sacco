@@ -1,0 +1,33 @@
+.member-theme-toggle {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 10px;
+  border: 1px solid rgb(98 126 101 / 22%);
+  border-radius: 10px;
+  color: #49624d;
+  background: rgb(255 255 255 / 72%);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 650;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.member-theme-toggle:hover,
+.member-theme-toggle[aria-pressed='true'] {
+  border-color: rgb(98 126 101 / 38%);
+  color: #31583b;
+  background: #edf3e9;
+}
+.member-theme-toggle:focus-visible {
+  outline: 2px solid #6f966d;
+  outline-offset: 2px;
+}
+.dashboard-menu .member-theme-menu-item[aria-pressed='true'] { color: #31583b; }
+
+@media (max-width: 430px) {
+  .member-theme-toggle { width: 36px; min-width: 36px; padding: 0; }
+  .member-theme-toggle span { display: none; }
+}

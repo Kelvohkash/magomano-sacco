@@ -1,0 +1,127 @@
+/* Section 3: Member Declaration */
+.doc-declaration-wrapper {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 3.5mm;
+  align-items: center;
+}
+
+.declaration-legal-text {
+  margin: 0;
+  font-size: 7.2pt;
+  color: #334155;
+  line-height: 1.5;
+  text-align: justify;
+}
+
+.declaration-signature-card {
+  padding: 3mm 3.8mm;
+  border-radius: 1.8mm;
+  border: 1pt solid #99f6e4;
+  background-color: #f0fdfa;
+  display: flex;
+  flex-direction: column;
+  gap: 1mm;
+}
+
+.signature-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sig-type {
+  font-size: 6.5pt;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #0f766e;
+}
+
+.sig-auth {
+  display: flex;
+  align-items: center;
+  gap: 1mm;
+  font-size: 6.5pt;
+  font-weight: 750;
+  color: #059669;
+}
+
+.signature-display {
+  padding: 1mm 0;
+  min-height: 10mm;
+  display: flex;
+  align-items: center;
+}
+
+.dancing-signature {
+  font-family: 'Great Vibes' !important;
+  font-size: 25pt;
+  font-weight: 400;
+  color: #115e59;
+  line-height: 1.1;
+}
+
+.signature-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-top: 0.8pt solid #ccfbf1;
+  padding-top: 1.2mm;
+}
+
+.sig-name {
+  font-size: 7.8pt;
+  font-weight: 800;
+  color: #042f2e;
+}
+
+.sig-date {
+  font-size: 7pt;
+  color: #64748b;
+}
+
+/* Section 4: Signatories */
+.doc-signatories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(34mm, 1fr));
+  gap: 3.5mm;
+  align-items: stretch;
+}
+
+.signatory-block {
+  padding: 3.2mm 3.6mm;
+  border-radius: 1.5mm;
+  border: 0.8pt solid #cbd5e1;
+  background-color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 32mm;
+  box-sizing: border-box;
+}
+
+.signatory-title-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5mm;
+  padding-bottom: 1.5mm;
+  border-bottom: 0.5pt solid #e2e8f0;
+}
+
+.signatory-title-row strong {
+  font-size: 8pt;
+  font-weight: 850;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.signatory-role {
+  font-size: 6.2pt;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}

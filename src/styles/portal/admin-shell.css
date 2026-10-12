@@ -1,0 +1,76 @@
+
+.admin-dashboard {
+  display: grid;
+  grid-template-columns: 248px minmax(0, 1fr);
+  grid-template-rows: 78px minmax(calc(100svh - 78px), auto);
+  align-items: stretch;
+  overflow: visible;
+}
+.admin-dashboard .dashboard-header { grid-column: 1 / -1; grid-row: 1; }
+.admin-dashboard .admin-sidebar {
+  position: sticky;
+  z-index: 2;
+  top: 78px;
+  align-self: start;
+  grid-column: 1;
+  grid-row: 2;
+  display: flex;
+  height: calc(100svh - 78px);
+  min-height: calc(100svh - 78px);
+  flex-direction: column;
+  padding: 25px 15px 20px;
+  border-right: 1px solid rgb(255 255 255 / 72%);
+  background: rgb(242 247 239 / 63%);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+.admin-sidebar-label { margin: 0 0 13px 12px; color: #829083; font-size: 9px; font-weight: 750; letter-spacing: .15em; }
+.admin-dashboard .admin-tabs {
+  position: static;
+  display: grid;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+.admin-dashboard .admin-tabs button {
+  display: flex;
+  width: 100%;
+  min-height: 45px;
+  justify-content: flex-start;
+  gap: 11px;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  color: #687b6d;
+  text-align: left;
+}
+.admin-dashboard .admin-tabs button > span:nth-child(2) { flex: 1; }
+.admin-dashboard .admin-tabs button:hover { color: #2c5b40; background: rgb(255 255 255 / 56%); }
+.admin-dashboard .admin-tabs button.active { border-color: rgb(255 255 255 / 88%); color: #28553c; background: rgb(255 255 255 / 78%); box-shadow: 0 5px 16px rgb(31 57 45 / 7%); }
+.admin-dashboard .admin-tabs .tab-count { min-width: 20px; height: 20px; justify-content: center; padding-inline: 5px; color: white; background: #bb7554; }
+.admin-sidebar-note {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+  padding: 13px 11px 2px;
+  border-top: 1px solid rgb(96 128 102 / 14%);
+  color: #809083;
+  font-size: 10px;
+  line-height: 1.45;
+}
+.admin-sidebar-note svg { flex: 0 0 auto; color: #72916f; }
+.admin-dashboard .admin-content {
+  grid-column: 2;
+  grid-row: 2;
+  width: min(100% - 64px, 1240px);
+  margin: 0 auto;
+  padding-top: 44px;
+}
+.admin-dashboard .admin-content .dashboard-intro h1 { font-size: clamp(32px, 3.2vw, 42px); }

@@ -1,0 +1,203 @@
+/* Modern Data Table Container */
+.admin-table-container {
+  overflow-x: auto;
+  border-radius: 14px;
+  background-color: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  box-shadow: var(--admin-shadow-sm);
+}
+
+.modern-admin-table {
+  width: 100%;
+  min-width: 1080px;
+  border-collapse: separate;
+  border-spacing: 0;
+  text-align: left;
+}
+
+.modern-admin-table thead th {
+  padding: 13px 18px;
+  background-color: #f8fafc;
+  color: var(--admin-text-muted);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  border-bottom: 1px solid var(--admin-border);
+  white-space: nowrap;
+}
+
+.modern-admin-table thead th.actions-col,
+.modern-admin-table tbody td.actions-col {
+  text-align: right;
+  white-space: nowrap;
+  width: 1%;
+  min-width: 220px;
+  padding-right: 20px;
+}
+
+.modern-admin-table thead th.loan-actions-col,
+.modern-admin-table tbody td.loan-actions-col {
+  width: 1%;
+  min-width: 0;
+  padding-left: 10px;
+  padding-right: 16px;
+}
+
+.modern-admin-table tbody tr {
+  transition: background-color 0.14s ease;
+}
+
+.modern-admin-table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+.modern-admin-table tbody tr.row-selected {
+  background-color: #f0fdf4;
+}
+
+.modern-admin-table tbody td {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--admin-border-subtle);
+  font-size: 13px;
+  color: var(--admin-text-dark);
+  vertical-align: middle;
+}
+
+.modern-admin-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Table Cells & Badges */
+.member-cell-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.member-cell-avatar {
+  display: flex;
+  width: 34px;
+  height: 34px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.member-cell-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.member-name-text {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--admin-text-dark);
+}
+
+.member-email-text {
+  font-size: 11px;
+  color: var(--admin-text-muted);
+}
+
+.badge-id {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background-color: #f1f5f9;
+  color: #334155;
+  font-family: monospace;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.app-ref-tag {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background-color: #ecfdf5;
+  color: #065f46;
+  font-family: monospace;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.savings-figure {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--admin-text-dark);
+  font-variant-numeric: tabular-nums;
+}
+
+.loan-amount-badge {
+  font-size: 14px;
+  font-weight: 800;
+  color: #047857;
+  font-variant-numeric: tabular-nums;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.status-pill.status-approved {
+  background-color: #ecfdf5;
+  color: #047857;
+  border: 1px solid #a7f3d0;
+}
+
+.status-pill.status-pending {
+  background-color: #fffbeb;
+  color: #b45309;
+  border: 1px solid #fde68a;
+}
+
+.status-pill.status-rejected {
+  background-color: #fff1f2;
+  color: #be123c;
+  border: 1px solid #fecdd3;
+}
+
+.role-tag-admin {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background-color: #eef2ff;
+  color: #4338ca;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.role-tag-signatory {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background-color: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.role-tag-member {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background-color: #f8fafc;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 600;
+}

@@ -1,0 +1,60 @@
+/* ==========================================================================
+   RESPONSIVE ADJUSTMENTS FOR ADMIN INTERFACE
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+  .admin-main-container {
+    grid-template-columns: 220px minmax(0, 1fr);
+  }
+  .kpi-metric-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .admin-workspace-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-main-container {
+    grid-template-columns: 1fr;
+  }
+  .admin-navbar {
+    position: static;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--admin-dark-border);
+    padding: 10px 16px;
+  }
+  .admin-nav-group-label,
+  .admin-nav-footer {
+    display: none;
+  }
+  .admin-nav-menu {
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  .admin-nav-link {
+    width: auto;
+    white-space: nowrap;
+    padding: 8px 12px;
+  }
+  .admin-viewport {
+    padding: 20px 16px 40px;
+  }
+  .kpi-metric-cards,
+  .queue-cards-grid {
+    grid-template-columns: 1fr;
+  }
+  .view-intro-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .admin-topbar {
+    padding: 0 16px;
+  }
+  .admin-system-status,
+  .admin-user-pill small {
+    display: none;
+  }
+}

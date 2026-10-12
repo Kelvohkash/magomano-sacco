@@ -1,0 +1,110 @@
+.login-shell { background-size: 125% 125%, 135% 135%; animation: auth-background-float 9s ease-in-out infinite alternate; }
+.login-shell .form-panel::after { transform-origin: center; animation: auth-wave-drift 4.5s ease-in-out infinite alternate; }
+.login-shell .mobile-brand { animation: auth-brand-enter 620ms cubic-bezier(.2,.8,.2,1) both; }
+.login-shell .mobile-brand .brand-mark { width: 56px; height: 56px; flex-basis: 56px; }
+.login-shell .mobile-brand .brand-name { font-size: 27px; }
+.login-shell .mobile-brand .brand-name > span { margin-top: 4px; font-size: 14px; }
+.login-shell .form-heading h2 { animation: auth-title-enter 620ms 100ms cubic-bezier(.16,1,.3,1) both; }
+.login-shell .form-content form > * { animation: auth-field-enter 430ms cubic-bezier(.2,.8,.2,1) both; }
+.login-shell .form-content form > *:nth-child(1) { animation-delay: 130ms; }
+.login-shell .form-content form > *:nth-child(2) { animation-delay: 175ms; }
+.login-shell .form-content form > *:nth-child(3) { animation-delay: 220ms; }
+.login-shell .form-content form > *:nth-child(4) { animation-delay: 265ms; }
+.login-shell .form-content form > *:nth-child(5) { animation-delay: 310ms; }
+.login-shell .form-content form > *:nth-child(6) { animation-delay: 355ms; }
+.login-shell .form-content form > *:nth-child(7) { animation-delay: 400ms; }
+.login-shell .form-content form > *:nth-child(8) { animation-delay: 445ms; }
+.login-shell .form-content form > *:nth-child(9) { animation-delay: 490ms; }
+.login-shell .form-content form > *:nth-child(10) { animation-delay: 535ms; }
+.login-shell .form-content form > *:nth-child(11) { animation-delay: 580ms; }
+.login-shell .form-content form > *:nth-child(12) { animation-delay: 625ms; }
+.login-shell .auth-divider, .login-shell .secondary-auth-button, .login-shell .admin-entry-link { animation: auth-field-enter 420ms 470ms both; }
+.login-shell .secondary-auth-button { transition: transform 180ms ease, background 180ms ease, color 180ms ease, border-color 180ms ease; }
+.login-shell .secondary-auth-button:active { transform: scale(.985); }
+.login-shell .visibility-button svg { transition: transform 180ms ease; }
+.login-shell .visibility-button:hover svg { transform: scale(1.14) rotate(-7deg); }
+
+.dashboard-intro { animation: portal-enter 460ms cubic-bezier(.2,.8,.2,1) both; }
+.balance-panel, .admin-metric { animation: portal-enter 500ms cubic-bezier(.2,.8,.2,1) both; transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease; }
+.balance-panel:nth-child(2), .admin-metric:nth-child(2) { animation-delay: 60ms; }
+.admin-metric:nth-child(3) { animation-delay: 120ms; }
+.admin-metric:nth-child(4) { animation-delay: 180ms; }
+.balance-panel:hover, .admin-metric:hover { transform: translateY(-3px); box-shadow: 0 9px 22px rgb(29 65 48 / 8%); }
+.statement-row, .admin-record { animation: list-enter 380ms ease-out both; }
+.statement-row:nth-child(2), .admin-record:nth-child(2) { animation-delay: 45ms; }
+.statement-row:nth-child(3), .admin-record:nth-child(3) { animation-delay: 90ms; }
+.statement-row:nth-child(4), .admin-record:nth-child(4) { animation-delay: 135ms; }
+.statement-row:nth-child(5), .admin-record:nth-child(5) { animation-delay: 180ms; }
+.statement-row { transition: background 160ms ease, padding 160ms ease; }
+.statement-row:hover { padding-inline: 7px; background: rgb(255 255 255 / 65%); }
+.dashboard-menu { transform-origin: top right; animation: menu-enter 170ms cubic-bezier(.2,.8,.2,1) both; }
+.dashboard-menu button, .admin-tabs button, .back-link, .template-button { transition: transform 160ms ease, color 160ms ease, background 160ms ease; }
+.dashboard-menu button:active, .admin-tabs button:active, .back-link:active { transform: scale(.98); }
+
+@keyframes auth-background-float {
+  from { background-position: 0% 0%, 100% 100%; }
+  to { background-position: 100% 20%, 0% 80%; }
+}
+
+@keyframes auth-wave-drift {
+  from { transform: translate3d(-2%, -5px, 0) rotate(-7deg) scale(1); border-radius: 48% 52% 63% 37% / 49% 37% 63% 51%; }
+  to { transform: translate3d(2%, 8px, 0) rotate(-3deg) scale(1.035); border-radius: 55% 45% 43% 57% / 43% 57% 43% 57%; }
+}
+
+@keyframes auth-brand-enter { from { opacity: 0; transform: translateY(-11px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes auth-title-enter { from { opacity: 0; transform: translateY(12px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes auth-field-enter { from { opacity: 0; transform: translateY(9px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes portal-enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes list-enter { from { opacity: 0; transform: translateX(-6px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes menu-enter { from { opacity: 0; transform: translateY(-5px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+@media (max-width: 720px) {
+  .login-shell .mobile-brand { top: 28px; left: 25px; gap: 13px; }
+}
+
+@media (max-width: 380px) {
+  .login-shell .mobile-brand { left: 20px; }
+  .login-shell .mobile-brand .brand-mark { width: 52px; height: 52px; flex-basis: 52px; }
+  .login-shell .mobile-brand .brand-name { font-size: 24px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-shell,
+  .login-shell .form-panel::after,
+  .login-shell .mobile-brand,
+  .login-shell .form-content,
+  .login-shell .form-heading h2,
+  .login-shell .form-content form > *,
+  .login-shell .auth-divider,
+  .login-shell .secondary-auth-button,
+  .login-shell .admin-entry-link,
+  .dashboard-intro,
+  .balance-panel,
+  .admin-metric,
+  .statement-row,
+  .admin-record,
+  .dashboard-menu {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+.login-shell {
+  background-color: #153d3a;
+  background-image: linear-gradient(164deg, transparent 0 13%, rgb(16 46 44 / 42%) 13% 31%, transparent 31% 100%), linear-gradient(16deg, transparent 0 73%, rgb(44 103 81 / 45%) 73% 87%, transparent 87% 100%);
+}
+
+.login-shell .form-panel {
+  background-color: #153d3a;
+  background-image: linear-gradient(18deg, transparent 0 67%, rgb(77 132 101 / 35%) 67% 78%, transparent 78% 100%);
+}
+
+.login-shell .form-panel::after {
+  background: linear-gradient(145deg, rgb(16 75 68 / 74%), rgb(49 111 86 / 58%) 57%, rgb(25 83 69 / 45%));
+}
+
+.login-shell .submit-button { border-color: var(--forest); background: var(--forest); }
+.login-shell .submit-button:hover:not(:disabled) { background: #20534c; }
+.login-shell .secondary-auth-button:hover { border-color: #39776d; color: #235b50; background: #f3f8f4; }
+.login-shell .admin-entry-link { color: #39776d; }

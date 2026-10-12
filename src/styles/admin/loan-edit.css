@@ -1,0 +1,72 @@
+/* Edit Application Mode */
+.loan-edit-card {
+  padding: 32px;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.loan-edit-header h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--admin-text-dark);
+}
+
+.loan-edit-header p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--admin-text-muted);
+}
+
+.loan-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.loan-edit-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.edit-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.edit-field.full-width {
+  grid-column: span 2;
+}
+
+.edit-field label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--admin-text-dark);
+}
+
+.edit-field input,
+.edit-field textarea {
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 9px;
+  border: 1px solid var(--admin-border);
+  font-size: 13px;
+  font-family: inherit;
+}
+
+.edit-field textarea {
+  height: auto;
+  padding: 12px 14px;
+}
+
+.loan-edit-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}

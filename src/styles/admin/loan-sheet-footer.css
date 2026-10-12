@@ -1,0 +1,39 @@
+/* Footer & Barcode */
+.doc-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 2.8mm;
+  border-top: 1pt solid #0f766e;
+  font-size: 6.8pt;
+  color: #64748b;
+  margin-top: auto;
+}
+
+.doc-footer-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5mm;
+}
+
+.barcode-line span {
+  font-family: monospace;
+  font-size: 6pt;
+  letter-spacing: -0.05em;
+  color: #0f172a;
+}
+
+.doc-footer-audit {
+  font-size: 6.5pt;
+  color: #64748b;
+}
+
+.doc-footer-right {
+  font-size: 7pt;
+  font-weight: 800;
+  color: #0f766e;
+}
+
+/* ==========================================================================
+   PRINT MEDIA STYLES (@media print) — ZERO SPILLOVER, CRISP 1-PAGE A4
+   ========================================================================== */

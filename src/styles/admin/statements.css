@@ -1,0 +1,103 @@
+/* ==========================================================================
+   10. ADMIN STATEMENT PANELS, POPUP FILTERS & BULK CSV IMPORT
+   ========================================================================== */
+
+.admin-statement-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  border-radius: 14px;
+  background-color: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  box-shadow: var(--admin-shadow-sm);
+}
+
+.admin-statement-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.admin-statement-title {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.admin-statement-title h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--admin-text-dark);
+}
+
+.admin-statement-title span {
+  font-size: 12px;
+  color: var(--admin-text-muted);
+  font-weight: 600;
+}
+
+/* Statement Table Styles */
+.admin-statement-panel .admin-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border-radius: 10px;
+  border: 1px solid var(--admin-border);
+}
+
+.admin-statement-panel .admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.admin-statement-panel .admin-table thead th {
+  padding: 12px 16px;
+  background-color: #f8fafc;
+  color: var(--admin-text-muted);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  border-bottom: 1px solid var(--admin-border);
+  white-space: nowrap;
+}
+
+.admin-statement-panel .admin-table tbody td {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--admin-border-subtle);
+  font-size: 12px;
+  color: var(--admin-text-dark);
+  white-space: nowrap;
+}
+
+.admin-statement-panel .admin-table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+.admin-statement-panel .admin-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-statement-panel .admin-empty {
+  padding: 40px 16px;
+  text-align: center;
+  color: var(--admin-text-muted);
+  font-size: 13px;
+  margin: 0;
+}
+
+.statement-row-actions { display: flex; align-items: center; gap: 7px; }
+.statement-edit-backdrop { z-index: 120; }
+.statement-edit-drawer { max-width: 480px; }
+.statement-edit-form { display: flex; flex: 1; flex-direction: column; gap: 20px; padding: 24px; }
+.statement-edit-form label { display: flex; flex-direction: column; gap: 8px; color: var(--admin-text-dark); font-size: 12px; font-weight: 700; }
+.statement-edit-form input { width: 100%; min-height: 42px; padding: 0 12px; border: 1px solid var(--admin-border); border-radius: 8px; color: var(--admin-text-dark); background: var(--admin-surface); font: inherit; font-weight: 500; }
+.statement-edit-form input:focus { border-color: #10b981; outline: 3px solid rgb(16 185 129 / 13%); }
+.statement-edit-error { margin: 0; color: #b42318; font-size: 12px; }
+.statement-edit-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: auto; padding-top: 12px; }
+.statement-edit-actions .submit-button { min-height: 40px; padding: 0 16px; }
+.statement-edit-cancel { min-height: 40px; padding: 0 14px; border: 1px solid var(--admin-border); border-radius: 8px; color: var(--admin-text-dark); background: var(--admin-surface); font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
+.view-intro-icon { display: grid; width: 42px; height: 42px; flex: 0 0 42px; place-items: center; border: 1px solid var(--admin-border); border-radius: 12px; color: #087f5b; background: var(--admin-surface); }

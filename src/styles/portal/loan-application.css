@@ -1,0 +1,69 @@
+.application-content { max-width: 800px; }
+.application-status-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
+.application-status-section { max-width: 760px; }
+.loan-application-status-list { display: grid; gap: 12px; }
+.loan-application-status-card {
+  padding: 17px 18px;
+  border: 1px solid rgb(255 255 255 / 83%);
+  border-radius: 15px;
+  background: rgb(255 255 255 / 55%);
+  box-shadow: 0 8px 22px rgb(36 64 48 / 5%);
+}
+.loan-application-status-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 15px; }
+.application-date { display: inline-flex; align-items: center; gap: 6px; color: #829084; font-size: 10px; }
+.loan-application-status-card h3 { margin: 8px 0 0; color: #2c503b; font-family: 'Manrope', sans-serif; font-size: 21px; font-weight: 700; letter-spacing: -.035em; }
+.loan-application-status-card > p { margin: 9px 0 0; color: #627569; font-size: 11px; line-height: 1.55; }
+.loan-application-status-card > small { display: block; margin-top: 8px; color: #849084; font-size: 10px; line-height: 1.5; }
+.application-status-badge { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 6px; padding: 7px 9px; border-radius: 99px; font-size: 10px; font-weight: 700; }
+.application-status-badge.pending { color: #886338; background: #f7eddc; }
+.application-status-badge.approved { color: #31704e; background: #e2f0e1; }
+.application-status-badge.rejected { color: #9a5147; background: #f6e6e3; }
+.back-link { margin-bottom: 26px; color: #477260; }
+.back-link:hover { color: #214b38; }
+.loan-capacity-card {
+  position: relative;
+  overflow: hidden;
+  width: min(100%, 620px);
+  margin-bottom: 20px;
+  padding: 0;
+  border: 1px solid rgb(255 255 255 / 86%);
+  border-radius: 16px;
+  background: rgb(255 255 255 / 59%);
+  box-shadow: 0 10px 28px rgb(36 64 48 / 6%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+.loan-capacity-main { display: grid; gap: 6px; padding: 20px 22px 17px; border-left: 3px solid #83a66d; }
+.loan-capacity-main > span { color: #607767; font-size: 11px; font-weight: 700; }
+.loan-capacity-main > strong { color: #28583e; font-size: 27px; letter-spacing: -.035em; }
+.loan-capacity-main > small,
+.loan-capacity-footnote { color: #728276; font-size: 10px; line-height: 1.5; }
+.loan-capacity-breakdown { display: flex; align-items: center; gap: 12px; padding: 14px 21px; border-top: 1px solid rgb(96 128 102 / 13%); }
+.loan-capacity-breakdown > div { display: grid; min-width: 0; gap: 4px; }
+.loan-capacity-breakdown > div > span { color: #7d8a7e; font-size: 9px; }
+.loan-capacity-breakdown > div > strong { color: #405a47; font-size: 11px; white-space: nowrap; }
+.capacity-operator { color: #91a092; font-size: 13px; }
+.loan-capacity-footnote { display: block; padding: 0 21px 15px; }
+.loan-application-form {
+  gap: 12px;
+  width: min(100%, 620px);
+  margin-top: 0;
+  padding: 25px;
+  border: 1px solid rgb(255 255 255 / 88%);
+  border-radius: 20px;
+  background: rgb(255 255 255 / 58%);
+  box-shadow: 0 14px 36px rgb(36 64 48 / 7%), inset 0 1px 0 rgb(255 255 255 / 80%);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+.loan-application-form > label { color: #40594a; }
+.loan-application-form textarea,
+.loan-application-form .amount-input-wrap,
+.loan-application-form .months-input-wrap { border-color: rgb(118 143 121 / 25%); border-radius: 11px; background: rgb(255 255 255 / 75%); }
+.loan-application-form textarea:focus,
+.loan-application-form .amount-input-wrap:focus-within,
+.loan-application-form .months-input-wrap:focus-within { border-color: #729b78; box-shadow: 0 0 0 4px rgb(114 155 120 / 13%); outline: none; }
+.loan-estimate { gap: 11px 16px; padding: 17px; border: 1px solid rgb(255 255 255 / 85%); border-left: 3px solid #8eaa71; border-radius: 13px; background: rgb(231 240 225 / 72%); }
+.loan-estimate > strong { color: #315c43; }
+.loan-application-form .submit-button { min-height: 52px; border: 0; border-radius: 12px; background: linear-gradient(110deg, #214b39, #35734e); box-shadow: 0 8px 18px rgb(36 83 58 / 17%); }
+.loan-application-form .submit-button:hover:not(:disabled) { background: linear-gradient(110deg, #1d4434, #2e6745); }

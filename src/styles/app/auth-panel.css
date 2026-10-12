@@ -1,0 +1,127 @@
+.login-shell {
+  display: flex;
+  min-height: 100svh;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 16px;
+  background-color: #0762e9;
+  background-image: linear-gradient(164deg, transparent 0 13%, rgb(0 65 194 / 40%) 13% 31%, transparent 31% 100%), linear-gradient(16deg, transparent 0 73%, rgb(47 139 255 / 55%) 73% 87%, transparent 87% 100%);
+}
+
+.login-shell .welcome-panel { display: none; }
+
+.login-shell .form-panel {
+  position: relative;
+  display: flex;
+  width: min(100%, 432px);
+  min-height: min(790px, calc(100svh - 56px));
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid rgb(0 39 106 / 24%);
+  border-radius: 28px;
+  background-color: #0762e9;
+  background-image: linear-gradient(18deg, transparent 0 67%, rgb(50 145 255 / 42%) 67% 78%, transparent 78% 100%);
+  box-shadow: 0 24px 70px rgb(0 35 104 / 30%);
+}
+
+.login-shell .form-panel::before {
+  position: absolute;
+  z-index: 0;
+  top: 244px;
+  right: -34px;
+  bottom: 0;
+  left: -34px;
+  border-radius: 48% 52% 0 0 / 48px 36px 0 0;
+  background: #fff;
+  content: '';
+  transform: rotate(-1deg);
+}
+
+.login-shell .form-panel::after {
+  position: absolute;
+  z-index: 0;
+  top: 93px;
+  left: -18%;
+  width: 136%;
+  height: 145px;
+  border-radius: 48% 52% 63% 37% / 49% 37% 63% 51%;
+  background: linear-gradient(145deg, rgb(0 80 207 / 68%), rgb(31 128 255 / 63%) 57%, rgb(0 70 195 / 42%));
+  content: '';
+  transform: rotate(-7deg);
+}
+
+.login-shell .mobile-brand {
+  position: absolute;
+  z-index: 3;
+  top: 31px;
+  left: 34px;
+  display: inline-flex;
+  margin: 0;
+  color: #fff;
+}
+
+.login-shell .brand-mark {
+  color: #0754c6;
+  background: #fff;
+}
+
+.login-shell .mobile-brand .brand-name > span { color: rgb(255 255 255 / 78%); }
+
+.login-shell .form-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  margin: 0;
+  padding: 266px 34px 18px;
+  animation: arrive 650ms 80ms ease-out both;
+}
+
+.login-shell .form-content::before {
+  position: absolute;
+  z-index: -1;
+  top: 244px;
+  right: -34px;
+  bottom: -25px;
+  left: -34px;
+  border-radius: 48% 52% 0 0 / 48px 36px 0 0;
+  background: #fff;
+  content: '';
+  transform: rotate(-1deg);
+  display: none;
+}
+
+.login-shell .form-content > * { position: relative; z-index: 1; }
+.login-shell .form-heading h2 { font-size: 34px; }
+.login-shell .form-subtitle { margin-bottom: 26px; }
+.login-shell .form-kicker { color: #3e78ce; }
+.login-shell .form-content form > input,
+.login-shell .password-field { height: 48px; border-color: #dce3eb; border-radius: 0; }
+.login-shell .password-label-row { margin-top: 18px; }
+.login-shell .remember-row { margin: 16px 0 22px; }
+.login-shell .submit-button { height: 48px; border-color: #0864ef; background: #0864ef; }
+.login-shell .submit-button:hover:not(:disabled) { background: #004ec5; }
+.auth-divider { display: flex; align-items: center; gap: 12px; margin: 13px 0; color: #9aa4b0; font-size: 10px; }
+.auth-divider::before, .auth-divider::after { height: 1px; flex: 1; background: #e2e7ec; content: ''; }
+.secondary-auth-button { width: 100%; min-height: 47px; border: 1px solid #d2dbe5; border-radius: 2px; color: #536273; background: #fff; font-size: 12px; font-weight: 600; }
+.secondary-auth-button:hover { border-color: #0864ef; color: #0754c6; background: #f8fbff; }
+.login-shell .admin-entry-link { margin-top: 12px; color: #3972bd; }
+.login-shell .secure-note { margin-top: 17px; }
+.login-shell .form-footer { position: relative; z-index: 1; margin-top: auto; padding: 13px 34px 20px; background: #fff; }
+
+@media (max-width: 720px) {
+  .login-shell { min-height: 100svh; padding: 0; }
+  .login-shell .form-panel { width: 100%; min-height: 100svh; border: 0; border-radius: 0; box-shadow: none; }
+  .login-shell .mobile-brand { top: 34px; left: 27px; }
+  .login-shell .form-content { padding: 267px 27px 18px; }
+  .login-shell .form-panel::before { top: 244px; right: -27px; left: -27px; }
+  .login-shell .form-footer { padding-right: 27px; padding-left: 27px; }
+}
+
+@media (max-width: 380px) {
+  .login-shell .form-content { padding-right: 22px; padding-left: 22px; }
+  .login-shell .form-panel::before { right: -22px; left: -22px; }
+  .login-shell .mobile-brand { left: 22px; }
+  .login-shell .form-footer { padding-right: 22px; padding-left: 22px; }
+}

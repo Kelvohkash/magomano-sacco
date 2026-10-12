@@ -1,0 +1,90 @@
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 8mm 10mm;
+  }
+
+  html,
+  body {
+    width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    color: #0f172a !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide everything on screen except the modal and document */
+  body * {
+    visibility: hidden !important;
+  }
+
+  .loan-modal-overlay,
+  .loan-modal-container,
+  .loan-modal-body,
+  .loan-sheet-wrapper,
+  .official-loan-document,
+  .official-loan-document * {
+    visibility: visible !important;
+  }
+
+  .loan-modal-overlay {
+    position: absolute !important;
+    inset: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    backdrop-filter: none !important;
+    display: block !important;
+    overflow: visible !important;
+  }
+
+  .loan-modal-container {
+    width: 100% !important;
+    max-width: none !important;
+    height: auto !important;
+    max-height: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    background: #ffffff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+  }
+
+  .loan-modal-toolbar,
+  .loan-edit-card {
+    display: none !important;
+  }
+
+  .loan-modal-body,
+  .loan-sheet-wrapper {
+    padding: 0 !important;
+    margin: 0 !important;
+    background: #ffffff !important;
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+    display: block !important;
+  }
+
+  .official-loan-document {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 275mm !important;
+    height: 275mm !important;
+    margin: 0 !important;
+    padding: 2mm 4mm !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+}

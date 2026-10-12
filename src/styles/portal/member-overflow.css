@@ -1,0 +1,13 @@
+html.member-portal-active,
+html.member-portal-active body {
+  max-width: 100%;
+  overflow-x: clip;
+  overscroll-behavior-x: none;
+}
+
+@supports not (overflow-x: clip) {
+  html.member-portal-active,
+  html.member-portal-active body {
+    overflow-x: hidden;
+  }
+}

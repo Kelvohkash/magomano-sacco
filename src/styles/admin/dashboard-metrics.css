@@ -1,0 +1,91 @@
+/* ==========================================================================
+   4. DASHBOARD OVERVIEW — HERO METRICS & QUEUES
+   ========================================================================== */
+
+.kpi-metric-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.kpi-card {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border-radius: 14px;
+  background-color: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  box-shadow: var(--admin-shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--admin-shadow-md);
+}
+
+.kpi-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.kpi-title {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--admin-text-muted);
+}
+
+.kpi-icon-wrap {
+  display: flex;
+  width: 38px;
+  height: 38px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+}
+
+.savings-icon {
+  background-color: #ecfdf5;
+  color: #059669;
+}
+
+.loans-icon {
+  background-color: #eff6ff;
+  color: #2563eb;
+}
+
+.pending-icon {
+  background-color: #fffbeb;
+  color: #d97706;
+}
+
+.dividend-icon {
+  background-color: #f5f3ff;
+  color: #7c3aed;
+}
+
+.kpi-value {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--admin-text-dark);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+  margin-bottom: 10px;
+}
+
+.kpi-footer {
+  display: flex;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid var(--admin-border-subtle);
+}
+
+.kpi-subtext {
+  font-size: 11px;
+  color: var(--admin-text-muted);
+}

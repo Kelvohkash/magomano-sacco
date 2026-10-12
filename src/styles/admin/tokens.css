@@ -1,0 +1,28 @@
+/* ==========================================================================
+   MAGOMANO SACCO — CORE BANKING ADMINISTRATION SUITE & OFFICIAL LOAN PDF
+   ========================================================================== */
+
+:root {
+  --admin-bg: #f8fafc;
+  --admin-surface: #ffffff;
+  --admin-border: #e2e8f0;
+  --admin-border-subtle: #edf2f7;
+  --admin-dark-bg: #0b1329;
+  --admin-dark-card: #111c38;
+  --admin-dark-border: #1e2c4f;
+  --admin-primary: #059669;
+  --admin-primary-hover: #047857;
+  --admin-primary-light: #ecfdf5;
+  --admin-text-dark: #0f172a;
+  --admin-text-muted: #64748b;
+  --admin-text-light: #94a3b8;
+  --admin-amber: #d97706;
+  --admin-amber-light: #fffbeb;
+  --admin-rose: #e11d48;
+  --admin-rose-light: #fff1f2;
+  --admin-indigo: #4f46e5;
+  --admin-indigo-light: #eef2ff;
+  --admin-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --admin-shadow-md: 0 4px 12px rgba(15, 23, 42, 0.06);
+  --admin-shadow-lg: 0 12px 30px rgba(15, 23, 42, 0.1);
+}

@@ -1,0 +1,104 @@
+/* Member role labels in the directory */
+.role-display {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid transparent;
+}
+
+.role-display.role-signatory {
+  background-color: #ecfdf5;
+  color: #047857;
+  border-color: #a7f3d0;
+}
+
+.role-display.role-standard {
+  background-color: #f1f5f9;
+  color: #475569;
+  border-color: #e2e8f0;
+}
+
+/* Signatories Governance Callout Strip */
+.signatories-governance-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 18px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f0fdfa 0%, #ecfdf5 100%);
+  border: 1px solid #99f6e4;
+  margin-bottom: 16px;
+}
+
+.strip-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.strip-icon-circle {
+  display: flex;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background-color: #0f766e;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.strip-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 12.5px;
+  color: #134e4a;
+}
+
+.strip-text strong {
+  font-weight: 800;
+  color: #042f2e;
+}
+
+.strip-names {
+  font-size: 12px;
+  color: #0f766e;
+  font-weight: 600;
+}
+
+.strip-manage-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 13px;
+  border-radius: 7px;
+  border: 1px solid #0d9488;
+  background-color: #ffffff;
+  color: #0f766e;
+  font-size: 11.5px;
+  font-weight: 750;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.16s ease;
+}
+
+.strip-manage-btn:hover {
+  background-color: #0f766e;
+  color: #ffffff;
+}
+
+.purpose-truncate {
+  display: inline-block;
+  max-width: 220px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--admin-text-muted);
+}

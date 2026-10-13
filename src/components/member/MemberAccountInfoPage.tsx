@@ -27,6 +27,8 @@ const emptyProfile = Object.fromEntries(fields.map(({ key }) => [key, '']))
 export function MemberAccountInfoPage() {
   const [profile, setProfile] = useState<Profile>(emptyProfile)
   const [loading, setLoading] = useState(true)
+  const [profileLoadFailed, setProfileLoadFailed] = useState(false)
+  const [loadAttempt, setLoadAttempt] = useState(0)
   const [saving, setSaving] = useState(false)
   const [currentPassword, setCurrentPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
@@ -37,18 +39,24 @@ export function MemberAccountInfoPage() {
 
   useEffect(() => {
     const controller = new AbortController()
+    setLoading(true)
+    setProfileLoadFailed(false)
+    setError('')
     fetch('/api/member/profile', { signal: controller.signal })
       .then(async (response) => {
         const result = await readJsonResponse<{ profile?: Profile; error?: string }>(response)
         if (!response.ok) throw new Error(result.error ?? 'Could not load account information.')
+        if (!result.profile) throw new Error('The account service returned no saved profile.')
         setProfile({ ...emptyProfile, ...result.profile })
       })
       .catch((cause: unknown) => {
-        if (!(cause instanceof DOMException && cause.name === 'AbortError')) setError(requestErrorMessage(cause, 'Could not load account information.'))
+        if (cause instanceof DOMException && cause.name === 'AbortError') return
+        setError(requestErrorMessage(cause, 'Could not load account information.'))
+        setProfileLoadFailed(true)
       })
       .finally(() => { if (!controller.signal.aborted) setLoading(false) })
     return () => controller.abort()
-  }, [])
+  }, [loadAttempt])
 
   async function saveProfile(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); setSaving(true); setError(''); setMessage('')
@@ -77,16 +85,16 @@ export function MemberAccountInfoPage() {
 
   const groups = [...new Set(fields.map((field) => field.group))]
   return <section className="member-account-page">
-    <div className="dashboard-intro"><p className="dashboard-kicker">YOUR ACCOUNT</p><h1>Account info</h1><p>Keep your personal details, bank accounts, contact persons and password up to date.</p></div>
+    <div className="dashboard-intro"><p className="dashboard-kicker">YOUR ACCOUNT</p><h1>Account info</h1><p>Your registration details and saved contact persons appear here. Edit your details and press the update button to save changes.</p></div>
     {error && <p className="form-message error" role="alert">{error}</p>}
     {message && <p className="form-message success" role="status">{message}</p>}
-    {loading ? <p className="admin-empty">Loading account information…</p> : <>
+    {loading ? <p className="admin-empty" role="status">Loading your saved account information…</p> : profileLoadFailed ? <div className="member-account-card"><p>We couldn’t load your saved details, so the form is unavailable to prevent overwriting them.</p><button type="button" className="member-details-cancel" onClick={() => setLoadAttempt((attempt) => attempt + 1)}>Try loading again</button></div> : <>
       <form className="member-account-card member-details-form" onSubmit={saveProfile}>
         <div className="member-account-card-heading"><span><UserRound size={18} /></span><div><h2>Personal and banking details</h2><p>Update the details held on your SACCO account</p></div></div>
         {groups.map((group) => <section key={group} className="account-info-group"><div className="member-details-form-heading"><div><p className="section-kicker">ACCOUNT SETTINGS</p><h2>{group}</h2></div>{group.includes('bank') && <Landmark size={17} />}{group === 'Address' && <MapPin size={17} />}</div>
           <div className="member-details-fields">{fields.filter((field) => field.group === group).map((field) => <label key={field.key}>{field.label}<input type={field.type ?? 'text'} value={profile[field.key] ?? ''} onChange={(event) => setProfile((current) => ({ ...current, [field.key]: event.target.value }))} autoComplete={field.type === 'tel' ? 'tel' : field.type === 'email' ? 'email' : 'off'} /></label>)}</div>
         </section>)}
-        <button className="submit-button" type="submit" disabled={saving}><span>{saving ? 'Saving…' : 'Save account details'}</span><Save size={17} /></button>
+        <button className="submit-button" type="submit" disabled={saving}><span>{saving ? 'Updating…' : 'Update account information'}</span><Save size={17} /></button>
       </form>
       <MemberContactsPage compact />
       <form className="member-account-card member-details-form" onSubmit={savePassword}>

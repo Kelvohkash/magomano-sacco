@@ -108,6 +108,7 @@ function App() {
         onLoanRepayment={admin.handleLoanRepayment}
         onReviewMember={admin.reviewMemberAccount}
         onSetMemberRole={admin.setMemberRole}
+        onResetMemberPassword={admin.resetMemberPassword}
         onDeleteMember={admin.deleteMember}
         onReviewLoan={admin.reviewLoanApplication}
         onUpdateLoanApplication={admin.updateLoanApplication}
@@ -150,6 +151,7 @@ function App() {
         onLoanRepayment={admin.handleLoanRepayment}
         onReviewMember={admin.reviewMemberAccount}
         onSetMemberRole={admin.setMemberRole}
+        onResetMemberPassword={admin.resetMemberPassword}
         onDeleteMember={admin.deleteMember}
         onReviewLoan={admin.reviewLoanApplication}
         onUpdateLoanApplication={admin.updateLoanApplication}

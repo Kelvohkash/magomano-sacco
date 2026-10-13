@@ -52,6 +52,7 @@ export interface AdminPortalProps {
   onLoanRepayment: FormEventHandler<HTMLFormElement>
   onReviewMember: (memberId: number, decision: 'approve' | 'reject') => void
   onSetMemberRole: (memberId: number, role: AdminMember['memberRole']) => void
+  onResetMemberPassword: (memberId: number) => void
   onDeleteMember: (memberId: number) => Promise<boolean>
   onReviewLoan: (applicationId: number, decision: 'approve' | 'reject') => void
   onUpdateLoanApplication: (
@@ -72,7 +73,7 @@ export function AdminPortal({
   members, applications,
   message, messageSuccess, reviewingId,
   onLogout,
-  onReviewMember, onSetMemberRole, onDeleteMember,
+  onReviewMember, onSetMemberRole, onResetMemberPassword, onDeleteMember,
   onReviewLoan, onUpdateLoanApplication, onDeleteLoanApplication, onUpdateMember,
   terms, setTerms, termsUpdatedAt, onSaveTerms, onRefresh,
 }: AdminPortalProps) {
@@ -201,6 +202,7 @@ export function AdminPortal({
           onClose={() => ui.setViewingMemberId(null)}
           onReviewMember={onReviewMember}
           onSetMemberRole={onSetMemberRole}
+          onResetMemberPassword={onResetMemberPassword}
           onEditMember={(m) => { ui.beginMemberEdit(m); ui.setViewingMemberId(null) }}
           onDeleteMember={ui.removeMember}
           reviewingId={reviewingId}

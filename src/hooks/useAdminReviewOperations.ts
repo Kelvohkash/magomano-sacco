@@ -38,7 +38,7 @@ export function useAdminReviewOperations(options: AdminReviewOperationsOptions) 
 
   async function runAdminMutation(
     path: string,
-    method: 'PUT' | 'DELETE',
+    method: 'PUT' | 'POST' | 'DELETE',
     body: Record<string, string | number> | undefined,
     actionId: string,
     fallbackMessage: string,
@@ -67,6 +67,10 @@ export function useAdminReviewOperations(options: AdminReviewOperationsOptions) 
 
   async function setMemberRole(memberId: number, role: AdminMember['memberRole']) {
     await runAdminMutation(`/api/admin/members/${memberId}/role`, 'PUT', { role }, `member-role-${memberId}`, 'Could not update member role.')
+  }
+
+  async function resetMemberPassword(memberId: number) {
+    await runAdminMutation(`/api/admin/members/${memberId}/password-reset`, 'POST', {}, `member-password-reset-${memberId}`, 'Could not reset this member password.')
   }
 
   async function deleteMember(memberId: number) {
@@ -155,6 +159,7 @@ export function useAdminReviewOperations(options: AdminReviewOperationsOptions) 
   return {
     reviewMemberAccount,
     setMemberRole,
+    resetMemberPassword,
     deleteMember,
     updateLoanApplication,
     deleteLoanApplication,

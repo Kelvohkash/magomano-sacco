@@ -34,6 +34,8 @@ export function MemberAccountInfoPage() {
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [passwordSaving, setPasswordSaving] = useState(false)
+  const [passwordError, setPasswordError] = useState('')
+  const [passwordMessage, setPasswordMessage] = useState('')
   const [error, setError] = useState('')
   const [message, setMessage] = useState('')
 
@@ -71,15 +73,16 @@ export function MemberAccountInfoPage() {
   }
 
   async function savePassword(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault(); setError(''); setMessage('')
-    if (newPassword !== confirmPassword) { setError('The new passwords do not match.'); return }
+    event.preventDefault(); setPasswordError(''); setPasswordMessage('')
+    if (!currentPassword) { setPasswordError('Enter your current password first.'); return }
+    if (newPassword !== confirmPassword) { setPasswordError('The new passwords do not match.'); return }
     setPasswordSaving(true)
     try {
       const response = await fetch('/api/member/password', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ currentPassword, newPassword }) })
       const result = await readJsonResponse<{ message?: string; error?: string }>(response)
       if (!response.ok) throw new Error(result.error ?? 'Could not change password.')
-      setCurrentPassword(''); setNewPassword(''); setConfirmPassword(''); setMessage(result.message ?? 'Password changed.')
-    } catch (cause) { setError(requestErrorMessage(cause, 'Could not change password.')) }
+      setCurrentPassword(''); setNewPassword(''); setConfirmPassword(''); setPasswordMessage(result.message ?? 'Password changed.')
+    } catch (cause) { setPasswordError(requestErrorMessage(cause, 'Could not change password.')) }
     finally { setPasswordSaving(false) }
   }
 
@@ -104,6 +107,8 @@ export function MemberAccountInfoPage() {
           ['new-password', 'New password', newPassword, setNewPassword, 'new-password'],
           ['confirm-password', 'Confirm new password', confirmPassword, setConfirmPassword, 'new-password'],
         ].map(([id, label, value, setter, autocomplete]) => <label key={id as string}>{label as string}<input id={id as string} type="password" autoComplete={autocomplete as string} minLength={id === 'current-password' ? undefined : 8} maxLength={256} required value={value as string} onChange={(event) => (setter as (value: string) => void)(event.target.value)} /></label>)}</div>
+        {passwordError && <p className="form-message error" role="alert">{passwordError}</p>}
+        {passwordMessage && <p className="form-message success" role="status">{passwordMessage}</p>}
         <button className="submit-button" type="submit" disabled={passwordSaving}><span>{passwordSaving ? 'Updating…' : 'Update password'}</span><KeyRound size={17} /></button>
       </form>
     </>}

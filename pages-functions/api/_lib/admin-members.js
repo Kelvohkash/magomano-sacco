@@ -1,7 +1,27 @@
-import { ApiError, json, readJson } from './shared.js'
+import { randomBytes } from 'node:crypto'
+import { ApiError, hashPassword, json, readJson } from './shared.js'
 
 export async function handleAdminMembers(path, request, session, db) {
   const method = request.method
+  const passwordReset = path.match(/^\/admin\/members\/(\d+)\/password-reset$/)
+  if (passwordReset && method === 'POST') {
+    const memberId = Number(passwordReset[1])
+    const member = await db.prepare('SELECT id FROM members WHERE id = ?').bind(memberId).first()
+    if (!member) throw new ApiError('Member account was not found.', 404)
+    const salt = randomBytes(16).toString('hex')
+    const passwordHash = hashPassword('1234', salt)
+    await db.batch([
+      db.prepare('UPDATE members SET password_salt = ?, password_hash = ? WHERE id = ?')
+        .bind(salt, passwordHash, memberId),
+      db.prepare('UPDATE admins SET password_salt = ?, password_hash = ? WHERE member_id = ?')
+        .bind(salt, passwordHash, memberId),
+      db.prepare(`DELETE FROM sessions WHERE token_hash != ? AND (
+        member_id = ? OR admin_id IN (SELECT id FROM admins WHERE member_id = ?)
+      )`).bind(session.tokenHash, memberId, memberId),
+    ])
+    return json({ message: 'Member password reset to 1234. Other sessions were signed out.' })
+  }
+
   if (path === '/admin/members' && method === 'GET') {
     const [members, contactRows, activeLoanRows] = await Promise.all([
       db.prepare(`

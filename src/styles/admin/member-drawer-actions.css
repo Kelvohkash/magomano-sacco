@@ -31,11 +31,15 @@
 .drawer-footer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 8px;
   padding: 18px 24px;
   border-top: 1px solid var(--admin-border);
   background-color: #f8fafc;
 }
+
+.drawer-delete-btn { margin-left: auto; }
 
 .drawer-edit-btn {
   display: inline-flex;

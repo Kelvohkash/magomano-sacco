@@ -1,4 +1,4 @@
-import { Check, Pencil, ShieldCheck, Trash2, X } from 'lucide-react'
+import { Check, KeyRound, Pencil, ShieldCheck, Trash2, X } from 'lucide-react'
 import { AnimatedFigure } from '../../AnimatedFigure'
 import { currency, formatDate } from '../../../format'
 import type { AdminMember } from '../../../types'
@@ -8,6 +8,7 @@ interface MemberProfileDrawerProps {
   onClose: () => void
   onReviewMember: (memberId: number, decision: 'approve' | 'reject') => void
   onSetMemberRole: (memberId: number, role: AdminMember['memberRole']) => void
+  onResetMemberPassword: (memberId: number) => void
   onEditMember: (member: AdminMember) => void
   onDeleteMember: (member: AdminMember) => void
   reviewingId: string | null
@@ -18,6 +19,7 @@ export function MemberProfileDrawer({
   onClose,
   onReviewMember,
   onSetMemberRole,
+  onResetMemberPassword,
   onEditMember,
   onDeleteMember,
   reviewingId,
@@ -243,6 +245,18 @@ export function MemberProfileDrawer({
         </div>
 
         <div className="drawer-footer">
+          <button
+            type="button"
+            className="drawer-edit-btn"
+            onClick={() => {
+              if (window.confirm(`Reset ${member.fullName}'s password to 1234? Their other sessions will be signed out.`)) {
+                onResetMemberPassword(member.id)
+              }
+            }}
+            disabled={reviewingId === `member-password-reset-${member.id}`}
+          >
+            <KeyRound size={14} /> {reviewingId === `member-password-reset-${member.id}` ? 'Resetting…' : 'Reset password to 1234'}
+          </button>
           <button
             type="button"
             className="drawer-edit-btn"

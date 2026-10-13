@@ -55,6 +55,7 @@ export interface MobileAdminPortalProps {
   onLoanRepayment: FormEventHandler<HTMLFormElement>
   onReviewMember: (memberId: number, decision: 'approve' | 'reject') => void
   onSetMemberRole: (memberId: number, role: AdminMember['memberRole']) => void
+  onResetMemberPassword: (memberId: number) => void
   onDeleteMember: (memberId: number) => Promise<boolean>
   onReviewLoan: (applicationId: number, decision: 'approve' | 'reject') => void
   onUpdateLoanApplication: (
@@ -84,6 +85,7 @@ export function MobileAdminPortal({
   onLogout,
   onReviewMember,
   onSetMemberRole,
+  onResetMemberPassword,
   onDeleteMember,
   onReviewLoan,
   onUpdateLoanApplication,
@@ -308,6 +310,7 @@ export function MobileAdminPortal({
           onClose={() => ui.setViewingMemberId(null)}
           onReviewMember={onReviewMember}
           onSetMemberRole={onSetMemberRole}
+          onResetMemberPassword={onResetMemberPassword}
           onEditMember={(m) => {
             ui.beginMemberEdit(m)
             ui.setViewingMemberId(null)

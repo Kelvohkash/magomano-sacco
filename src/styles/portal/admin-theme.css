@@ -153,9 +153,9 @@
 .member-account-card-heading h2 { margin: 0; color: #29483a; font-size: 17px; }
 .member-account-card-heading p { margin: 4px 0 0; color: #849185; font-size: 11px; }
 .member-contact-form { display: grid; gap: 10px; }
-.member-contact-form > label { margin-top: 3px; color: #40594a; font-size: 11px; font-weight: 700; }
-.member-contact-form > input { min-height: 43px; padding: 0 12px; border: 1px solid rgb(118 143 121 / 25%); border-radius: 10px; color: #29483a; background: rgb(255 255 255 / 78%); }
-.member-contact-form > input:focus { border-color: #729b78; box-shadow: 0 0 0 4px rgb(114 155 120 / 13%); outline: none; }
+.member-contact-field { display: grid; align-content: start; gap: 7px; margin-top: 3px; color: #40594a; font-size: 11px; font-weight: 700; }
+.member-contact-field input { width: 100%; min-width: 0; min-height: 43px; padding: 0 12px; border: 1px solid rgb(118 143 121 / 25%); border-radius: 10px; color: #29483a; background: rgb(255 255 255 / 78%); font: inherit; font-size: 12px; }
+.member-contact-field input:focus { border-color: #729b78; box-shadow: 0 0 0 4px rgb(114 155 120 / 13%); outline: none; }
 .member-contact-form .submit-button { display: inline-flex; min-height: 46px; align-items: center; justify-content: space-between; margin-top: 8px; padding: 0 15px; border: 0; border-radius: 11px; color: #fff; background: linear-gradient(110deg, #214b39, #35734e); font-size: 12px; font-weight: 700; }
 .member-account-note { margin: 0; color: #7b897d; font-size: 10px; line-height: 1.5; }
 .member-contact-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 14px 0; border-top: 1px solid rgb(96 128 102 / 13%); }
@@ -181,8 +181,14 @@
 .account-info-group .member-details-form-heading { margin-bottom: 13px; }
 .account-info-group .member-details-form-heading > svg { color: #6c8a70; }
 .member-account-page > .member-contacts-embedded { margin: 0 0 20px; }
-.member-contacts-embedded .member-account-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.member-contacts-embedded .member-account-grid { grid-template-columns: minmax(0, 1fr); }
 .member-contacts-embedded .member-account-card { padding: 20px; }
+.member-contacts-embedded .member-contact-form { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: end; }
+.member-contacts-embedded .member-contact-form > .member-account-card-heading,
+.member-contacts-embedded .member-contact-form > .form-message,
+.member-contacts-embedded .member-contact-form > .submit-button,
+.member-contacts-embedded .member-contact-form > .member-account-note { grid-column: 1 / -1; }
+.member-contacts-embedded .member-contact-form > .submit-button { justify-self: start; min-width: 190px; }
 .member-details-form > .submit-button, .admin-terms-form > .submit-button { display: inline-flex; min-height: 45px; align-items: center; justify-content: space-between; gap: 18px; padding: 0 15px; border: 0; border-radius: 11px; color: #fff; background: linear-gradient(110deg, #214b39, #35734e); font-size: 11px; font-weight: 700; }
 .member-details-cancel { min-height: 35px; padding: 0 12px; border: 1px solid rgb(118 143 121 / 25%); border-radius: 9px; color: #59705f; background: rgb(255 255 255 / 72%); font-size: 10px; font-weight: 700; }
 .admin-terms-form { display: grid; gap: 13px; }

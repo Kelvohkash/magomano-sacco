@@ -89,12 +89,9 @@ export function MemberContactsPage({ compact = false }: { compact?: boolean }) {
             <span><UsersRound size={18} /></span>
             <div><h2>Add a contact</h2><p>Up to two contacts</p></div>
           </div>
-          <label htmlFor="contact-full-name">Full name</label>
-          <input id="contact-full-name" value={fullName} onChange={(event) => setFullName(event.target.value)} maxLength={100} autoComplete="name" required />
-          <label htmlFor="contact-relationship">Relationship to you</label>
-          <input id="contact-relationship" value={relationship} onChange={(event) => setRelationship(event.target.value)} maxLength={60} placeholder="e.g. Parent, spouse, colleague" required />
-          <label htmlFor="contact-phone">Phone number</label>
-          <input id="contact-phone" type="tel" value={phoneNumber} onChange={(event) => setPhoneNumber(event.target.value)} maxLength={32} autoComplete="tel" required />
+          <label className="member-contact-field" htmlFor="contact-full-name">Full name<input id="contact-full-name" value={fullName} onChange={(event) => setFullName(event.target.value)} maxLength={100} autoComplete="name" required /></label>
+          <label className="member-contact-field" htmlFor="contact-relationship">Relationship to you<input id="contact-relationship" value={relationship} onChange={(event) => setRelationship(event.target.value)} maxLength={60} placeholder="e.g. Parent, spouse, colleague" required /></label>
+          <label className="member-contact-field" htmlFor="contact-phone">Phone number<input id="contact-phone" type="tel" value={phoneNumber} onChange={(event) => setPhoneNumber(event.target.value)} maxLength={32} autoComplete="tel" required /></label>
           {error && <p className="form-message error" role="alert">{error}</p>}
           {message && <p className="form-message success" role="status">{message}</p>}
           <button className="submit-button" type="submit" disabled={saving || contacts.length >= 2}>

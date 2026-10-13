@@ -8,6 +8,11 @@
 @media (max-width: 720px) {
   .member-account-page { width: calc(100% - 36px); padding: 35px 0 52px; }
   .member-account-grid { grid-template-columns: 1fr; gap: 13px; }
+  .member-contacts-embedded .member-contact-form { grid-template-columns: 1fr; }
+  .member-contacts-embedded .member-contact-form > .member-account-card-heading,
+  .member-contacts-embedded .member-contact-form > .form-message,
+  .member-contacts-embedded .member-contact-form > .submit-button,
+  .member-contacts-embedded .member-contact-form > .member-account-note { grid-column: 1; }
   .member-account-card { padding: 18px; border-radius: 17px; }
   .member-details-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 }

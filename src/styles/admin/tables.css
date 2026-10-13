@@ -157,6 +157,11 @@
   border: 1px solid #a7f3d0;
 }
 
+.status-pill.status-disbursed {
+  color: #17644a;
+  background: #dff5e9;
+}
+
 .status-pill.status-pending {
   background-color: #fffbeb;
   color: #b45309;

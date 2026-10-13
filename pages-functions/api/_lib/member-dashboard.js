@@ -7,12 +7,12 @@ export async function getMemberBorrowingCapacity(env, memberId) {
         FROM savings_transactions WHERE member_id = ?), 0) AS savingsBalance,
       COALESCE((SELECT SUM(outstanding_balance)
         FROM member_loans WHERE member_id = ? AND outstanding_balance > 0), 0) AS activeLoanBalance,
-      COALESCE((SELECT SUM(requested_amount)
-        FROM loan_applications WHERE member_id = ? AND status = 'pending'), 0) AS pendingApplications
+      COALESCE((SELECT SUM(requested_amount * 1.1)
+        FROM loan_applications WHERE member_id = ? AND status IN ('pending', 'approved')), 0) AS pendingApplications
   `).bind(memberId, memberId, memberId).first()
   return {
     ...result,
-    availableBalance: Math.max(0, result.savingsBalance - result.activeLoanBalance - result.pendingApplications),
+    availableBalance: Math.floor(Math.max(0, result.savingsBalance - result.activeLoanBalance - result.pendingApplications) * 0.9 * 100) / 100,
   }
 }
 
@@ -28,12 +28,22 @@ export async function memberDashboard(session, env) {
   `).bind(memberId).first()
   if (!member) throw new ApiError('Please sign in to continue.', 401)
 
-  const [borrowingCapacity, loanTotals] = await Promise.all([
+  const [borrowingCapacity, loanTotals, maintenance, memberMessages] = await Promise.all([
     getMemberBorrowingCapacity(env, memberId),
     env.DB.prepare(`
       SELECT COALESCE(SUM(outstanding_balance), 0) AS balance
       FROM member_loans WHERE member_id = ?
     `).bind(memberId).first(),
+    env.DB.prepare('SELECT enabled, message FROM maintenance_mode WHERE id = 1').first(),
+    env.DB.prepare(`
+      SELECT id, title, body, created_at AS createdAt
+      FROM member_popup_messages
+      WHERE active = 1 AND (target_type = 'all' OR EXISTS (
+        SELECT 1 FROM member_popup_message_recipients r
+        WHERE r.message_id = member_popup_messages.id AND r.member_id = ?
+      ) OR target_member_id = ?)
+      ORDER BY created_at ASC, id ASC
+    `).bind(memberId, memberId).all(),
   ])
   return json({
     member: {
@@ -56,6 +66,11 @@ export async function memberDashboard(session, env) {
         },
       ].filter((account) => account.bankName && account.accountNumber),
     },
+    maintenance: {
+      enabled: Boolean(maintenance?.enabled),
+      message: maintenance?.message ?? 'We are carrying out maintenance. Please try again later.',
+    },
+    memberMessages: memberMessages.results,
     borrowingCapacity,
     savings: { balance: borrowingCapacity.savingsBalance, statement: [] },
     loans: {

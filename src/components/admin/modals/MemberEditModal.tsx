@@ -39,6 +39,24 @@ export function MemberEditModal({
             <span className="form-sec-heading">Personal Information</span>
             <div className="form-fields-grid">
               <label>
+                SACCO Member Number
+                <input
+                  value={memberForm.saccoNumber}
+                  onChange={(e) => setMemberForm((c) => ({ ...c, saccoNumber: e.target.value.toUpperCase() }))}
+                  placeholder="A/005"
+                  maxLength={20}
+                />
+              </label>
+              <label>
+                National ID
+                <input
+                  value={memberForm.nationalId}
+                  onChange={(e) => setMemberForm((c) => ({ ...c, nationalId: e.target.value.trim() }))}
+                  inputMode="numeric"
+                  maxLength={12}
+                />
+              </label>
+              <label>
                 Full Legal Name
                 <input
                   value={memberForm.fullName}

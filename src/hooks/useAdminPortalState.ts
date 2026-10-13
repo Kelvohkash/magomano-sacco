@@ -32,12 +32,12 @@ export function useAdminPortalState(
   const [memberSearch, setMemberSearch] = useState('')
   const [memberFilter, setMemberFilter] = useState<'all' | 'pending' | 'approved' | 'signatory' | 'admin'>('all')
   const [loanSearch, setLoanSearch] = useState('')
-  const [loanFilter, setLoanFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('all')
+  const [loanFilter, setLoanFilter] = useState<'all' | 'pending' | 'decision' | 'disbursed'>('all')
   const [repaymentSearch, setRepaymentSearch] = useState('')
 
   // Edit forms
   const [memberForm, setMemberForm] = useState<MemberProfileUpdate>({
-    fullName: '', phoneNumber: '', email: '', county: '', subCounty: '',
+    saccoNumber: '', nationalId: '', fullName: '', phoneNumber: '', email: '', county: '', subCounty: '',
     bankName: '', bankBranch: '', bankAccountName: '', bankAccountNumber: '',
     bankTwoName: '', bankTwoBranch: '', bankTwoAccountName: '', bankTwoAccountNumber: '',
     location: '', maritalStatus: '', nextKinName: '', nextKinRelationship: '', nextKinPhone: '',
@@ -70,7 +70,8 @@ export function useAdminPortalState(
       const q = memberSearch.toLowerCase()
       return (
         m.fullName.toLowerCase().includes(q) ||
-        m.nationalId.toLowerCase().includes(q) ||
+        m.saccoNumber?.toLowerCase().includes(q) ||
+        m.nationalId?.toLowerCase().includes(q) ||
         m.phoneNumber?.toLowerCase().includes(q) ||
         m.email?.toLowerCase().includes(q)
       )
@@ -79,7 +80,8 @@ export function useAdminPortalState(
   })
 
   const filteredApplications = applications.filter((app) => {
-    if (loanFilter !== 'all' && app.status !== loanFilter) return false
+    if (loanFilter === 'decision' && !['approved', 'rejected'].includes(app.status)) return false
+    if (loanFilter !== 'all' && loanFilter !== 'decision' && app.status !== loanFilter) return false
     if (loanSearch.trim()) {
       const q = loanSearch.toLowerCase()
       return (
@@ -103,7 +105,7 @@ export function useAdminPortalState(
   function beginMemberEdit(member: AdminMember) {
     setEditingMemberId(member.id)
     setMemberForm({
-      fullName: member.fullName ?? '', phoneNumber: member.phoneNumber ?? '', email: member.email ?? '',
+      saccoNumber: member.saccoNumber ?? '', nationalId: member.nationalId ?? '', fullName: member.fullName ?? '', phoneNumber: member.phoneNumber ?? '', email: member.email ?? '',
       county: member.county ?? '', subCounty: member.subCounty ?? '', bankName: member.bankName ?? '',
       bankBranch: member.bankBranch ?? '', bankAccountName: member.bankAccountName ?? '',
       bankAccountNumber: member.bankAccountNumber ?? '', bankTwoName: member.bankTwoName ?? '',

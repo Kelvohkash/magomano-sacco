@@ -3,6 +3,7 @@ import {
   ArrowRight,
   ClipboardList,
   Clock,
+  Coins,
   FileSpreadsheet,
   Landmark,
   Printer,
@@ -20,7 +21,7 @@ interface AdminDashboardViewProps {
   pendingApplications: AdminLoanApplication[]
   setView: Dispatch<SetStateAction<AdminView>>
   setMemberFilter: Dispatch<SetStateAction<'all' | 'pending' | 'approved' | 'signatory' | 'admin'>>
-  setLoanFilter: Dispatch<SetStateAction<'all' | 'pending' | 'approved' | 'rejected'>>
+  setLoanFilter: Dispatch<SetStateAction<'all' | 'pending' | 'decision' | 'disbursed'>>
 }
 
 export function AdminDashboardView({
@@ -93,6 +94,16 @@ export function AdminDashboardView({
           <div className="kpi-footer">
             <span className="kpi-subtext">Current active loan balances due</span>
           </div>
+        </article>
+
+        <article className="kpi-card interest-kpi">
+          <div className="kpi-card-header">
+            <span className="kpi-title">INTEREST AVAILABLE</span>
+            <div className="kpi-icon-wrap pending-icon"><Coins size={20} /></div>
+          </div>
+          <strong className="kpi-value"><AnimatedFigure value={summary?.interestHeld ?? 0} /></strong>
+          <div className="kpi-footer"><span className="kpi-subtext">Received interest, held separately from member savings</span></div>
+          <button type="button" className="queue-action-button" onClick={() => setView('savings')}>Manage interest payout <ArrowRight size={16} /></button>
         </article>
 
       </section>

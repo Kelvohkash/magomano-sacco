@@ -152,6 +152,7 @@ export function AdminStatementPanel({ type, title, refreshKey, onRecordsChanged 
   async function saveEdit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (!editingRow) return
+    if (!window.confirm(`Save changes to this ${type === 'savings' ? 'savings' : 'dividend'} record?`)) return
     setSavingEdit(true)
     setEditError('')
     try {
@@ -214,7 +215,7 @@ export function AdminStatementPanel({ type, title, refreshKey, onRecordsChanged 
           statusOptions={type === 'loans'
             ? [{ value: 'active', label: 'Active' }, { value: 'paid', label: 'Paid' }]
             : type === 'applications'
-              ? [{ value: 'pending', label: 'Pending' }, { value: 'approved', label: 'Approved' }, { value: 'rejected', label: 'Rejected' }]
+              ? [{ value: 'pending', label: 'Pending' }, { value: 'approved', label: 'Approved' }, { value: 'rejected', label: 'Rejected' }, { value: 'disbursed', label: 'Disbursed' }]
               : undefined}
         />
       </div>

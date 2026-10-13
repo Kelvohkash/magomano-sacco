@@ -22,7 +22,11 @@ import type {
   AdminOpenLoan,
   AdminSummary,
   AdminView,
+  AdminMemberCreate,
+  AdminLoanCreate,
   MemberProfileUpdate,
+  AdminPopupMessage,
+  AdminPopupMessageCreate,
 } from '../../types'
 
 export interface MobileAdminPortalProps {
@@ -34,6 +38,8 @@ export interface MobileAdminPortalProps {
   members: AdminMember[]
   applications: AdminLoanApplication[]
   openLoans: AdminOpenLoan[]
+  onCreateMember: (input: AdminMemberCreate) => Promise<boolean>
+  onIssueLoan: (input: AdminLoanCreate) => Promise<boolean>
   memberId: string
   setMemberId: Dispatch<SetStateAction<string>>
   amount: string
@@ -58,6 +64,7 @@ export interface MobileAdminPortalProps {
   onResetMemberPassword: (memberId: number) => void
   onDeleteMember: (memberId: number) => Promise<boolean>
   onReviewLoan: (applicationId: number, decision: 'approve' | 'reject') => void
+  onDisburseLoan: (applicationId: number, bankName: string, accountNumber: string) => void
   onUpdateLoanApplication: (
     applicationId: number,
     details: Pick<AdminLoanApplication, 'requestedAmount' | 'repaymentMonths' | 'purpose'>,
@@ -68,6 +75,14 @@ export interface MobileAdminPortalProps {
   setTerms: Dispatch<SetStateAction<string>>
   termsUpdatedAt?: string | null
   onSaveTerms: (terms: string) => Promise<boolean>
+  maintenanceEnabled: boolean
+  maintenanceMessage: string
+  setMaintenanceMessage: Dispatch<SetStateAction<string>>
+  onUpdateMaintenance: (enabled: boolean, message: string) => Promise<boolean>
+  popupMessages: AdminPopupMessage[]
+  onCreatePopupMessage: (input: AdminPopupMessageCreate) => Promise<boolean>
+  onSetPopupMessageActive: (messageId: number, active: boolean) => Promise<boolean>
+  onDeletePopupMessage: (messageId: number) => Promise<boolean>
   onRefresh: () => Promise<void>
 }
 
@@ -79,6 +94,9 @@ export function MobileAdminPortal({
   statementRefreshKey,
   members,
   applications,
+  openLoans,
+  onCreateMember,
+  onIssueLoan,
   message,
   messageSuccess,
   reviewingId,
@@ -88,6 +106,7 @@ export function MobileAdminPortal({
   onResetMemberPassword,
   onDeleteMember,
   onReviewLoan,
+  onDisburseLoan,
   onUpdateLoanApplication,
   onDeleteLoanApplication,
   onUpdateMember,
@@ -95,7 +114,17 @@ export function MobileAdminPortal({
   setTerms,
   termsUpdatedAt,
   onSaveTerms,
+  maintenanceEnabled,
+  maintenanceMessage,
+  setMaintenanceMessage,
+  onUpdateMaintenance,
+  popupMessages,
+  onCreatePopupMessage,
+  onSetPopupMessageActive,
+  onDeletePopupMessage,
   onRefresh,
+  repaymentLoanId, setRepaymentLoanId, repaymentAmount, setRepaymentAmount,
+  repaymentDescription, setRepaymentDescription, onLoanRepayment, submitting,
 }: MobileAdminPortalProps) {
   const ui = useAdminPortalState(
     members,
@@ -216,6 +245,7 @@ export function MobileAdminPortal({
         {view === 'members' && (
           <AdminMembersView
             members={members}
+            onCreateMember={onCreateMember}
             filteredMembers={ui.filteredMembers}
             memberSearch={ui.memberSearch}
             setMemberSearch={ui.setMemberSearch}
@@ -230,11 +260,14 @@ export function MobileAdminPortal({
             onReviewMember={onReviewMember}
             removeMember={ui.removeMember}
             reviewingId={reviewingId}
+              onRefresh={onRefresh}
           />
         )}
 
         {view === 'loans' && (
           <AdminLoansView
+            members={members}
+            onIssueLoan={onIssueLoan}
             applications={applications}
             filteredApplications={ui.filteredApplications}
             pendingApplicationsCount={ui.pendingApplications.length}
@@ -246,6 +279,7 @@ export function MobileAdminPortal({
             setEditingApplicationId={ui.setEditingApplicationId}
             beginApplicationEdit={ui.beginApplicationEdit}
             onReviewLoan={onReviewLoan}
+            onDisburseLoan={onDisburseLoan}
             removeApplication={ui.removeApplication}
             reviewingId={reviewingId}
           />
@@ -255,6 +289,15 @@ export function MobileAdminPortal({
           <AdminRepaymentsView
             statementRefreshKey={statementRefreshKey}
             onRecordsChanged={onRefresh}
+            openLoans={openLoans}
+            repaymentLoanId={repaymentLoanId}
+            setRepaymentLoanId={setRepaymentLoanId}
+            repaymentAmount={repaymentAmount}
+            setRepaymentAmount={setRepaymentAmount}
+            repaymentDescription={repaymentDescription}
+            setRepaymentDescription={setRepaymentDescription}
+            onLoanRepayment={onLoanRepayment}
+            submitting={submitting}
           />
         )}
 
@@ -276,6 +319,17 @@ export function MobileAdminPortal({
             termsMessage={ui.termsMessage}
             setTermsMessage={ui.setTermsMessage}
             onSaveTerms={saveTerms}
+            maintenanceEnabled={maintenanceEnabled}
+            maintenanceMessage={maintenanceMessage}
+            setMaintenanceMessage={setMaintenanceMessage}
+            onUpdateMaintenance={onUpdateMaintenance}
+            maintenanceSaving={reviewingId === 'maintenance-mode'}
+            members={members}
+            popupMessages={popupMessages}
+            onCreatePopupMessage={onCreatePopupMessage}
+            onSetPopupMessageActive={onSetPopupMessageActive}
+            onDeletePopupMessage={onDeletePopupMessage}
+            reviewingId={reviewingId}
           />
         )}
       </main>

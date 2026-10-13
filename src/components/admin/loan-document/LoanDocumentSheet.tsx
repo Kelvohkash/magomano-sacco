@@ -44,7 +44,7 @@ export function LoanDocumentSheet({
         />
         <DocDeclarationSection application={application} />
         <DocSignatoriesSection signatories={signatories} />
-        <DocFooter refCode={refCode} />
+        <DocFooter refCode={refCode} securityHash={application.securityHash} />
       </article>
     </div>
   )

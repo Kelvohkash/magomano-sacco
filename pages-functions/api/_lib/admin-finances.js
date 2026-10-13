@@ -2,6 +2,40 @@ import { ApiError, json, readJson } from './shared.js'
 
 export async function handleAdminFinances(path, request, session, db) {
   const method = request.method
+  if (path === '/admin/interest-disbursements' && method === 'GET') {
+    const [balance, records] = await Promise.all([
+      db.prepare(`SELECT MAX(0,
+        COALESCE((SELECT SUM(MAX(0, MIN(l.total_repayable - l.principal_amount,
+          l.total_repayable - l.outstanding_balance))) FROM member_loans l), 0)
+        - COALESCE((SELECT SUM(amount) FROM interest_disbursements), 0)
+      ) AS available`).first(),
+      db.prepare(`SELECT id, amount, description, paid_at AS paidAt FROM interest_disbursements ORDER BY paid_at DESC, id DESC LIMIT 100`).all(),
+    ])
+    return json({ available: balance.available, records: records.results })
+  }
+  if (path === '/admin/interest-disbursements' && method === 'POST') {
+    const body = await readJson(request)
+    const amount = Math.round(Number(body.amount) * 100) / 100
+    const description = typeof body.description === 'string' ? body.description.trim() : ''
+    if (!Number.isFinite(amount) || amount <= 0 || amount > 1_000_000_000) throw new ApiError('Enter a valid interest payout amount.')
+    if (description.length > 120) throw new ApiError('Description must be 120 characters or fewer.')
+    const result = await db.prepare(`
+      INSERT INTO interest_disbursements (amount, description, admin_id)
+      SELECT ?, ?, ? WHERE ? <= MAX(0,
+        COALESCE((SELECT SUM(MAX(0, MIN(l.total_repayable - l.principal_amount,
+          l.total_repayable - l.outstanding_balance))) FROM member_loans l), 0)
+        - COALESCE((SELECT SUM(amount) FROM interest_disbursements), 0)
+      )
+    `).bind(amount, description, session.adminId, amount).run()
+    if (!result.meta.changes) throw new ApiError('Payout exceeds interest currently received and available.', 409)
+    const updatedBalance = await db.prepare(`
+      SELECT MAX(0, COALESCE((SELECT SUM(MAX(0, MIN(l.total_repayable - l.principal_amount,
+        l.total_repayable - l.outstanding_balance))) FROM member_loans l), 0)
+        - COALESCE((SELECT SUM(amount) FROM interest_disbursements), 0)) AS available
+    `).first()
+    return json({ message: 'Interest payout recorded.', available: updatedBalance.available }, 201)
+  }
+
   if (path === '/admin/repayments' && method === 'GET') {
     const loans = await db.prepare(`
       SELECT l.id, l.loan_reference AS reference, l.principal_amount AS principalAmount,

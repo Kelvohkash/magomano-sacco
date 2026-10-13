@@ -1,0 +1,11 @@
+.admin-create-trigger { display: inline-flex; align-items: center; gap: 7px; min-height: 36px; margin-right: 12px; }
+.admin-create-panel { display: flex; flex-direction: column; gap: 16px; margin: 0 0 22px; padding: 20px; border: 1px solid var(--admin-border); border-radius: 14px; background: var(--admin-surface); box-shadow: var(--admin-shadow-sm); }
+.admin-create-panel-heading h2 { margin: 0; color: var(--admin-text-dark); font-size: 17px; }
+.admin-create-panel-heading p { margin: 4px 0 0; color: var(--admin-text-muted); font-size: 12px; }
+.admin-create-panel .modal-actions-bar { justify-content: flex-end; }
+.admin-create-note { margin: 0; color: var(--admin-text-muted); font-size: 12px; }
+.admin-create-estimate { margin: 0; color: var(--admin-text-dark); font-size: 13px; font-weight: 700; }
+@media (max-width: 640px) {
+  .admin-create-panel .form-fields-grid { grid-template-columns: 1fr; }
+  .admin-create-panel .form-fields-grid label.span-2 { grid-column: auto; }
+}

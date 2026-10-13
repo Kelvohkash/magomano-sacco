@@ -30,13 +30,10 @@ export function MemberLoginForm({
         name="nationalId"
         type="text"
         autoComplete="username"
-        inputMode="numeric"
         placeholder="e.g. 37765731"
         value={nationalId}
         onChange={(event) => setNationalId(event.target.value)}
-        pattern="[0-9]{6,12}"
-        maxLength={12}
-        title="Enter 6 to 12 digits"
+        maxLength={20}
         required
       />
 

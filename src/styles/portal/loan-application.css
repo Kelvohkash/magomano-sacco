@@ -1,6 +1,9 @@
 .application-content { max-width: 800px; }
 .application-status-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
 .application-status-section { max-width: 760px; }
+.loan-progress-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: -6px 0 18px; }
+.loan-progress-tabs button { min-height: 38px; padding: 0 12px; border: 1px solid rgb(78 111 87 / 18%); border-radius: 999px; color: #52705b; background: rgb(255 255 255 / 60%); font: inherit; font-size: 10px; font-weight: 700; cursor: pointer; }
+.loan-progress-tabs button.is-active { border-color: #6d9472; color: #fff; background: #547c60; }
 .loan-application-status-list { display: grid; gap: 12px; }
 .loan-application-status-card {
   padding: 17px 18px;
@@ -17,6 +20,7 @@
 .application-status-badge { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 6px; padding: 7px 9px; border-radius: 99px; font-size: 10px; font-weight: 700; }
 .application-status-badge.pending { color: #886338; background: #f7eddc; }
 .application-status-badge.approved { color: #31704e; background: #e2f0e1; }
+.application-status-badge.disbursed { color: #17644a; background: #dff5e9; }
 .application-status-badge.rejected { color: #9a5147; background: #f6e6e3; }
 .back-link { margin-bottom: 26px; color: #477260; }
 .back-link:hover { color: #214b38; }

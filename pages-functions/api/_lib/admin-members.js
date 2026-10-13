@@ -22,10 +22,40 @@ export async function handleAdminMembers(path, request, session, db) {
     return json({ message: 'Member password reset to 1234. Other sessions were signed out.' })
   }
 
+  if (path === '/admin/members' && method === 'POST') {
+    const body = await readJson(request)
+    const saccoNumber = typeof body.saccoNumber === 'string' ? body.saccoNumber.trim().toUpperCase() : ''
+    const fullName = typeof body.fullName === 'string' ? body.fullName.trim().replace(/\s+/g, ' ') : ''
+    const nationalId = typeof body.nationalId === 'string' ? body.nationalId.trim() : ''
+    if (!/^[A-Z]+\/\d+$/.test(saccoNumber)) throw new ApiError('SACCO number must look like A/005.')
+    if (fullName.length < 2 || fullName.length > 100) throw new ApiError('Enter a member name up to 100 characters.')
+    if (nationalId && !/^\d{6,12}$/.test(nationalId)) throw new ApiError('National ID must be blank or 6 to 12 digits.')
+    const nameParts = fullName.split(/\s+/)
+    const firstName = nameParts.shift() ?? ''
+    const lastName = nameParts.length > 1 ? nameParts.pop() ?? '' : ''
+    const secondName = nameParts.join(' ')
+    const salt = randomBytes(16).toString('hex')
+    const passwordHash = hashPassword('Magomano1234', salt)
+    try {
+      await db.prepare(`
+        INSERT INTO members (
+          sacco_number, national_id, full_name, first_name, second_name, last_name,
+          account_status, password_salt, password_hash
+        ) VALUES (?, ?, ?, ?, ?, ?, 'approved', ?, ?)
+      `).bind(saccoNumber, nationalId, fullName, firstName, secondName, lastName, salt, passwordHash).run()
+    } catch (error) {
+      if (String(error).includes('UNIQUE constraint failed')) {
+        throw new ApiError('That SACCO number or National ID is already assigned to another member.', 409)
+      }
+      throw error
+    }
+    return json({ message: `${fullName} was added. Their temporary password is Magomano1234.` }, 201)
+  }
+
   if (path === '/admin/members' && method === 'GET') {
     const [members, activeLoanRows, contactRows] = await Promise.all([
       db.prepare(`
-      SELECT m.id, m.national_id AS nationalId, m.full_name AS fullName,
+      SELECT m.id, m.sacco_number AS saccoNumber, m.national_id AS nationalId, m.full_name AS fullName,
         m.first_name AS firstName, m.second_name AS secondName, m.last_name AS lastName,
         m.phone_number AS phoneNumber, m.account_status AS accountStatus,
         m.email, m.county, m.sub_county AS subCounty,
@@ -41,8 +71,10 @@ export async function handleAdminMembers(path, request, session, db) {
         COALESCE(SUM(CASE WHEN s.entry_type = 'deposit' THEN s.amount ELSE -s.amount END), 0) AS savingsBalance,
         (SELECT COALESCE(SUM(l.outstanding_balance), 0) FROM member_loans l
           WHERE l.member_id = m.id AND l.outstanding_balance > 0) AS activeLoanBalance,
-        (SELECT COALESCE(SUM(a.requested_amount), 0) FROM loan_applications a
-          WHERE a.member_id = m.id AND a.status = 'pending') AS pendingLoanAmount,
+        (SELECT COALESCE(SUM(a.requested_amount * 1.1), 0) FROM loan_applications a
+          WHERE a.member_id = m.id AND a.status IN ('pending', 'approved')) AS pendingLoanAmount,
+        (SELECT COALESCE(SUM(p.remaining_amount), 0) FROM unallocated_loan_payments p
+          WHERE p.member_id = m.id AND p.remaining_amount > 0) AS pendingLoanPayment,
         EXISTS (SELECT 1 FROM admins a WHERE a.member_id = m.id) AS isAdmin
       FROM members m LEFT JOIN savings_transactions s ON s.member_id = m.id
       WHERE m.national_id IS NOT NULL GROUP BY m.id ORDER BY m.full_name COLLATE NOCASE
@@ -91,7 +123,7 @@ export async function handleAdminMembers(path, request, session, db) {
         ...member,
         availableBalance: Math.max(
           0,
-          Number(member.savingsBalance) - Number(member.activeLoanBalance) - Number(member.pendingLoanAmount),
+          Math.floor((Number(member.savingsBalance) - Number(member.activeLoanBalance) - Number(member.pendingLoanAmount)) * 0.9 * 100) / 100,
         ),
         activeLoans: loansByMember.get(member.id) ?? [],
         contacts: contactsByMember.get(member.id) ?? [],
@@ -104,6 +136,8 @@ export async function handleAdminMembers(path, request, session, db) {
     const memberId = Number(memberDetails[1])
     const body = await readJson(request)
     const fields = [
+      ['saccoNumber', 'SACCO member number', 0, 20],
+      ['nationalId', 'National ID', 0, 12],
       ['fullName', 'Full name', 2, 100],
       ['phoneNumber', 'Phone number', 0, 32],
       ['bankName', 'Bank name', 0, 100],
@@ -130,6 +164,13 @@ export async function handleAdminMembers(path, request, session, db) {
         throw new ApiError(`${label} must be ${min ? `${min} to ` : 'no more than '}${max} characters.`)
       }
     }
+    if (values.saccoNumber && !/^[A-Za-z]+\/\d+$/.test(values.saccoNumber)) {
+      throw new ApiError('SACCO member number must look like A/005.')
+    }
+    values.saccoNumber = values.saccoNumber ? values.saccoNumber.toUpperCase() : null
+    if (values.nationalId && !/^\d{6,12}$/.test(values.nationalId)) {
+      throw new ApiError('National ID must be blank or 6 to 12 digits.')
+    }
     const maritalStatus = typeof body.maritalStatus === 'string' ? body.maritalStatus : ''
     if (!['', 'single', 'married', 'divorced', 'widowed', 'other'].includes(maritalStatus)) {
       throw new ApiError('Choose a valid marital status.')
@@ -141,22 +182,33 @@ export async function handleAdminMembers(path, request, session, db) {
     const firstName = nameParts.shift() ?? ''
     const lastName = nameParts.length > 1 ? nameParts.pop() ?? '' : ''
     const secondName = nameParts.join(' ')
-    const result = await db.prepare(`
-      UPDATE members SET
-        full_name = ?, first_name = ?, second_name = ?, last_name = ?,
-        phone_number = ?, email = ?, county = ?, sub_county = ?, bank_name = ?, bank_branch = ?,
-        bank_account_name = ?, bank_account_number = ?, bank_two_name = ?, bank_two_branch = ?,
-        bank_two_account_name = ?, bank_two_account_number = ?, location = ?,
-        marital_status = ?, next_kin_name = ?, next_kin_relationship = ?, next_kin_phone = ?
-      WHERE id = ?
-    `).bind(
-      values.fullName, firstName, secondName, lastName, values.phoneNumber, values.email,
-      values.county, values.subCounty, values.bankName, values.bankBranch,
-      values.bankAccountName, values.bankAccountNumber, values.bankTwoName, values.bankTwoBranch,
-      values.bankTwoAccountName, values.bankTwoAccountNumber, values.location,
-      maritalStatus, values.nextKinName, values.nextKinRelationship, values.nextKinPhone,
-      memberId,
-    ).run()
+    let result
+    try {
+      result = await db.prepare(`
+        UPDATE members SET
+          sacco_number = ?, national_id = ?, full_name = ?, first_name = ?, second_name = ?, last_name = ?,
+          phone_number = ?, email = ?, county = ?, sub_county = ?, bank_name = ?, bank_branch = ?,
+          bank_account_name = ?, bank_account_number = ?, bank_two_name = ?, bank_two_branch = ?,
+          bank_two_account_name = ?, bank_two_account_number = ?, location = ?,
+          marital_status = ?, next_kin_name = ?, next_kin_relationship = ?, next_kin_phone = ?
+        WHERE id = ?
+      `).bind(
+        values.saccoNumber, values.nationalId, values.fullName, firstName, secondName, lastName, values.phoneNumber, values.email,
+        values.county, values.subCounty, values.bankName, values.bankBranch,
+        values.bankAccountName, values.bankAccountNumber, values.bankTwoName, values.bankTwoBranch,
+        values.bankTwoAccountName, values.bankTwoAccountNumber, values.location,
+        maritalStatus, values.nextKinName, values.nextKinRelationship, values.nextKinPhone,
+        memberId,
+      ).run()
+    } catch (error) {
+      if (String(error).includes('members_sacco_number_unique') || String(error).includes('members.sacco_number')) {
+        throw new ApiError('That SACCO member number is already assigned to another member.', 409)
+      }
+      if (String(error).includes('members_national_id_unique') || String(error).includes('members.national_id')) {
+        throw new ApiError('That National ID is already assigned to another member.', 409)
+      }
+      throw error
+    }
     if (!result.meta.changes) {
       const member = await db.prepare('SELECT id FROM members WHERE id = ?').bind(memberId).first()
       if (!member) throw new ApiError('Member account was not found.', 404)
@@ -181,6 +233,57 @@ export async function handleAdminMembers(path, request, session, db) {
   }
 
   const deleteMember = path.match(/^\/admin\/members\/(\d+)$/)
+  const terminateMember = path.match(/^\/admin\/members\/(\d+)\/terminate$/)
+  if (terminateMember && method === 'POST') {
+    const memberId = Number(terminateMember[1])
+    const member = await db.prepare("SELECT id, full_name AS fullName FROM members WHERE id = ? AND account_status = 'approved'")
+      .bind(memberId).first()
+    if (!member) throw new ApiError('Active member account was not found.', 404)
+    const [savingsRow, loans] = await Promise.all([
+      db.prepare(`SELECT COALESCE(SUM(CASE WHEN entry_type = 'deposit' THEN amount ELSE -amount END), 0) AS balance
+        FROM savings_transactions WHERE member_id = ?`).bind(memberId).first(),
+      db.prepare(`SELECT id, outstanding_balance AS balance FROM member_loans
+        WHERE member_id = ? AND outstanding_balance > 0 ORDER BY issued_at, id`).bind(memberId).all(),
+    ])
+    const savings = Math.max(0, Math.round(Number(savingsRow.balance) * 100) / 100)
+    const totalDue = Math.round(loans.results.reduce((sum, loan) => sum + Number(loan.balance), 0) * 100) / 100
+    let toApply = Math.min(savings, totalDue)
+    const allocations = loans.results.map((loan) => {
+      const paid = Math.min(toApply, Number(loan.balance))
+      toApply = Math.round((toApply - paid) * 100) / 100
+      return { id: loan.id, balance: Number(loan.balance), paid, remaining: Math.round((Number(loan.balance) - paid) * 100) / 100 }
+    }).filter((loan) => loan.paid > 0)
+    const applied = Math.round(allocations.reduce((sum, loan) => sum + loan.paid, 0) * 100) / 100
+    const payout = Math.round((savings - applied) * 100) / 100
+    const remainingDue = Math.round((totalDue - applied) * 100) / 100
+    const statements = [db.prepare(`INSERT INTO member_terminations
+      (member_id, savings_applied, loan_balance_settled, payout_amount, remaining_loan_due, admin_id)
+      SELECT ?, ?, ?, ?, ?, ? WHERE (SELECT account_status FROM members WHERE id = ?) = 'approved'
+      AND (SELECT COALESCE(SUM(CASE WHEN entry_type='deposit' THEN amount ELSE -amount END),0)
+        FROM savings_transactions WHERE member_id = ?) = ?`).bind(memberId, applied, applied, payout, remainingDue, session.adminId, memberId, memberId, savingsRow.balance)]
+    if (payout > 0) statements.push(db.prepare(`INSERT INTO savings_transactions (member_id, entry_type, amount, description)
+      VALUES (?, 'withdrawal', ?, 'Member termination payout')`).bind(memberId, payout))
+    for (const loan of allocations) {
+      statements.push(db.prepare(`INSERT INTO loan_repayments (loan_id, admin_id, amount, description)
+        SELECT ?, ?, ?, 'Member termination settlement' WHERE EXISTS (
+          SELECT 1 FROM member_loans WHERE id = ? AND outstanding_balance = ?
+        )`).bind(loan.id, session.adminId, loan.paid, loan.id, loan.balance))
+      statements.push(db.prepare(`UPDATE member_loans SET outstanding_balance = ?, status = ?
+        WHERE id = ? AND outstanding_balance = ?`).bind(loan.remaining, loan.remaining === 0 ? 'paid' : 'active', loan.id, loan.balance))
+    }
+    if (savings > 0) statements.push(db.prepare(`INSERT INTO savings_transactions (member_id, entry_type, amount, description)
+      SELECT ?, 'withdrawal', ?, 'Member termination: savings applied to outstanding loans'
+      WHERE ? > 0`).bind(memberId, applied, applied))
+    statements.push(db.prepare(`UPDATE members SET account_status = 'terminated'
+      WHERE id = ? AND account_status = 'approved'`).bind(memberId))
+    statements.push(db.prepare("UPDATE loan_applications SET status = 'rejected' WHERE member_id = ? AND status IN ('pending', 'approved')")
+      .bind(memberId))
+    statements.push(db.prepare('DELETE FROM sessions WHERE member_id = ?').bind(memberId))
+    await db.batch(statements)
+    const updated = await db.prepare("SELECT account_status FROM members WHERE id = ?").bind(memberId).first()
+    if (updated?.account_status !== 'terminated') throw new ApiError('Settlement changed before completion. Refresh and retry.', 409)
+    return json({ message: `${member.fullName} terminated. ${payout.toFixed(2)} paid out; ${remainingDue.toFixed(2)} loan balance remains due.`, savingsApplied: applied, payoutAmount: payout, remainingLoanDue: remainingDue })
+  }
   if (deleteMember && method === 'DELETE') {
     const memberId = Number(deleteMember[1])
     const member = await db.prepare('SELECT full_name AS fullName FROM members WHERE id = ?')

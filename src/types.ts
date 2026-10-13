@@ -1,4 +1,9 @@
 export interface DashboardData {
+  maintenance: {
+    enabled: boolean
+    message: string
+  }
+  memberMessages: MemberPopupMessage[]
   member: {
     national_id: string
     full_name: string
@@ -49,6 +54,30 @@ export interface DashboardData {
   }
 }
 
+export interface MemberPopupMessage {
+  id: number
+  title: string
+  body: string
+  createdAt: string
+}
+
+export interface AdminPopupMessage extends MemberPopupMessage {
+  targetType: 'all' | 'member'
+  targetMemberId: number | null
+  targetMemberName: string | null
+  targetSaccoNumber: string | null
+  targetMemberNames?: string | null
+  targetMemberCount?: number
+  active: boolean
+}
+
+export interface AdminPopupMessageCreate {
+  title: string
+  body: string
+  targetType: 'all' | 'member'
+  targetMemberIds: number[]
+}
+
 export interface SavingsTransaction {
   entryType: 'deposit'
   amount: number
@@ -90,12 +119,20 @@ export interface MemberLoanApplication {
   repaymentMonths: number
   purpose: string
   securityType: 'savings'
-  status: 'pending' | 'approved' | 'rejected'
+  status: 'pending' | 'approved' | 'rejected' | 'disbursed'
   appliedAt: string
+  payoutBankName: string
+  payoutBankBranch: string
+  payoutAccountName: string
+  payoutAccountNumber: string
+  disbursedAt: string | null
+  disbursedLoanReference: string | null
+  disbursementMessage: string
 }
 
 export interface AdminMember {
   id: number
+  saccoNumber: string | null
   nationalId: string
   fullName: string
   firstName: string
@@ -105,7 +142,7 @@ export interface AdminMember {
   email: string
   county: string
   subCounty: string
-  accountStatus: 'pending' | 'approved' | 'rejected'
+  accountStatus: 'pending' | 'approved' | 'rejected' | 'terminated'
   bankName: string
   bankBranch: string
   bankAccountName: string
@@ -123,6 +160,7 @@ export interface AdminMember {
   termsAcceptedAt: string | null
   savingsBalance: number
   activeLoanBalance: number
+  pendingLoanPayment: number
   pendingLoanAmount: number
   availableBalance: number
   activeLoans: {
@@ -139,6 +177,8 @@ export interface AdminMember {
 }
 
 export interface MemberProfileUpdate {
+  saccoNumber: string
+  nationalId: string
   fullName: string
   phoneNumber: string
   email: string
@@ -157,6 +197,19 @@ export interface MemberProfileUpdate {
   nextKinName: string
   nextKinRelationship: string
   nextKinPhone: string
+}
+
+export interface AdminMemberCreate {
+  saccoNumber: string
+  fullName: string
+  nationalId: string
+}
+
+export interface AdminLoanCreate {
+  memberId: number
+  principalAmount: number
+  repaymentMonths: number
+  purpose: string
 }
 
 export interface MemberRegistrationForm {
@@ -197,6 +250,7 @@ export interface AdminSummary {
   totalSavings: number
   loansIssued: number
   pendingPayments: number
+  interestHeld: number
   dividendsPaid: number
   pendingLoanApplications: number
 }
@@ -207,7 +261,7 @@ export interface AdminLoanApplication {
   repaymentMonths: number
   purpose: string
   securityType: 'savings'
-  status: 'pending' | 'approved' | 'rejected'
+  status: 'pending' | 'approved' | 'rejected' | 'disbursed'
   appliedAt: string
   nationalId: string
   fullName: string
@@ -217,6 +271,10 @@ export interface AdminLoanApplication {
   payoutAccountNumber: string
   electronicSignatureName: string
   electronicallySignedAt: string | null
+  disbursedAt: string | null
+  disbursedLoanReference: string | null
+  disbursementMessage: string
+  securityHash: string
 }
 
 export interface AdminOpenLoan {

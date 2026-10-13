@@ -19,7 +19,11 @@ import type {
   AdminOpenLoan,
   AdminSummary,
   AdminView,
+  AdminMemberCreate,
+  AdminLoanCreate,
   MemberProfileUpdate,
+  AdminPopupMessage,
+  AdminPopupMessageCreate,
 } from '../../types'
 
 export interface AdminPortalProps {
@@ -31,6 +35,8 @@ export interface AdminPortalProps {
   members: AdminMember[]
   applications: AdminLoanApplication[]
   openLoans: AdminOpenLoan[]
+  onCreateMember: (input: AdminMemberCreate) => Promise<boolean>
+  onIssueLoan: (input: AdminLoanCreate) => Promise<boolean>
   memberId: string
   setMemberId: Dispatch<SetStateAction<string>>
   amount: string
@@ -55,6 +61,7 @@ export interface AdminPortalProps {
   onResetMemberPassword: (memberId: number) => void
   onDeleteMember: (memberId: number) => Promise<boolean>
   onReviewLoan: (applicationId: number, decision: 'approve' | 'reject') => void
+  onDisburseLoan: (applicationId: number, bankName: string, accountNumber: string) => void
   onUpdateLoanApplication: (
     applicationId: number,
     details: Pick<AdminLoanApplication, 'requestedAmount' | 'repaymentMonths' | 'purpose'>,
@@ -65,17 +72,29 @@ export interface AdminPortalProps {
   setTerms: Dispatch<SetStateAction<string>>
   termsUpdatedAt?: string | null
   onSaveTerms: (terms: string) => Promise<boolean>
+  maintenanceEnabled: boolean
+  maintenanceMessage: string
+  setMaintenanceMessage: Dispatch<SetStateAction<string>>
+  onUpdateMaintenance: (enabled: boolean, message: string) => Promise<boolean>
+  popupMessages: AdminPopupMessage[]
+  onCreatePopupMessage: (input: AdminPopupMessageCreate) => Promise<boolean>
+  onSetPopupMessageActive: (messageId: number, active: boolean) => Promise<boolean>
+  onDeletePopupMessage: (messageId: number) => Promise<boolean>
   onRefresh: () => Promise<void>
 }
 
 export function AdminPortal({
   signedInAdmin, view, setView, summary, statementRefreshKey,
-  members, applications,
+  members, applications, openLoans, onCreateMember, onIssueLoan,
   message, messageSuccess, reviewingId,
   onLogout,
   onReviewMember, onSetMemberRole, onResetMemberPassword, onDeleteMember,
-  onReviewLoan, onUpdateLoanApplication, onDeleteLoanApplication, onUpdateMember,
+  onReviewLoan, onDisburseLoan, onUpdateLoanApplication, onDeleteLoanApplication, onUpdateMember,
   terms, setTerms, termsUpdatedAt, onSaveTerms, onRefresh,
+  maintenanceEnabled, maintenanceMessage, setMaintenanceMessage, onUpdateMaintenance,
+  popupMessages, onCreatePopupMessage, onSetPopupMessageActive, onDeletePopupMessage,
+  repaymentLoanId, setRepaymentLoanId, repaymentAmount, setRepaymentAmount,
+  repaymentDescription, setRepaymentDescription, onLoanRepayment, submitting,
 }: AdminPortalProps) {
   const ui = useAdminPortalState(
     members, applications,
@@ -131,6 +150,7 @@ export function AdminPortal({
           {view === 'members' && (
             <AdminMembersView
               members={members}
+              onCreateMember={onCreateMember}
               filteredMembers={ui.filteredMembers}
               memberSearch={ui.memberSearch}
               setMemberSearch={ui.setMemberSearch}
@@ -145,11 +165,14 @@ export function AdminPortal({
               onReviewMember={onReviewMember}
               removeMember={ui.removeMember}
               reviewingId={reviewingId}
+              onRefresh={onRefresh}
             />
           )}
 
           {view === 'loans' && (
             <AdminLoansView
+              members={members}
+              onIssueLoan={onIssueLoan}
               applications={applications}
               filteredApplications={ui.filteredApplications}
               pendingApplicationsCount={ui.pendingApplications.length}
@@ -161,6 +184,7 @@ export function AdminPortal({
               setEditingApplicationId={ui.setEditingApplicationId}
               beginApplicationEdit={ui.beginApplicationEdit}
               onReviewLoan={onReviewLoan}
+              onDisburseLoan={onDisburseLoan}
               removeApplication={ui.removeApplication}
               reviewingId={reviewingId}
             />
@@ -170,6 +194,15 @@ export function AdminPortal({
             <AdminRepaymentsView
               statementRefreshKey={statementRefreshKey}
               onRecordsChanged={onRefresh}
+              openLoans={openLoans}
+              repaymentLoanId={repaymentLoanId}
+              setRepaymentLoanId={setRepaymentLoanId}
+              repaymentAmount={repaymentAmount}
+              setRepaymentAmount={setRepaymentAmount}
+              repaymentDescription={repaymentDescription}
+              setRepaymentDescription={setRepaymentDescription}
+              onLoanRepayment={onLoanRepayment}
+              submitting={submitting}
             />
           )}
 
@@ -191,6 +224,17 @@ export function AdminPortal({
               termsMessage={ui.termsMessage}
               setTermsMessage={ui.setTermsMessage}
               onSaveTerms={saveTerms}
+              maintenanceEnabled={maintenanceEnabled}
+              maintenanceMessage={maintenanceMessage}
+              setMaintenanceMessage={setMaintenanceMessage}
+              onUpdateMaintenance={onUpdateMaintenance}
+              maintenanceSaving={reviewingId === 'maintenance-mode'}
+              members={members}
+              popupMessages={popupMessages}
+              onCreatePopupMessage={onCreatePopupMessage}
+              onSetPopupMessageActive={onSetPopupMessageActive}
+              onDeletePopupMessage={onDeletePopupMessage}
+              reviewingId={reviewingId}
             />
           )}
         </main>

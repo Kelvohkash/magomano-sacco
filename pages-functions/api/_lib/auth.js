@@ -155,16 +155,17 @@ export async function handleAuth(path, request, env) {
 
   if (path === '/auth/login' && request.method === 'POST') {
     const body = await readJson(request)
-    const nationalId = typeof body.nationalId === 'string' ? body.nationalId.trim() : ''
+    const memberIdentifier = typeof body.nationalId === 'string' ? body.nationalId.trim() : ''
     const password = typeof body.password === 'string' ? body.password : ''
-    if (!/^[0-9]{6,12}$/.test(nationalId) || !password) {
-      throw new ApiError('Enter your National ID and password.')
+    if (!(/^[0-9]{6,12}$/.test(memberIdentifier) || /^[A-Za-z]+\/\d+$/.test(memberIdentifier)) || !password) {
+      throw new ApiError('Enter your National ID or SACCO member number, and password.')
     }
     const member = await env.DB.prepare(`
       SELECT id, national_id, full_name, account_status, password_salt, password_hash
-      FROM members WHERE national_id = ? COLLATE NOCASE
-    `).bind(nationalId).first()
-    if (!member) throw new ApiError('National ID or password is incorrect.', 401)
+      FROM members
+      WHERE national_id = ? COLLATE NOCASE OR sacco_number = ? COLLATE NOCASE
+    `).bind(memberIdentifier, memberIdentifier.toUpperCase()).first()
+    if (!member) throw new ApiError('Member number or password is incorrect.', 401)
     return loginSession(env, request, body, 'member', member)
   }
 

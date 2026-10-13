@@ -1,4 +1,3 @@
-import { ShieldCheck } from 'lucide-react'
 import { formatDate, standardizeName } from '../../../format'
 import type { AdminLoanApplication } from '../../../types'
 
@@ -28,10 +27,7 @@ export function DocDeclarationSection({ application }: DocDeclarationSectionProp
 
         <div className="declaration-signature-card">
           <div className="signature-header">
-            <span className="sig-type">MEMBER ELECTRONIC SIGNATURE</span>
-            <span className="sig-auth">
-              <ShieldCheck size={13} /> Consent Electronically Verified
-            </span>
+            <span className="sig-type">MEMBER SIGNATURE</span>
           </div>
           <div className="signature-display">
             <span className="dancing-signature">

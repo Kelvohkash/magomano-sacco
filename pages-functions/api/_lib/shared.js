@@ -28,7 +28,7 @@ export function getStatementFilters(url, { status = false } = {}) {
     throw new ApiError('Choose a valid date range.')
   }
   if (search.length > 100) throw new ApiError('Statement search must be 100 characters or fewer.')
-  if (requestedStatus && !['active', 'paid', 'pending', 'approved', 'rejected'].includes(requestedStatus)) {
+  if (requestedStatus && !['active', 'paid', 'pending', 'approved', 'rejected', 'disbursed', 'decision'].includes(requestedStatus)) {
     throw new ApiError('Choose a valid statement status.')
   }
   return { from, to, search, status: requestedStatus }
@@ -44,6 +44,15 @@ export function getCookie(request, name) {
 
 export function sha256(value) {
   return createHash('sha256').update(value).digest('hex')
+}
+
+export function loanApplicationHash(application) {
+  return sha256(`MAGOMANO-LOAN-APPLICATION-V1:${JSON.stringify([
+    Number(application.id), Number(application.memberId), Number(application.requestedAmount),
+    Number(application.repaymentMonths), application.purpose, application.payoutBankName,
+    application.payoutBankBranch, application.payoutAccountName, application.payoutAccountNumber,
+    application.electronicSignatureName, application.electronicallySignedAt,
+  ])}`)
 }
 
 export function hashPassword(password, saltHex) {

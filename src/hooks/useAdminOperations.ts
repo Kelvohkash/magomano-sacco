@@ -6,6 +6,7 @@ import type {
   AdminMember,
   AdminOpenLoan,
   AdminSummary,
+  AdminPopupMessage,
   AdminView,
 } from '../types'
 import { readJsonResponse } from '../networkErrors'
@@ -18,6 +19,9 @@ export function useAdminOperations() {
   const [adminOpenLoans, setAdminOpenLoans] = useState<AdminOpenLoan[]>([])
   const [adminTerms, setAdminTerms] = useState('')
   const [adminTermsUpdatedAt, setAdminTermsUpdatedAt] = useState<string | null>(null)
+  const [adminMaintenanceEnabled, setAdminMaintenanceEnabled] = useState(false)
+  const [adminMaintenanceMessage, setAdminMaintenanceMessage] = useState('We are carrying out maintenance. Please try again later.')
+  const [adminPopupMessages, setAdminPopupMessages] = useState<AdminPopupMessage[]>([])
   const [adminSummary, setAdminSummary] = useState<AdminSummary | null>(null)
   const [adminStatementRefreshKey, setAdminStatementRefreshKey] = useState(0)
 
@@ -33,29 +37,35 @@ export function useAdminOperations() {
   const [adminReviewingId, setAdminReviewingId] = useState<string | null>(null)
 
   const refreshAdminData = useCallback(async () => {
-    const [summaryRes, membersRes, appsRes, repayRes, termsRes] = await Promise.all([
+    const [summaryRes, membersRes, appsRes, repayRes, termsRes, maintenanceRes, popupMessagesRes] = await Promise.all([
       fetch('/api/admin/dashboard'),
       fetch('/api/admin/members'),
       fetch('/api/admin/loan-applications'),
       fetch('/api/admin/repayments'),
       fetch('/api/admin/terms'),
+      fetch('/api/admin/maintenance'),
+      fetch('/api/admin/member-messages'),
     ])
-    const [summaryResult, membersResult, applicationsResult, repaymentsResult, termsResult] =
+    const [summaryResult, membersResult, applicationsResult, repaymentsResult, termsResult, maintenanceResult, popupMessagesResult] =
       await Promise.all([
         readJsonResponse<AdminSummary & { error?: string }>(summaryRes),
         readJsonResponse<{ members?: AdminMember[]; error?: string }>(membersRes),
         readJsonResponse<{ applications?: AdminLoanApplication[]; error?: string }>(appsRes),
         readJsonResponse<{ loans?: AdminOpenLoan[]; error?: string }>(repayRes),
         readJsonResponse<{ terms?: string; updatedAt?: string | null; error?: string }>(termsRes),
+        readJsonResponse<{ enabled?: boolean; message?: string; error?: string }>(maintenanceRes),
+        readJsonResponse<{ messages?: AdminPopupMessage[]; error?: string }>(popupMessagesRes),
       ])
 
-    if (!summaryRes.ok || !membersRes.ok || !appsRes.ok || !repayRes.ok || !termsRes.ok) {
+    if (!summaryRes.ok || !membersRes.ok || !appsRes.ok || !repayRes.ok || !termsRes.ok || !maintenanceRes.ok || !popupMessagesRes.ok) {
       throw new Error(
         summaryResult.error ??
           membersResult.error ??
           applicationsResult.error ??
           repaymentsResult.error ??
           termsResult.error ??
+          maintenanceResult.error ??
+          popupMessagesResult.error ??
           'Could not load admin records.',
       )
     }
@@ -68,6 +78,9 @@ export function useAdminOperations() {
     setAdminApplications(applicationsResult.applications ?? [])
     setAdminTerms(termsResult.terms ?? '')
     setAdminTermsUpdatedAt(termsResult.updatedAt ?? null)
+    setAdminMaintenanceEnabled(Boolean(maintenanceResult.enabled))
+    setAdminMaintenanceMessage(maintenanceResult.message ?? 'We are carrying out maintenance. Please try again later.')
+    setAdminPopupMessages(popupMessagesResult.messages ?? [])
     setAdminOpenLoans(openLoans)
     setRepaymentLoanId((curr) => (openLoans.some((l) => String(l.id) === curr) ? curr : String(openLoans[0]?.id ?? '')))
     setAdminMemberId((curr) => (members.some((m) => String(m.id) === curr) ? curr : String(members[0]?.id ?? '')))
@@ -95,6 +108,9 @@ export function useAdminOperations() {
     setMessageSuccess: setAdminMessageSuccess,
     setTerms: setAdminTerms,
     setTermsUpdatedAt: setAdminTermsUpdatedAt,
+    setMaintenanceEnabled: setAdminMaintenanceEnabled,
+    setMaintenanceMessage: setAdminMaintenanceMessage,
+    setPopupMessages: setAdminPopupMessages,
     refreshAdminData,
   })
 
@@ -112,6 +128,8 @@ export function useAdminOperations() {
     adminView, setAdminView,
     adminMembers, adminApplications, adminOpenLoans,
     adminTerms, setAdminTerms, adminTermsUpdatedAt, adminSummary, adminStatementRefreshKey,
+    adminMaintenanceEnabled, adminMaintenanceMessage, setAdminMaintenanceMessage,
+    adminPopupMessages,
     adminMemberId, setAdminMemberId,
     adminAmount, setAdminAmount,
     adminDescription, setAdminDescription,

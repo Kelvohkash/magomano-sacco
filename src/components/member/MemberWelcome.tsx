@@ -14,10 +14,14 @@ function getGreeting() {
   return 'Good evening'
 }
 
+function formatGreetingName(value: string) {
+  return value.trim().toLocaleLowerCase().replace(/(^|\s)\p{L}/gu, (letter) => letter.toLocaleUpperCase())
+}
+
 export function MemberWelcome({ firstName, savingsBalance, outstandingLoans }: MemberWelcomeProps) {
   const [greeting, setGreeting] = useState(getGreeting)
   const [tipIndex, setTipIndex] = useState(0)
-  const greetingText = `${greeting}, ${firstName}`
+  const greetingText = `${greeting}, ${formatGreetingName(firstName)}`
   const tips = [
     savingsBalance > 0
       ? 'Regular savings, even in small amounts, can build a stronger financial cushion.'

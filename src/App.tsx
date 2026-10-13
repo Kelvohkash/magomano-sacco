@@ -3,6 +3,8 @@ import { AdminPortal } from './components/admin/AdminPortal'
 import { MobileAdminPortal } from './components/admin/MobileAdminPortal'
 import { AuthScreen } from './components/auth/AuthScreen'
 import { MemberPortal } from './components/member/MemberPortal'
+import { MemberMaintenanceScreen } from './components/member/MemberMaintenanceScreen'
+import { MemberPopupLayer } from './components/member/MemberPopupLayer'
 import { useAdminOperations } from './hooks/useAdminOperations'
 import { useAuthSession } from './hooks/useAuthSession'
 import { useMemberOperations } from './hooks/useMemberOperations'
@@ -17,6 +19,14 @@ function App() {
   const appearance = useAppearance(member.dashboard?.member.national_id)
   const { refreshDashboard, resetMemberState } = member
   const { setSignedInAdmin, refreshAdminData, resetAdminState } = admin
+
+  useEffect(() => {
+    if (!member.dashboard) return
+    const refreshTimer = window.setInterval(() => {
+      void refreshDashboard().catch(() => undefined)
+    }, 30_000)
+    return () => window.clearInterval(refreshTimer)
+  }, [Boolean(member.dashboard), refreshDashboard])
 
   const [isMobile, setIsMobile] = useState(false)
   useEffect(() => {
@@ -52,7 +62,13 @@ function App() {
   })
 
   if (member.dashboard) {
-    return (
+    const memberScreen = member.dashboard.maintenance.enabled ? (
+        <MemberMaintenanceScreen
+          memberName={member.dashboard.member.full_name}
+          message={member.dashboard.maintenance.message}
+          onLogout={auth.handleLogout}
+        />
+    ) : (
       <MemberPortal
         dashboard={member.dashboard}
         view={member.memberView}
@@ -74,6 +90,7 @@ function App() {
         onToggleLightAppearance={appearance.toggleForceLight}
       />
     )
+    return <MemberPopupLayer messages={member.dashboard.memberMessages}>{memberScreen}</MemberPopupLayer>
   }
 
   if (admin.signedInAdmin) {
@@ -87,6 +104,8 @@ function App() {
         members={admin.adminMembers}
         applications={admin.adminApplications}
         openLoans={admin.adminOpenLoans}
+        onCreateMember={admin.createMember}
+        onIssueLoan={admin.issueLoan}
         memberId={admin.adminMemberId}
         setMemberId={admin.setAdminMemberId}
         amount={admin.adminAmount}
@@ -111,6 +130,7 @@ function App() {
         onResetMemberPassword={admin.resetMemberPassword}
         onDeleteMember={admin.deleteMember}
         onReviewLoan={admin.reviewLoanApplication}
+        onDisburseLoan={admin.disburseLoanApplication}
         onUpdateLoanApplication={admin.updateLoanApplication}
         onDeleteLoanApplication={admin.deleteLoanApplication}
         onUpdateMember={admin.updateMemberDetails}
@@ -118,6 +138,14 @@ function App() {
         setTerms={admin.setAdminTerms}
         termsUpdatedAt={admin.adminTermsUpdatedAt}
         onSaveTerms={admin.saveTerms}
+        maintenanceEnabled={admin.adminMaintenanceEnabled}
+        maintenanceMessage={admin.adminMaintenanceMessage}
+        setMaintenanceMessage={admin.setAdminMaintenanceMessage}
+        onUpdateMaintenance={admin.updateMaintenance}
+        popupMessages={admin.adminPopupMessages}
+        onCreatePopupMessage={admin.createPopupMessage}
+        onSetPopupMessageActive={admin.setPopupMessageActive}
+        onDeletePopupMessage={admin.deletePopupMessage}
         onRefresh={admin.refreshAdminData}
       />
     ) : (
@@ -130,6 +158,8 @@ function App() {
         members={admin.adminMembers}
         applications={admin.adminApplications}
         openLoans={admin.adminOpenLoans}
+        onCreateMember={admin.createMember}
+        onIssueLoan={admin.issueLoan}
         memberId={admin.adminMemberId}
         setMemberId={admin.setAdminMemberId}
         amount={admin.adminAmount}
@@ -154,6 +184,7 @@ function App() {
         onResetMemberPassword={admin.resetMemberPassword}
         onDeleteMember={admin.deleteMember}
         onReviewLoan={admin.reviewLoanApplication}
+        onDisburseLoan={admin.disburseLoanApplication}
         onUpdateLoanApplication={admin.updateLoanApplication}
         onDeleteLoanApplication={admin.deleteLoanApplication}
         onUpdateMember={admin.updateMemberDetails}
@@ -161,6 +192,14 @@ function App() {
         setTerms={admin.setAdminTerms}
         termsUpdatedAt={admin.adminTermsUpdatedAt}
         onSaveTerms={admin.saveTerms}
+        maintenanceEnabled={admin.adminMaintenanceEnabled}
+        maintenanceMessage={admin.adminMaintenanceMessage}
+        setMaintenanceMessage={admin.setAdminMaintenanceMessage}
+        onUpdateMaintenance={admin.updateMaintenance}
+        popupMessages={admin.adminPopupMessages}
+        onCreatePopupMessage={admin.createPopupMessage}
+        onSetPopupMessageActive={admin.setPopupMessageActive}
+        onDeletePopupMessage={admin.deletePopupMessage}
         onRefresh={admin.refreshAdminData}
       />
     )

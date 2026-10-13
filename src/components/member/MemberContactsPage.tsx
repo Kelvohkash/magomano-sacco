@@ -60,6 +60,7 @@ export function MemberContactsPage({ compact = false }: { compact?: boolean }) {
   }
 
   async function removeContact(contact: MemberContact) {
+    if (!window.confirm(`Do you want to remove ${contact.fullName} from your contacts?`)) return
     setRemovingId(contact.id)
     setError('')
     setMessage('')

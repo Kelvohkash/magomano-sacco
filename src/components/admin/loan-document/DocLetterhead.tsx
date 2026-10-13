@@ -17,9 +17,8 @@ export function DocLetterhead({ application, refCode }: DocLetterheadProps) {
           </div>
           <div className="doc-org-text">
             <h1 className="doc-org-name">MAGOMANO SAVINGS SACCO</h1>
-            <p className="doc-org-sub">SOCIETY LIMITED · REG. NO. CS/12849</p>
             <p className="doc-org-address">
-              Head Office: P.O. Box 482-00100 Nairobi, Kenya · Tel: +254 700 000 000 · Email: info@magomanosacco.co.ke
+              Head Office: P.O. Box 482-00100 Thika, Kenya · Tel: +254 700 000 000 · Email: info@magomanosacco.co.ke
             </p>
           </div>
         </div>

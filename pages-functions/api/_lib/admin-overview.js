@@ -2,6 +2,106 @@ import { ApiError, getStatementFilters, json, readJson } from './shared.js'
 
 export async function handleAdminOverview(path, request, session, db) {
   const method = request.method
+  if (path === '/admin/member-messages' && method === 'GET') {
+    const messages = await db.prepare(`
+      SELECT p.id, p.title, p.body, p.target_type AS targetType,
+        p.target_member_id AS targetMemberId, m.full_name AS targetMemberName,
+        m.sacco_number AS targetSaccoNumber,
+        (SELECT group_concat(rm.full_name, ', ') FROM member_popup_message_recipients r
+          JOIN members rm ON rm.id = r.member_id WHERE r.message_id = p.id) AS targetMemberNames,
+        (SELECT COUNT(*) FROM member_popup_message_recipients r WHERE r.message_id = p.id) AS targetMemberCount,
+        p.active, p.created_at AS createdAt
+      FROM member_popup_messages p
+      LEFT JOIN members m ON m.id = p.target_member_id
+      ORDER BY p.active DESC, p.created_at DESC, p.id DESC
+      LIMIT 200
+    `).all()
+    return json({ messages: messages.results.map((message) => ({
+      ...message,
+      active: Boolean(message.active),
+    })) })
+  }
+
+  if (path === '/admin/member-messages' && method === 'POST') {
+    const body = await readJson(request)
+    const title = typeof body.title === 'string' ? body.title.trim() : ''
+    const messageBody = typeof body.body === 'string' ? body.body.trim() : ''
+    const targetType = body.targetType
+    const targetMemberIds = Array.isArray(body.targetMemberIds)
+      ? [...new Set(body.targetMemberIds.map(Number))]
+      : [Number(body.targetMemberId)]
+    if (title.length < 1 || title.length > 120) throw new ApiError('Message title must be 1 to 120 characters.')
+    if (messageBody.length < 1 || messageBody.length > 2000) throw new ApiError('Message must be 1 to 2,000 characters.')
+    if (!['all', 'member'].includes(targetType)) throw new ApiError('Choose all members or one member as the audience.')
+    if (targetType === 'member' && (!targetMemberIds.length || targetMemberIds.some((id) => !Number.isInteger(id) || id < 1))) {
+      throw new ApiError('Choose a member for this message.')
+    }
+    if (targetType === 'member') {
+      const placeholders = targetMemberIds.map(() => '?').join(', ')
+      const members = await db.prepare(`SELECT id FROM members WHERE account_status = 'approved' AND id IN (${placeholders})`)
+        .bind(...targetMemberIds).all()
+      if (members.results.length !== targetMemberIds.length) throw new ApiError('Choose approved members for this message.')
+    }
+    const result = await db.prepare(`
+      INSERT INTO member_popup_messages (title, body, target_type, target_member_id, created_by)
+      VALUES (?, ?, ?, ?, ?)
+    `).bind(title, messageBody, targetType, targetType === 'member' ? targetMemberIds[0] : null, session.adminId).run()
+    if (targetType === 'member') {
+      await db.batch(targetMemberIds.map((memberId) => db.prepare(`
+        INSERT INTO member_popup_message_recipients (message_id, member_id) VALUES (?, ?)
+      `).bind(result.meta.last_row_id, memberId)))
+    }
+    return json({ id: result.meta.last_row_id, message: 'Member message created.' }, 201)
+  }
+
+  const popupMessage = path.match(/^\/admin\/member-messages\/(\d+)$/)
+  if (popupMessage && method === 'PUT') {
+    const messageId = Number(popupMessage[1])
+    const body = await readJson(request)
+    if (typeof body.active !== 'boolean') throw new ApiError('Choose whether this member message is active.')
+    const result = await db.prepare(`
+      UPDATE member_popup_messages SET active = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?
+    `).bind(body.active ? 1 : 0, messageId).run()
+    if (!result.meta.changes) throw new ApiError('Member message was not found.', 404)
+    return json({ message: body.active ? 'Member message activated.' : 'Member message deactivated.' })
+  }
+
+  if (popupMessage && method === 'DELETE') {
+    const result = await db.prepare('DELETE FROM member_popup_messages WHERE id = ?')
+      .bind(Number(popupMessage[1])).run()
+    if (!result.meta.changes) throw new ApiError('Member message was not found.', 404)
+    return json({ message: 'Member message deleted.' })
+  }
+
+  if (path === '/admin/maintenance' && method === 'GET') {
+    const maintenance = await db.prepare(`
+      SELECT enabled, message, updated_at AS updatedAt FROM maintenance_mode WHERE id = 1
+    `).first()
+    return json({
+      enabled: Boolean(maintenance?.enabled),
+      message: maintenance?.message ?? 'We are carrying out maintenance. Please try again later.',
+      updatedAt: maintenance?.updatedAt ?? null,
+    })
+  }
+
+  if (path === '/admin/maintenance' && method === 'PUT') {
+    const body = await readJson(request)
+    if (typeof body.enabled !== 'boolean') throw new ApiError('Choose whether maintenance mode is on or off.')
+    const message = typeof body.message === 'string' ? body.message.trim() : ''
+    if (message.length > 500) throw new ApiError('The maintenance message must be 500 characters or fewer.')
+    const statusMessage = message || 'We are carrying out maintenance. Please try again later.'
+    await db.prepare(`
+      UPDATE maintenance_mode
+      SET enabled = ?, message = ?, updated_by = ?, updated_at = CURRENT_TIMESTAMP
+      WHERE id = 1
+    `).bind(body.enabled ? 1 : 0, statusMessage, session.adminId).run()
+    return json({
+      enabled: body.enabled,
+      message: statusMessage,
+      notice: body.enabled ? 'Maintenance mode is now on.' : 'Maintenance mode is now off.',
+    })
+  }
+
   if (path === '/admin/terms' && method === 'GET') {
     const terms = await db.prepare('SELECT content, updated_at AS updatedAt FROM sacco_terms WHERE id = 1').first()
     return json({ terms: terms?.content ?? '', updatedAt: terms?.updatedAt ?? null })
@@ -42,8 +142,8 @@ export async function handleAdminOverview(path, request, session, db) {
     if (filters.status && type === 'loans' && !['active', 'paid'].includes(filters.status)) {
       throw new ApiError('Choose active or paid for the issued-loan status filter.')
     }
-    if (filters.status && type === 'applications' && !['pending', 'approved', 'rejected'].includes(filters.status)) {
-      throw new ApiError('Choose pending, approved, or rejected for the application status filter.')
+    if (filters.status && type === 'applications' && !['pending', 'approved', 'rejected', 'disbursed'].includes(filters.status)) {
+      throw new ApiError('Choose a valid application status filter.')
     }
     const pageSize = 10
     const offset = (page - 1) * pageSize
@@ -139,7 +239,7 @@ export async function handleAdminOverview(path, request, session, db) {
   }
 
   if (path === '/admin/dashboard' && method === 'GET') {
-    const [members, savings, loans, dividends, applications] = await Promise.all([
+    const [members, savings, loans, dividends, applications, interest] = await Promise.all([
       db.prepare(`
         SELECT COUNT(*) AS totalMembers,
           SUM(CASE WHEN account_status = 'pending' THEN 1 ELSE 0 END) AS pendingMembers,
@@ -156,12 +256,20 @@ export async function handleAdminOverview(path, request, session, db) {
       `).first(),
       db.prepare('SELECT COALESCE(SUM(amount), 0) AS total FROM dividend_payments').first(),
       db.prepare("SELECT COUNT(*) AS total FROM loan_applications WHERE status = 'pending'").first(),
+      db.prepare(`
+        SELECT MAX(0,
+          COALESCE((SELECT SUM(MAX(0, MIN(l.total_repayable - l.principal_amount,
+            l.total_repayable - l.outstanding_balance))) FROM member_loans l), 0)
+          - COALESCE((SELECT SUM(amount) FROM interest_disbursements), 0)
+        ) AS held
+      `).first(),
     ])
     return json({
       members,
       totalSavings: savings.total,
       loansIssued: loans.issued,
       pendingPayments: loans.pendingPayments,
+      interestHeld: interest.held,
       dividendsPaid: dividends.total,
       pendingLoanApplications: applications.total,
     })

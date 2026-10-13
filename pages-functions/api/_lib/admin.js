@@ -16,7 +16,7 @@ export async function handleAdmin(path, request, env) {
     ?? await handleAdminFinances(path, request, session, db)
   if (result) return result
 
-  const importMatch = path.match(/^\/admin\/imports\/(savings|repayments)$/)
+  const importMatch = path.match(/^\/admin\/imports\/(members|savings|repayments)$/)
   if (importMatch && request.method === 'POST') {
     return importRows(request, session, db, importMatch[1])
   }

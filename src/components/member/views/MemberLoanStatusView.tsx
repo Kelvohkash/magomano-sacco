@@ -13,7 +13,8 @@ interface MemberLoanStatusViewProps {
 }
 
 function applicationStatus(status: MemberLoanApplication['status']) {
-  if (status === 'approved') return { label: 'Approved & disbursed', Icon: CheckCircle2 }
+  if (status === 'approved') return { label: 'Approved · awaiting disbursement', Icon: Clock3 }
+  if (status === 'disbursed') return { label: 'Funds disbursed', Icon: CheckCircle2 }
   if (status === 'rejected') return { label: 'Not approved', Icon: XCircle }
   return { label: 'Received · under review', Icon: Clock3 }
 }
@@ -80,6 +81,32 @@ export function MemberLoanStatusView({ setView }: MemberLoanStatusViewProps) {
 
       <div className="dashboard-intro">
         <h1>Loan application status</h1>
+        <p>Follow your request from review to the final bank transfer.</p>
+      </div>
+
+      <div className="loan-progress-tabs" role="tablist" aria-label="Loan application stage">
+        {[
+          { value: '', label: 'All requests' },
+          { value: 'pending', label: '1. Awaiting approval' },
+          { value: 'decision', label: '2. Decision' },
+          { value: 'disbursed', label: '3. Funds disbursed' },
+        ].map((stage) => (
+          <button
+            key={stage.value || 'all'}
+            type="button"
+            role="tab"
+            aria-selected={state.filters.status === stage.value}
+            className={state.filters.status === stage.value ? 'is-active' : ''}
+            onClick={() => setState((current) => ({
+              ...current,
+              page: 1,
+              loading: true,
+              filters: { ...current.filters, status: stage.value },
+            }))}
+          >
+            {stage.label}
+          </button>
+        ))}
       </div>
 
       <section className="statement-section application-status-section" aria-label="Loan application history">
@@ -98,11 +125,6 @@ export function MemberLoanStatusView({ setView }: MemberLoanStatusViewProps) {
               onApply={(filters) => {
                 setState((current) => ({ ...current, page: 1, loading: true, filters }))
               }}
-              statusOptions={[
-                { value: 'pending', label: 'Received / under review' },
-                { value: 'approved', label: 'Approved & disbursed' },
-                { value: 'rejected', label: 'Not approved' },
-              ]}
               searchPlaceholder="Purpose or status"
             />
           </div>
@@ -138,10 +160,18 @@ export function MemberLoanStatusView({ setView }: MemberLoanStatusViewProps) {
                     <small>Your application has been received and is waiting for admin review.</small>
                   )}
                   {application.status === 'approved' && (
-                    <small>Your request was approved and the loan was issued.</small>
+                    <small>Your request was approved and is waiting for funds to be sent to your selected bank account.</small>
                   )}
                   {application.status === 'rejected' && (
                     <small>This request was not approved. Contact the sacco if you need more information.</small>
+                  )}
+                  {application.status === 'disbursed' && (
+                    <>
+                      <small>{application.disbursementMessage || 'Your loan funds have been disbursed to your selected bank account. Please allow 2–3 business days for them to reflect.'}</small>
+                      {application.disbursedAt && (
+                        <small>Disbursed {formatDate(application.disbursedAt)}{application.disbursedLoanReference ? ` · Loan ${application.disbursedLoanReference}` : ''}</small>
+                      )}
+                    </>
                   )}
                 </article>
               )

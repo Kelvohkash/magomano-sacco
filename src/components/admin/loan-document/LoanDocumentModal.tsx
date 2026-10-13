@@ -46,6 +46,7 @@ export function LoanDocumentModal({
   isActionLoading,
 }: LoanDocumentModalProps) {
   const [isPrinting, setIsPrinting] = useState(false)
+  const [hashVerification, setHashVerification] = useState('')
 
   const requestedAmount = Number(application.requestedAmount) || 0
   const repaymentMonths = Number(application.repaymentMonths) || 1
@@ -56,6 +57,16 @@ export function LoanDocumentModal({
 
   const appNumber = String(application.id).padStart(5, '0')
   const refCode = `MAG-LN-2026-${appNumber}`
+
+  async function verifyHash() {
+    setHashVerification('Verifying…')
+    try {
+      const response = await fetch(`/api/admin/loan-applications/${application.id}/verify-hash`, { method: 'POST' })
+      const result = await response.json() as { valid?: boolean; error?: string }
+      if (!response.ok) throw new Error(result.error ?? 'Verification failed.')
+      setHashVerification(result.valid ? 'Hash verified. Application details match the signed record.' : 'Hash mismatch. Application details may have changed.')
+    } catch (error) { setHashVerification(error instanceof Error ? error.message : 'Verification failed.') }
+  }
 
   async function handlePrint() {
     setIsPrinting(true)
@@ -91,14 +102,15 @@ export function LoanDocumentModal({
               <span className="applicant-id">ID: {application.nationalId}</span>
             </div>
             <span className={`loan-status-pill status-${application.status}`}>
-              {application.status === 'approved' && <CheckCircle2 size={13} />}
+              {['approved', 'disbursed'].includes(application.status) && <CheckCircle2 size={13} />}
               {application.status === 'pending' && <Clock size={13} />}
               {application.status === 'rejected' && <XCircle size={13} />}
-              <span>{application.status.toUpperCase()}</span>
+              <span>{application.status === 'approved' ? 'APPROVED · AWAITING DISBURSEMENT' : application.status.toUpperCase()}</span>
             </span>
           </div>
 
           <div className="loan-modal-actions">
+            <button type="button" className="action-btn-edit" onClick={() => void verifyHash()}>Verify security hash</button>
             {!isEditing && (
               <>
                 {application.status === 'pending' && onApprove && (
@@ -107,10 +119,10 @@ export function LoanDocumentModal({
                     className="action-btn-approve"
                     onClick={onApprove}
                     disabled={isActionLoading}
-                    title="Approve and issue this loan"
+                    title="Approve this application; disbursement is a separate step"
                   >
                     <Check size={15} />
-                    <span>Approve &amp; Issue</span>
+                    <span>Approve application</span>
                   </button>
                 )}
 
@@ -172,6 +184,7 @@ export function LoanDocumentModal({
             </button>
           </div>
         </header>
+        {hashVerification && <div className="admin-banner-alert" role="status">{hashVerification}</div>}
 
         {!isEditing && (
           <div className="loan-modal-scroll-hint">

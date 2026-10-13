@@ -49,7 +49,7 @@ export function MemberLoanApplicationView({
 
       <div className="loan-capacity-card">
         <div className="loan-capacity-main">
-          <span>Available to borrow</span>
+          <span>Maximum principal (10% savings deduction applied)</span>
           <strong>
             <AnimatedFigure value={dashboard.borrowingCapacity.availableBalance} />
           </strong>
@@ -72,7 +72,7 @@ export function MemberLoanApplicationView({
             <>
               <span className="capacity-operator">−</span>
               <div>
-                <span>Pending applications reserved</span>
+                <span>Pending and approved requests reserved</span>
                 <strong>
                   <AnimatedFigure value={dashboard.borrowingCapacity.pendingApplications} />
                 </strong>
@@ -158,7 +158,7 @@ export function MemberLoanApplicationView({
             <AnimatedFigure value={(Number(loanAmount || 0) * 1.1) / Math.max(1, Number(repaymentMonths) || 1)} />
           </strong>
           <small>
-            Your request cannot exceed the available balance shown above. Final approval is subject to SACCO review.
+            Your maximum principal is 90% of savings remaining after current loan balances and requests are reserved. Loan interest is calculated separately at 10%. Final approval is subject to SACCO review.
           </small>
         </div>
 

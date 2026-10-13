@@ -30,4 +30,5 @@
 @import './styles/admin/statements.css';
 @import './styles/admin/statement-filters.css';
 @import './styles/admin/bulk-import.css';
+@import './styles/admin/manual-create.css';
 @import './styles/admin/mobile-admin.css';

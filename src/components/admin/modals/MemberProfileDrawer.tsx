@@ -44,7 +44,8 @@ export function MemberProfileDrawer({
             </div>
             <div>
               <h2>{member.fullName}</h2>
-              <span className="drawer-id">National ID: {member.nationalId}</span>
+              <span className="drawer-id">SACCO No.: {member.saccoNumber || 'Not assigned'}</span>
+              <span className="drawer-id">National ID: {member.nationalId || 'Not provided'}</span>
             </div>
           </div>
           <button
@@ -132,6 +133,11 @@ export function MemberProfileDrawer({
               {member.pendingLoanAmount > 0 && (
                 <small className="drawer-pending-loans-note">
                   {currency.format(member.pendingLoanAmount)} in pending loan requests is included in the available balance.
+                </small>
+              )}
+              {member.pendingLoanPayment > 0 && (
+                <small className="drawer-pending-loans-note">
+                  {currency.format(member.pendingLoanPayment)} in repayments is waiting for this member’s next loan.
                 </small>
               )}
             </div>
@@ -250,11 +256,7 @@ export function MemberProfileDrawer({
           <button
             type="button"
             className="drawer-edit-btn"
-            onClick={() => {
-              if (window.confirm(`Reset ${member.fullName}'s password to 1234? Their other sessions will be signed out.`)) {
-                onResetMemberPassword(member.id)
-              }
-            }}
+            onClick={() => onResetMemberPassword(member.id)}
             disabled={reviewingId === `member-password-reset-${member.id}`}
           >
             <KeyRound size={14} /> {reviewingId === `member-password-reset-${member.id}` ? 'Resetting…' : 'Reset password to 1234'}

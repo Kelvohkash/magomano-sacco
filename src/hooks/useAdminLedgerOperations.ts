@@ -30,6 +30,7 @@ export function useAdminLedgerOperations(options: AdminLedgerOperationsOptions) 
 
   async function handleAdminSavingsEntry(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    if (!window.confirm(`Record a savings deposit of ${currency.format(Number(amount))} for this member?`)) return
     setSubmitting(true)
     setMessage('')
     try {
@@ -55,6 +56,7 @@ export function useAdminLedgerOperations(options: AdminLedgerOperationsOptions) 
 
   async function handleLoanRepayment(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    if (!window.confirm(`Record a loan repayment of ${currency.format(Number(repaymentAmount))}?`)) return
     setSubmitting(true)
     setMessage('')
     try {

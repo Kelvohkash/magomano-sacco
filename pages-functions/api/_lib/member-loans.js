@@ -2,6 +2,7 @@ import {
   ApiError,
   getStatementFilters,
   json,
+  loanApplicationHash,
   readJson,
 } from './shared.js'
 import { getMemberBorrowingCapacity } from './member-dashboard.js'
@@ -65,9 +66,9 @@ async function applyForLoan(request, session, env) {
         FROM savings_transactions WHERE member_id = ?), 0)
       - COALESCE((SELECT SUM(outstanding_balance)
         FROM member_loans WHERE member_id = ? AND outstanding_balance > 0), 0)
-      - COALESCE((SELECT SUM(requested_amount)
-        FROM loan_applications WHERE member_id = ? AND status = 'pending'), 0)
-    )
+      - COALESCE((SELECT SUM(requested_amount * 1.1)
+        FROM loan_applications WHERE member_id = ? AND status IN ('pending', 'approved')), 0)
+    ) * 0.9
   `).bind(session.memberId, requestedAmount, repaymentMonths, purpose,
     member.bankName, member.bankBranch, member.accountName, member.accountNumber, signatureName,
     requestedAmount, session.memberId, session.memberId, session.memberId).run()
@@ -75,6 +76,16 @@ async function applyForLoan(request, session, env) {
     const latestCapacity = await getMemberBorrowingCapacity(env, session.memberId)
     throw new ApiError(`Requested loan exceeds your available borrowing balance of ${Number(latestCapacity.availableBalance).toFixed(2)}.`)
   }
+  const application = await env.DB.prepare(`SELECT id, member_id AS memberId,
+    requested_amount AS requestedAmount, repayment_months AS repaymentMonths, purpose,
+    payout_bank_name AS payoutBankName, payout_bank_branch AS payoutBankBranch,
+    payout_account_name AS payoutAccountName, payout_account_number AS payoutAccountNumber,
+    electronic_signature_name AS electronicSignatureName,
+    electronically_signed_at AS electronicallySignedAt
+    FROM loan_applications WHERE id = ?`).bind(result.meta.last_row_id).first()
+  const securityHash = loanApplicationHash(application)
+  await env.DB.prepare('UPDATE loan_applications SET security_hash = ? WHERE id = ?')
+    .bind(securityHash, application.id).run()
   const totalRepayable = Math.round(requestedAmount * 1.1 * 100) / 100
   const monthlyInstallment = Math.round(totalRepayable / repaymentMonths * 100) / 100
   return json({
@@ -91,8 +102,8 @@ async function memberLoanApplications(request, session, env) {
     throw new ApiError('Choose a valid application page.')
   }
   const filters = getStatementFilters(url, { status: true })
-  if (filters.status && !['pending', 'approved', 'rejected'].includes(filters.status)) {
-    throw new ApiError('Choose pending, approved, or rejected for the application status filter.')
+  if (filters.status && !['pending', 'approved', 'rejected', 'disbursed', 'decision'].includes(filters.status)) {
+    throw new ApiError('Choose a valid loan application status filter.')
   }
   const where = ['member_id = ?']
   const params = [session.memberId]
@@ -109,8 +120,12 @@ async function memberLoanApplications(request, session, env) {
     params.push(`%${filters.search}%`, `%${filters.search}%`)
   }
   if (filters.status) {
-    where.push('status = ?')
-    params.push(filters.status)
+    if (filters.status === 'decision') {
+      where.push("status IN ('approved', 'rejected')")
+    } else {
+      where.push('status = ?')
+      params.push(filters.status)
+    }
   }
   const whereSql = `WHERE ${where.join(' AND ')}`
   const pageSize = 10
@@ -119,7 +134,11 @@ async function memberLoanApplications(request, session, env) {
     env.DB.prepare(`SELECT COUNT(*) AS total FROM loan_applications ${whereSql}`).bind(...params).first(),
     env.DB.prepare(`
       SELECT id, requested_amount AS requestedAmount, repayment_months AS repaymentMonths,
-        purpose, status, security_type AS securityType, applied_at AS appliedAt
+        purpose, status, security_type AS securityType, applied_at AS appliedAt,
+        payout_bank_name AS payoutBankName, payout_bank_branch AS payoutBankBranch,
+        payout_account_name AS payoutAccountName, payout_account_number AS payoutAccountNumber,
+        disbursed_at AS disbursedAt, disbursed_loan_reference AS disbursedLoanReference,
+    disbursement_message AS disbursementMessage, security_hash AS securityHash
       FROM loan_applications ${whereSql}
       ORDER BY applied_at DESC, id DESC LIMIT ? OFFSET ?
     `).bind(...params, pageSize, offset).all(),

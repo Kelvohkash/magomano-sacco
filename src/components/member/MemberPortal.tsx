@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useState, type Dispatch, type FormEventHandler, type SetStateAction } from 'react'
-import { MemberContactsPage } from './MemberContactsPage'
+import { MemberAccountInfoPage } from './MemberAccountInfoPage'
 import { MemberTermsPage } from './MemberTermsPage'
 import type { StatementFilterValues } from '../StatementFilterPopover'
 import type {
@@ -244,8 +244,8 @@ export function MemberPortal({
           loanSubmitting={loanSubmitting}
           onLoanApplication={onLoanApplication}
         />
-      ) : view === 'contacts' ? (
-        <MemberContactsPage />
+      ) : view === 'account-info' ? (
+        <MemberAccountInfoPage />
       ) : view === 'terms' ? (
         <MemberTermsPage />
       ) : (

@@ -7,6 +7,7 @@ export async function handleMember(path, request, env) {
   const isContactDelete = /^\/member\/contacts\/\d+$/.test(path) && request.method === 'DELETE'
   if (path !== '/member/dashboard' && path !== '/member/loan-applications'
     && path !== '/member/transactions' && path !== '/member/contacts'
+    && path !== '/member/profile' && path !== '/member/password'
     && path !== '/member/terms' && !isContactDelete) return null
 
   const session = await requireRole(request, env, 'member')

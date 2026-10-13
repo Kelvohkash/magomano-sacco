@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from 'react'
-import { Clock3, FileText, HandCoins, Landmark, LogOut, Menu, Moon, Sun, UsersRound, Wallet, X } from 'lucide-react'
+import { Clock3, FileText, HandCoins, Landmark, LogOut, Menu, Moon, Sun, UserRound, Wallet, X } from 'lucide-react'
 import type { MemberView } from '../../types'
 
 interface MemberHeaderProps {
@@ -65,11 +65,11 @@ export function MemberHeader({
         </button>
         <button
           type="button"
-          aria-current={view === 'contacts' ? 'page' : undefined}
-          className={view === 'contacts' ? 'page' : undefined}
-          onClick={() => setView('contacts')}
+          aria-current={view === 'account-info' ? 'page' : undefined}
+          className={view === 'account-info' ? 'active' : ''}
+          onClick={() => setView('account-info')}
         >
-          <UsersRound size={17} /> Contact persons
+          <UserRound size={17} /> Account info
         </button>
         <button
           type="button"
@@ -119,8 +119,8 @@ export function MemberHeader({
           <button type="button" onClick={() => { setView('loan-status'); setMenuOpen(false) }}>
             <Clock3 size={17} /> Loan application status
           </button>
-          <button type="button" onClick={() => { setView('contacts'); setMenuOpen(false) }}>
-            <UsersRound size={17} /> Contact persons
+          <button type="button" onClick={() => { setView('account-info'); setMenuOpen(false) }}>
+            <UserRound size={17} /> Account info
           </button>
           <button type="button" onClick={() => { setView('terms'); setMenuOpen(false) }}>
             <FileText size={17} /> Terms and conditions

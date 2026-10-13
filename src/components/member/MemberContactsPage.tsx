@@ -3,7 +3,7 @@ import { Phone, Plus, Trash2, UsersRound } from 'lucide-react'
 import type { MemberContact } from '../../types'
 import { readJsonResponse, requestErrorMessage } from '../../networkErrors'
 
-export function MemberContactsPage() {
+export function MemberContactsPage({ compact = false }: { compact?: boolean }) {
   const [contacts, setContacts] = useState<MemberContact[]>([])
   const [fullName, setFullName] = useState('')
   const [relationship, setRelationship] = useState('')
@@ -77,12 +77,12 @@ export function MemberContactsPage() {
   }
 
   return (
-    <section className="member-account-page">
-      <div className="dashboard-intro">
+    <section className={compact ? 'member-contacts-embedded' : 'member-account-page'}>
+      {!compact && <div className="dashboard-intro">
         <p className="dashboard-kicker">YOUR ACCOUNT</p>
         <h1>Contact persons</h1>
         <p>Manage up to two people the SACCO may contact about your account and record how they are related to you.</p>
-      </div>
+      </div>}
       <div className="member-account-grid">
         <form className="member-account-card member-contact-form" onSubmit={addContact}>
           <div className="member-account-card-heading">

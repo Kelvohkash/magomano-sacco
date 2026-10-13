@@ -24,6 +24,8 @@ export function MemberProfileDrawer({
   onDeleteMember,
   reviewingId,
 }: MemberProfileDrawerProps) {
+  const activeLoans = member.activeLoans ?? []
+  const contacts = member.contacts ?? []
   const locationString = [member.location, member.subCounty, member.county]
     .filter(Boolean)
     .join(', ') || '—'
@@ -113,14 +115,14 @@ export function MemberProfileDrawer({
             </div>
             <div className="drawer-active-loans">
               <div className="drawer-active-loans-heading">
-                <strong>Active loans ({member.activeLoans.length})</strong>
+                <strong>Active loans ({activeLoans.length})</strong>
                 <span>Total due: {currency.format(member.activeLoanBalance)}</span>
               </div>
-              {member.activeLoans.length ? member.activeLoans.map((loan) => (
+              {activeLoans.length ? activeLoans.map((loan) => (
                 <article className="drawer-active-loan" key={loan.id}>
                   <div>
                     <strong>Loan of {currency.format(loan.principalAmount)}</strong>
-                    <small>{formatDate(loan.issuedAt)} · {loan.repaymentMonths} months</small>
+                    <small>{formatDate(loan.issuedAt ?? '')} · {loan.repaymentMonths} months</small>
                   </div>
                   <span>{currency.format(loan.outstandingBalance)} due</span>
                 </article>
@@ -202,11 +204,11 @@ export function MemberProfileDrawer({
                 <dd>{member.nextKinPhone || '—'}</dd>
               </div>
             </dl>
-            {member.contacts.length > 0 && (
+            {contacts.length > 0 && (
               <div className="drawer-contacts-sublist">
                 <span className="sublist-title">Registered Emergency Contacts:</span>
                 <ul>
-                  {member.contacts.map((c) => (
+                  {contacts.map((c) => (
                     <li key={c.id}>
                       <strong>{c.fullName}</strong> ({c.relationship}) — {c.phoneNumber}
                     </li>

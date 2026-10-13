@@ -23,7 +23,7 @@ export async function handleAdminMembers(path, request, session, db) {
   }
 
   if (path === '/admin/members' && method === 'GET') {
-    const [members, contactRows, activeLoanRows] = await Promise.all([
+    const [members, activeLoanRows, contactRows] = await Promise.all([
       db.prepare(`
       SELECT m.id, m.national_id AS nationalId, m.full_name AS fullName,
         m.first_name AS firstName, m.second_name AS secondName, m.last_name AS lastName,

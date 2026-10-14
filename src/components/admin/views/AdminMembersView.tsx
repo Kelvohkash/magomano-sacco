@@ -60,7 +60,7 @@ export function AdminMembersView({
 
   async function terminateMember(member: AdminMember) {
     const net = member.savingsBalance - member.activeLoanBalance
-    if (!window.confirm(`Terminate ${member.fullName} and settle the account? Savings ${member.savingsBalance.toFixed(2)} will be applied against loans due ${member.activeLoanBalance.toFixed(2)}. Estimated payout: ${Math.max(0, net).toFixed(2)}; remaining loan due: ${Math.max(0, -net).toFixed(2)}.`)) return
+    if (!window.confirm(`Terminate ${member.fullName} and settle the account? Savings ${member.savingsBalance.toFixed(2)} will be applied against loans due ${member.activeLoanBalance.toFixed(2)}.Payout: ${Math.max(0, net).toFixed(2)}; remaining loan due: ${Math.max(0, -net).toFixed(2)}.`)) return
     setTerminatingId(member.id); setSettlementMessage('')
     try {
       const response = await fetch(`/api/admin/members/${member.id}/terminate`, { method: 'POST' })

@@ -149,11 +149,11 @@ export function MemberLoanApplicationView({
         <div className="loan-estimate">
           <span>Interest rate</span>
           <strong>10%</strong>
-          <span>Estimated total repayment</span>
+          <span>Total repayment</span>
           <strong>
             <AnimatedFigure value={Number(loanAmount || 0) * 1.1} />
           </strong>
-          <span>Estimated monthly payment</span>
+          <span>Monthly payment</span>
           <strong>
             <AnimatedFigure value={(Number(loanAmount || 0) * 1.1) / Math.max(1, Number(repaymentMonths) || 1)} />
           </strong>

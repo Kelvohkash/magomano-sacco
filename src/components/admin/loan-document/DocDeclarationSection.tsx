@@ -20,22 +20,19 @@ export function DocDeclarationSection({ application }: DocDeclarationSectionProp
       <div className="doc-declaration-wrapper">
         <p className="declaration-legal-text">
           I hereby declare that the information provided in this application is true, accurate and complete.
-          I authorize Magomano SACCO to recover any outstanding loan installments directly from my salary in accordance
+          I authorize Magomano Sacco to recover any outstanding loan installments directly from my salary in accordance
            with the SACCO laws.
           I confirm that my accumulated member savings constitute valid security for this loan.
         </p>
 
         <div className="declaration-signature-card">
-          <div className="signature-header">
-            <span className="sig-type">MEMBER SIGNATURE</span>
-          </div>
           <div className="signature-display">
             <span className="dancing-signature">
               {standardizeName(application.electronicSignatureName || application.fullName)}
             </span>
           </div>
           <div className="signature-meta">
-            <span className="sig-date">Executed: {executionDate}</span>
+            <span className="sig-date">Member electronic hushed signature, Signed on: {executionDate}</span>
           </div>
         </div>
       </div>

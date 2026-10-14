@@ -89,7 +89,7 @@ async function applyForLoan(request, session, env) {
   const totalRepayable = Math.round(requestedAmount * 1.1 * 100) / 100
   const monthlyInstallment = Math.round(totalRepayable / repaymentMonths * 100) / 100
   return json({
-    message: `Application submitted. At 10% interest, estimated total repayment is ${totalRepayable.toFixed(2)} over ${repaymentMonths} months (about ${monthlyInstallment.toFixed(2)} per month).`,
+    message: `Application submitted. At 10% interest, total repayment is ${totalRepayable.toFixed(2)} over ${repaymentMonths} months (about ${monthlyInstallment.toFixed(2)} per month).`,
     totalRepayable,
     monthlyInstallment,
   }, 201)

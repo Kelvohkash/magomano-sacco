@@ -99,7 +99,7 @@ export function AdminLoansView({
           <label>Repayment period (months)<input required type="number" min="1" max="120" step="1" value={newLoan.repaymentMonths} onChange={(event) => setNewLoan((current) => ({ ...current, repaymentMonths: Number(event.target.value) }))} /></label>
           <label className="span-2">Purpose<textarea required minLength={3} maxLength={500} rows={2} value={newLoan.purpose} onChange={(event) => setNewLoan((current) => ({ ...current, purpose: event.target.value }))} /></label>
         </div>
-        {selectedMember && <p className="admin-create-note">Maximum principal after the 10% savings deduction: {currency.format(selectedMember.availableBalance)}. Estimated total repayment: {currency.format(newLoan.principalAmount * 1.1)}.</p>}
+        {selectedMember && <p className="admin-create-note">Maximum principal after the 10% savings deduction: {currency.format(selectedMember.availableBalance)}.Total repayment: {currency.format(newLoan.principalAmount * 1.1)}.</p>}
         {!approvedMembers.length && <p className="admin-create-note">There are no approved members available for a loan.</p>}
         <div className="modal-actions-bar">
           <button type="button" className="action-btn-cancel" onClick={() => setShowIssueForm(false)}>Cancel</button>

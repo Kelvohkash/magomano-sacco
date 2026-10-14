@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from 'react'
-import { Clock3, FileText, HandCoins, Landmark, LogOut, Menu, Moon, Sun, UserRound, Wallet, X } from 'lucide-react'
+import { Clock3, FileText, HandCoins, Landmark, LogOut, Menu, Moon, RefreshCw, Sun, UserRound, Wallet, X } from 'lucide-react'
 import type { MemberView } from '../../types'
 
 interface MemberHeaderProps {
@@ -11,6 +11,9 @@ interface MemberHeaderProps {
   onLogout: () => void
   forceLightAppearance: boolean
   onToggleLightAppearance: () => void
+  isSyncing?: boolean
+  syncError?: string
+  onSync?: () => void
 }
 
 export function MemberHeader({
@@ -22,6 +25,9 @@ export function MemberHeader({
   onLogout,
   forceLightAppearance,
   onToggleLightAppearance,
+  isSyncing = false,
+  syncError = '',
+  onSync,
 }: MemberHeaderProps) {
   const appearanceLabel = forceLightAppearance ? 'dark mode' : 'light mode'
   const AppearanceIcon = forceLightAppearance ? Moon : Sun
@@ -125,6 +131,22 @@ export function MemberHeader({
           <button type="button" onClick={() => { setView('terms'); setMenuOpen(false) }}>
             <FileText size={17} /> Terms and conditions
           </button>
+          <button
+            type="button"
+            className="member-menu-sync-btn"
+            disabled={isSyncing}
+            onClick={() => {
+              if (onSync) onSync()
+            }}
+          >
+            <RefreshCw size={17} className={isSyncing ? 'spin-icon' : ''} />
+            <span>{isSyncing ? 'Syncing records…' : 'Sync SACCO records'}</span>
+          </button>
+          {syncError && (
+            <div className="member-menu-sync-error" role="alert">
+              {syncError}
+            </div>
+          )}
           <button
             type="button"
             className="member-theme-menu-item"

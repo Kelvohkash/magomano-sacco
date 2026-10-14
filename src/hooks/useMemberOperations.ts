@@ -1,6 +1,7 @@
 import { useCallback, useState, type FormEvent } from 'react'
 import type { DashboardData, MemberView } from '../types'
-import { readJsonResponse, requestErrorMessage } from '../networkErrors'
+import { readJsonResponse, requestErrorMessage, requireOnline } from '../networkErrors'
+import { forceSync } from '../platform/syncCache'
 
 export function useMemberOperations() {
   const [dashboard, setDashboard] = useState<DashboardData | null>(null)
@@ -12,6 +13,8 @@ export function useMemberOperations() {
   const [loanMessage, setLoanMessage] = useState('')
   const [loanMessageSuccess, setLoanMessageSuccess] = useState(false)
   const [loanSubmitting, setLoanSubmitting] = useState(false)
+  const [isSyncing, setIsSyncing] = useState(false)
+  const [syncError, setSyncError] = useState('')
 
   const refreshDashboard = useCallback(async () => {
     const response = await fetch('/api/member/dashboard')
@@ -20,8 +23,33 @@ export function useMemberOperations() {
     setDashboard(result)
   }, [])
 
+  /**
+   * Manual sync: clears the local SQLite cache so the next dashboard fetch
+   * bypasses ETags and pulls the latest data straight from the server.
+   */
+  const syncDashboard = useCallback(async () => {
+    if (isSyncing) return
+    setIsSyncing(true)
+    setSyncError('')
+    try {
+      requireOnline()
+      await forceSync()
+      await refreshDashboard()
+    } catch (error) {
+      setSyncError(requestErrorMessage(error, 'Could not sync. Please try again.'))
+    } finally {
+      setIsSyncing(false)
+    }
+  }, [isSyncing, refreshDashboard])
+
   async function handleLoanApplication(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    // Loan applications require an active internet connection.
+    try { requireOnline() } catch (error) {
+      setLoanMessage(requestErrorMessage(error, 'Unable to reach the application service.'))
+      setLoanMessageSuccess(false)
+      return
+    }
     setLoanSubmitting(true)
     setLoanMessage('')
     setLoanMessageSuccess(false)
@@ -45,6 +73,7 @@ export function useMemberOperations() {
       setLoanMessageSuccess(true)
       setLoanAmount('')
       setLoanPurpose('')
+      void refreshDashboard().catch(() => undefined)
       setMemberView('loan-status')
     } catch (error) {
       setLoanMessage(requestErrorMessage(error, 'Unable to reach the application service.'))
@@ -76,9 +105,11 @@ export function useMemberOperations() {
     loanMessage,
     loanMessageSuccess,
     loanSubmitting,
+    isSyncing,
+    syncError,
     refreshDashboard,
+    syncDashboard,
     handleLoanApplication,
     resetMemberState,
   }
 }
-

@@ -159,15 +159,15 @@ export function MemberLoanApplicationView({
           </strong>
         </div>
 
-        <label htmlFor="loan-purpose">Purpose of the loan</label>
+        <label htmlFor="loan-purpose">Purpose of the loan (optional)</label>
         <textarea
           id="loan-purpose"
           name="purpose"
-          rows={4}
+          rows={3}
           maxLength={500}
           value={loanPurpose}
           onChange={(event) => setLoanPurpose(event.target.value)}
-          placeholder="Briefly tell us what the loan is for"
+          placeholder="Optional: Tell us what the loan is for"
         />
 
         <label className="loan-electronic-consent">

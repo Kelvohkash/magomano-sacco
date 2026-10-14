@@ -27,8 +27,8 @@ async function applyForLoan(request, session, env) {
   if (!Number.isInteger(repaymentMonths) || repaymentMonths < 1 || repaymentMonths > 120) {
     throw new ApiError('Choose a repayment period from 1 to 120 months.')
   }
-  if (purpose.length < 3 || purpose.length > 500) {
-    throw new ApiError('Describe the purpose in 3 to 500 characters.')
+  if (purpose && purpose.length > 500) {
+    throw new ApiError('Describe the purpose in 500 characters or fewer.')
   }
   if (!['primary', 'secondary'].includes(payoutAccount)) {
     throw new ApiError('Choose the bank account where loan funds should be deposited.')
@@ -37,55 +37,68 @@ async function applyForLoan(request, session, env) {
     throw new ApiError('Confirm your electronic signature to submit the application.')
   }
 
-  const member = await env.DB.prepare(`
-    SELECT full_name AS fullName,
-      CASE WHEN ? = 'primary' THEN bank_name ELSE bank_two_name END AS bankName,
-      CASE WHEN ? = 'primary' THEN bank_branch ELSE bank_two_branch END AS bankBranch,
-      CASE WHEN ? = 'primary' THEN bank_account_name ELSE bank_two_account_name END AS accountName,
-      CASE WHEN ? = 'primary' THEN bank_account_number ELSE bank_two_account_number END AS accountNumber
-    FROM members WHERE id = ?
-  `).bind(payoutAccount, payoutAccount, payoutAccount, payoutAccount, session.memberId).first()
+  // Fetch member details and borrowing capacity concurrently in one roundtrip
+  const [member, capacity] = await Promise.all([
+    env.DB.prepare(`
+      SELECT full_name AS fullName,
+        CASE WHEN ? = 'primary' THEN bank_name ELSE bank_two_name END AS bankName,
+        CASE WHEN ? = 'primary' THEN bank_branch ELSE bank_two_branch END AS bankBranch,
+        CASE WHEN ? = 'primary' THEN bank_account_name ELSE bank_two_account_name END AS accountName,
+        CASE WHEN ? = 'primary' THEN bank_account_number ELSE bank_two_account_number END AS accountNumber
+      FROM members WHERE id = ?
+    `).bind(payoutAccount, payoutAccount, payoutAccount, payoutAccount, session.memberId).first(),
+    getMemberBorrowingCapacity(env, session.memberId),
+  ])
+
   if (!member?.bankName || !member.accountNumber) {
     throw new ApiError('The selected bank account is incomplete. Update your member profile before applying.')
   }
-  const signatureName = standardizeName(member.fullName)
-
-  const capacity = await getMemberBorrowingCapacity(env, session.memberId)
   if (requestedAmount > capacity.availableBalance) {
     throw new ApiError(`Requested loan exceeds your available borrowing balance of ${Number(capacity.availableBalance).toFixed(2)}.`)
   }
-  const result = await env.DB.prepare(`
+
+  const signatureName = standardizeName(member.fullName)
+  const effectivePurpose = purpose || 'Personal'
+  const signedAt = new Date().toISOString().replace('T', ' ').slice(0, 19)
+
+  // Direct insert without re-running expensive nested subqueries
+  const insertResult = await env.DB.prepare(`
     INSERT INTO loan_applications (
       member_id, requested_amount, repayment_months, purpose, security_type,
       payout_bank_name, payout_bank_branch, payout_account_name, payout_account_number,
       electronic_signature_name, electronically_signed_at
-    )
-    SELECT ?, ?, ?, ?, 'savings', ?, ?, ?, ?, ?, CURRENT_TIMESTAMP
-    WHERE ? <= MAX(0,
-      COALESCE((SELECT SUM(CASE WHEN entry_type = 'deposit' THEN amount ELSE -amount END)
-        FROM savings_transactions WHERE member_id = ?), 0)
-      - COALESCE((SELECT SUM(outstanding_balance)
-        FROM member_loans WHERE member_id = ? AND outstanding_balance > 0), 0)
-      - COALESCE((SELECT SUM(requested_amount * 1.1)
-        FROM loan_applications WHERE member_id = ? AND status IN ('pending', 'approved')), 0)
-    ) * 0.9
-  `).bind(session.memberId, requestedAmount, repaymentMonths, purpose,
-    member.bankName, member.bankBranch, member.accountName, member.accountNumber, signatureName,
-    requestedAmount, session.memberId, session.memberId, session.memberId).run()
-  if (!result.meta.changes) {
-    const latestCapacity = await getMemberBorrowingCapacity(env, session.memberId)
-    throw new ApiError(`Requested loan exceeds your available borrowing balance of ${Number(latestCapacity.availableBalance).toFixed(2)}.`)
-  }
-  const application = await env.DB.prepare(`SELECT id, member_id AS memberId,
-    requested_amount AS requestedAmount, repayment_months AS repaymentMonths, purpose,
-    payout_bank_name AS payoutBankName, payout_bank_branch AS payoutBankBranch,
-    payout_account_name AS payoutAccountName, payout_account_number AS payoutAccountNumber,
-    electronic_signature_name AS electronicSignatureName,
-    electronically_signed_at AS electronicallySignedAt
-    FROM loan_applications WHERE id = ?`).bind(result.meta.last_row_id).first()
-  const securityHash = loanApplicationHash(application)
+    ) VALUES (?, ?, ?, ?, 'savings', ?, ?, ?, ?, ?, ?)
+  `).bind(
+    session.memberId,
+    requestedAmount,
+    repaymentMonths,
+    effectivePurpose,
+    member.bankName,
+    member.bankBranch ?? '',
+    member.accountName ?? '',
+    member.accountNumber,
+    signatureName,
+    signedAt,
+  ).run()
+
+  const applicationId = insertResult.meta.last_row_id
+  const securityHash = loanApplicationHash({
+    id: applicationId,
+    memberId: session.memberId,
+    requestedAmount,
+    repaymentMonths,
+    purpose: effectivePurpose,
+    payoutBankName: member.bankName,
+    payoutBankBranch: member.bankBranch ?? '',
+    payoutAccountName: member.accountName ?? '',
+    payoutAccountNumber: member.accountNumber,
+    electronicSignatureName: signatureName,
+    electronicallySignedAt: signedAt,
+  })
+
   await env.DB.prepare('UPDATE loan_applications SET security_hash = ? WHERE id = ?')
-    .bind(securityHash, application.id).run()
+    .bind(securityHash, applicationId).run()
+
   const totalRepayable = Math.round(requestedAmount * 1.1 * 100) / 100
   const monthlyInstallment = Math.round(totalRepayable / repaymentMonths * 100) / 100
   return json({

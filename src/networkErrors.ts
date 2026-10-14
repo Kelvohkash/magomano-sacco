@@ -1,6 +1,18 @@
 const CONNECTIVITY_MESSAGE = 'Connect to the internet to proceed.'
 
 /**
+ * Throws with a user-facing message when the browser / device reports it is
+ * offline.  Call this at the top of any write operation (loan applications,
+ * profile updates, etc.) that cannot be completed without a live connection.
+ */
+export function requireOnline(): void {
+  if (typeof navigator !== 'undefined' && !navigator.onLine) {
+    throw new Error(CONNECTIVITY_MESSAGE)
+  }
+}
+
+
+/**
  * Reads an API response without hiding the actual failure behind a JSON parser
  * exception. Cloudflare can return an empty response when a Function route is
  * missing, and proxies can return HTML error pages.

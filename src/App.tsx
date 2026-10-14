@@ -88,6 +88,9 @@ function App() {
         onLogout={auth.handleLogout}
         forceLightAppearance={appearance.forceLight}
         onToggleLightAppearance={appearance.toggleForceLight}
+        isSyncing={member.isSyncing}
+        syncError={member.syncError}
+        onSync={member.syncDashboard}
       />
     )
     return <MemberPopupLayer messages={member.dashboard.memberMessages}>{memberScreen}</MemberPopupLayer>

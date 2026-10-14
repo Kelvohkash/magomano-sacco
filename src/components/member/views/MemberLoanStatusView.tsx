@@ -8,8 +8,12 @@ import { StatementPagination } from '../StatementPagination'
 import type { StatementState } from '../statementHelpers'
 import { readJsonResponse, requestErrorMessage } from '../../../networkErrors'
 
+import type { Dispatch, SetStateAction } from 'react'
+
 interface MemberLoanStatusViewProps {
   setView: (view: MemberView) => void
+  applicationsPage?: StatementState<MemberLoanApplication>
+  setApplicationsPage?: Dispatch<SetStateAction<StatementState<MemberLoanApplication>>>
 }
 
 function applicationStatus(status: MemberLoanApplication['status']) {
@@ -19,8 +23,12 @@ function applicationStatus(status: MemberLoanApplication['status']) {
   return { label: 'Received · under review', Icon: Clock3 }
 }
 
-export function MemberLoanStatusView({ setView }: MemberLoanStatusViewProps) {
-  const [state, setState] = useState<StatementState<MemberLoanApplication>>({
+export function MemberLoanStatusView({
+  setView,
+  applicationsPage,
+  setApplicationsPage,
+}: MemberLoanStatusViewProps) {
+  const [internalState, setInternalState] = useState<StatementState<MemberLoanApplication>>({
     items: [],
     total: 0,
     page: 1,
@@ -29,6 +37,9 @@ export function MemberLoanStatusView({ setView }: MemberLoanStatusViewProps) {
     error: '',
     filters: { search: '', from: '', to: '', status: '' },
   })
+
+  const state = applicationsPage ?? internalState
+  const setState = setApplicationsPage ?? setInternalState
 
   useEffect(() => {
     const controller = new AbortController()

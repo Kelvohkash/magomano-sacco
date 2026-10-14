@@ -5,13 +5,14 @@ import type { StatementFilterValues } from '../StatementFilterPopover'
 import type {
   DashboardData,
   LoanRepayment,
+  MemberLoanApplication,
   MemberLoanRecord,
   MemberStatementPage,
   MemberView,
   SavingsTransaction,
 } from '../../types'
 import { MemberHeader } from './MemberHeader'
-import { statementUrl, type StatementState } from './statementHelpers'
+import { applicationUrl, statementUrl, type StatementState } from './statementHelpers'
 import { MemberLoanApplicationView } from './views/MemberLoanApplicationView'
 import { MemberLoanStatusView } from './views/MemberLoanStatusView'
 import { MemberOverviewView } from './views/MemberOverviewView'
@@ -37,6 +38,9 @@ export interface MemberPortalProps {
   onLogout: () => void
   forceLightAppearance: boolean
   onToggleLightAppearance: () => void
+  isSyncing: boolean
+  syncError: string
+  onSync: () => void
 }
 
 export function MemberPortal({
@@ -58,6 +62,9 @@ export function MemberPortal({
   onLogout,
   forceLightAppearance,
   onToggleLightAppearance,
+  isSyncing,
+  syncError,
+  onSync,
 }: MemberPortalProps) {
   const firstName = dashboard.member.full_name.trim().split(/\s+/)[0] || 'Member'
   useLayoutEffect(() => {
@@ -95,9 +102,24 @@ export function MemberPortal({
     filters: { search: '', from: '', to: '', status: '' },
   })
 
+  const [applicationsPage, setApplicationsPage] = useState<StatementState<MemberLoanApplication>>({
+    items: [],
+    total: 0,
+    page: 1,
+    pageSize: 10,
+    loading: true,
+    error: '',
+    filters: { search: '', from: '', to: '', status: '' },
+  })
+
   useEffect(() => {
     let active = true
-    const controllers = [new AbortController(), new AbortController(), new AbortController()]
+    const controllers = [
+      new AbortController(),
+      new AbortController(),
+      new AbortController(),
+      new AbortController(),
+    ]
 
     const loadPage = async <T,>(
       type: 'savings' | 'loans' | 'repayments',
@@ -131,10 +153,37 @@ export function MemberPortal({
       }
     }
 
+    const loadApplications = async (signal: AbortSignal) => {
+      try {
+        setApplicationsPage((current) => ({ ...current, loading: current.items.length === 0, error: '' }))
+        const response = await fetch(applicationUrl(applicationsPage.page, applicationsPage.filters), { signal })
+        const result = await readJsonResponse<MemberStatementPage<MemberLoanApplication> & { error?: string }>(response)
+        if (!response.ok) throw new Error(result.error ?? 'Could not load your application history.')
+        if (active) {
+          setApplicationsPage((current) => ({
+            ...current,
+            items: result.items,
+            total: result.total,
+            page: result.page,
+            pageSize: result.pageSize,
+            loading: false,
+            error: '',
+          }))
+        }
+      } catch (error) {
+        if (error instanceof DOMException && error.name === 'AbortError') return
+        if (active) {
+          const message = requestErrorMessage(error, 'Could not load your application history.')
+          setApplicationsPage((current) => ({ ...current, loading: false, error: message }))
+        }
+      }
+    }
+
     void Promise.all([
       loadPage<SavingsTransaction>('savings', 1, savingsPage.filters, setSavingsPage, controllers[0].signal),
       loadPage<MemberLoanRecord>('loans', 1, loansPage.filters, setLoansPage, controllers[1].signal),
       loadPage<LoanRepayment>('repayments', 1, repaymentsPage.filters, setRepaymentsPage, controllers[2].signal),
+      loadApplications(controllers[3].signal),
     ])
 
     return () => {
@@ -146,6 +195,8 @@ export function MemberPortal({
     savingsPage.filters,
     loansPage.filters,
     repaymentsPage.filters,
+    applicationsPage.page,
+    applicationsPage.filters,
   ])
 
   function changePage<T>(
@@ -215,6 +266,9 @@ export function MemberPortal({
         onLogout={onLogout}
         forceLightAppearance={forceLightAppearance}
         onToggleLightAppearance={onToggleLightAppearance}
+        isSyncing={isSyncing}
+        syncError={syncError}
+        onSync={onSync}
       />
       {view === 'overview' ? (
         <MemberOverviewView
@@ -249,7 +303,11 @@ export function MemberPortal({
       ) : view === 'terms' ? (
         <MemberTermsPage />
       ) : (
-        <MemberLoanStatusView setView={setView} />
+        <MemberLoanStatusView
+          setView={setView}
+          applicationsPage={applicationsPage}
+          setApplicationsPage={setApplicationsPage}
+        />
       )}
     </main>
   )

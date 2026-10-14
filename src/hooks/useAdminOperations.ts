@@ -82,8 +82,8 @@ export function useAdminOperations() {
     setAdminMaintenanceMessage(maintenanceResult.message ?? 'We are carrying out maintenance. Please try again later.')
     setAdminPopupMessages(popupMessagesResult.messages ?? [])
     setAdminOpenLoans(openLoans)
-    setRepaymentLoanId((curr) => (openLoans.some((l) => String(l.id) === curr) ? curr : String(openLoans[0]?.id ?? '')))
-    setAdminMemberId((curr) => (members.some((m) => String(m.id) === curr) ? curr : String(members[0]?.id ?? '')))
+    setRepaymentLoanId((curr) => (openLoans.some((loan) => String(loan.id) === curr) ? curr : ''))
+    setAdminMemberId((curr) => (members.some((member) => String(member.id) === curr) ? curr : ''))
   }, [])
 
   const ledgerOperations = useAdminLedgerOperations({
@@ -144,4 +144,3 @@ export function useAdminOperations() {
     resetAdminState,
   }
 }
-

@@ -809,6 +809,24 @@ textarea {
 .member-account-page .member-details-form-heading h2 {
   text-shadow: 0 2px 14px rgb(245 114 36 / 30%);
 }
+.member-contact-row {
+  border-color: var(--rt-border);
+}
+.member-contact-row strong {
+  color: var(--rt-text);
+}
+.member-contact-row span {
+  color: var(--rt-text-muted);
+}
+.member-contact-remove {
+  border-color: rgb(255 113 113 / 30%);
+  color: #ffc2ba;
+  background: rgb(147 0 10 / 22%);
+}
+.member-contact-remove:hover:not(:disabled) {
+  border-color: rgb(255 113 113 / 52%);
+  background: rgb(147 0 10 / 34%);
+}
 .member-contact-field {
   color: var(--rt-text-muted);
 }
@@ -957,7 +975,7 @@ textarea {
   .join-shell .registration-panel::before,
   .join-shell .registration-panel::after { height: 200px; }
   .join-shell .mobile-auth-wordmark { top: 16px; }
-  .join-shell .registration-panel .form-content { padding-top: 185px; }
+  .join-shell .registration-panel .form-content { padding-top: 222px; }
   .dashboard-brand .member-nav-logo {
     width: 42px;
     height: 38px;
@@ -966,7 +984,7 @@ textarea {
 }
 
 @media (max-width: 380px) {
-  .join-shell .registration-panel .form-content { padding-top: 180px; }
+  .join-shell .registration-panel .form-content { padding-top: 216px; }
 }
 
 .member-bottom-nav { display: none; }
@@ -1139,6 +1157,145 @@ textarea {
   outline: none;
 }
 
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-search-picker {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 5px;
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-search-picker:focus-within {
+  z-index: 10;
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-search-picker > label {
+  color: var(--rt-text-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-search-picker-results {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 5px);
+  right: 0;
+  left: 0;
+  max-height: 260px;
+  overflow-y: auto;
+  border: 1px solid var(--rt-border-orange);
+  border-radius: 12px;
+  background: var(--rt-surface);
+  box-shadow: 0 14px 32px rgb(5 2 15 / 55%), 0 0 18px rgb(245 114 36 / 10%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-search-picker-option {
+  display: flex;
+  width: 100%;
+  min-height: 54px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 0;
+  border-bottom: 1px solid var(--rt-border);
+  border-radius: 0;
+  color: var(--rt-text);
+  background: transparent;
+  text-align: left;
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-search-picker-option:last-child {
+  border-bottom: 0;
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-search-picker-option:hover,
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-search-picker-option:focus-visible {
+  color: var(--rt-text);
+  background: var(--rt-orange-dim);
+  outline: none;
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-search-picker-option > span {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 3px;
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-search-picker-option strong {
+  color: var(--rt-text);
+  font-size: 12px;
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-search-picker-option small {
+  color: var(--rt-text-muted);
+  font-size: 10px;
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-search-picker-empty {
+  margin: 0;
+  padding: 14px;
+  color: var(--rt-text-muted);
+  font-size: 12px;
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-table tbody tr:hover {
+  background: rgb(31 21 63 / 76%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-table tbody tr:hover > td {
+  color: var(--rt-text);
+  background: rgb(31 21 63 / 76%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .bulk-import-mode button.active {
+  border: 1px solid var(--rt-border-orange);
+  color: var(--rt-orange-warm);
+  background: var(--rt-orange-dim);
+  box-shadow: 0 0 0 1px rgb(245 114 36 / 10%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .bulk-import-mode button:hover:not(.active),
+:is(.admin-root-layout, .mobile-admin-root-layout) .template-button:hover,
+:is(.admin-root-layout, .mobile-admin-root-layout) .csv-dropzone:hover {
+  border-color: var(--rt-border-orange);
+  color: var(--rt-text);
+  background: rgb(245 114 36 / 10%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .template-button {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .csv-dropzone :is(svg, span) {
+  color: var(--rt-text);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .csv-dropzone small {
+  color: var(--rt-text-muted);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .csv-dropzone:focus-within {
+  border-color: var(--rt-orange);
+  box-shadow: 0 0 0 3px rgb(245 114 36 / 17%);
+  outline: none;
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .mobile-ledger-tab-btn.is-active {
+  border-color: var(--rt-border-orange);
+  color: var(--rt-orange-warm);
+  background: var(--rt-orange-dim);
+  box-shadow: 0 0 0 1px rgb(245 114 36 / 10%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .mobile-ledger-tab-btn:hover:not(.is-active) {
+  color: var(--rt-text);
+  background: rgb(245 114 36 / 10%);
+}
+
 .admin-root-layout :is(.form-card, .form-card label, .workspace-card-heading h3),
 .mobile-admin-root-layout :is(.form-card, .form-card label, .workspace-card-heading h3) { color: var(--rt-text); }
 .amount-input-wrap span {
@@ -1218,6 +1375,49 @@ textarea {
 .mobile-admin-root-layout .primary-button:hover:not(:disabled) {
   background: linear-gradient(120deg, #ff8838, #f57224);
 }
+.admin-root-layout .table-btn-primary,
+.mobile-admin-root-layout .table-btn-primary {
+  border: 1px solid var(--rt-border-orange);
+  color: #fff;
+  background: linear-gradient(120deg, #ff6b00, #f57224 65%, #e95c10);
+  box-shadow: 0 6px 18px rgb(245 114 36 / 22%);
+}
+.admin-root-layout .table-btn-primary:hover:not(:disabled),
+.mobile-admin-root-layout .table-btn-primary:hover:not(:disabled) {
+  border-color: rgb(255 170 117 / 60%);
+  color: #fff;
+  background: linear-gradient(120deg, #ff8838, #f57224);
+  box-shadow: 0 0 0 3px rgb(245 114 36 / 15%), 0 8px 22px rgb(245 114 36 / 28%);
+}
+.admin-root-layout .table-btn-primary:disabled,
+.mobile-admin-root-layout .table-btn-primary:disabled {
+  border-color: rgb(255 170 117 / 30%);
+  color: rgb(255 255 255 / 88%);
+  background: linear-gradient(120deg, #a8470a, #b94c12 65%, #943b0b);
+  box-shadow: none;
+  opacity: 1;
+  cursor: not-allowed;
+}
+.admin-root-layout .table-btn-view,
+.admin-root-layout .table-btn-edit,
+.admin-root-layout .table-btn-role,
+.mobile-admin-root-layout .table-btn-view,
+.mobile-admin-root-layout .table-btn-edit,
+.mobile-admin-root-layout .table-btn-role {
+  border-color: var(--rt-border);
+  color: var(--rt-text-muted);
+  background: var(--rt-surface-low);
+}
+.admin-root-layout .table-btn-view:hover:not(:disabled),
+.admin-root-layout .table-btn-edit:hover:not(:disabled),
+.admin-root-layout .table-btn-role:hover:not(:disabled),
+.mobile-admin-root-layout .table-btn-view:hover:not(:disabled),
+.mobile-admin-root-layout .table-btn-edit:hover:not(:disabled),
+.mobile-admin-root-layout .table-btn-role:hover:not(:disabled) {
+  border-color: var(--rt-border-orange);
+  color: var(--rt-text);
+  background: var(--rt-orange-dim);
+}
 .admin-root-layout .alert-success,
 .mobile-admin-root-layout .alert-success {
   border-color: rgb(87 181 132 / 32%);
@@ -1229,6 +1429,399 @@ textarea {
   border-color: rgb(255 113 113 / 30%);
   color: #ffc2ba;
   background: rgb(147 0 10 / 22%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .admin-create-panel,
+  .admin-entry-form,
+  .admin-record-list,
+  .workspace-card,
+  .quick-actions-strip,
+  .admin-table-container,
+  .admin-table-wrap,
+  .kpi-card,
+  .queue-card,
+  .admin-modal-card,
+  .admin-dialog,
+  .modal-dialog-card,
+  .form-section-card,
+  .loan-edit-card,
+  .member-profile-card,
+  .member-drawer,
+  .member-details-drawer,
+  .terms-editor-card,
+  .bulk-import,
+  .bulk-import-panel,
+  .bulk-preview,
+  .bulk-import-guidance,
+  .csv-dropzone,
+  .admin-member-summary,
+  .admin-recent-dividends,
+  .admin-filter-panel,
+  .admin-search-panel,
+  .admin-section-card,
+  .mobile-admin-drawer-panel
+) {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background-color: var(--rt-surface-glass);
+  box-shadow: var(--admin-shadow-sm);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .queue-card.queue-active,
+  .member-drawer-content,
+  .drawer-profile-card,
+  .drawer-footer-actions,
+  .mobile-admin-ledger-bar,
+  .mobile-ledger-segmented-control,
+  .bulk-import-mode,
+  .bulk-import-guidance,
+  .bulk-preview,
+  .csv-dropzone,
+  .form-section-card,
+  .loan-edit-card,
+  .admin-table-wrap,
+  .admin-table-container
+) {
+  border-color: var(--rt-border);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .admin-topbar,
+  .mobile-admin-topbar,
+  .drawer-panel-header
+) {
+  color: var(--rt-text);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .admin-create-panel-heading h2,
+  .admin-create-estimate,
+  .admin-entry-form > label,
+  .admin-list-heading,
+  .admin-record-main > strong,
+  .admin-member-review-details p strong,
+  .admin-member-summary h2,
+  .admin-current-balance strong,
+  .admin-recent-dividends h2,
+  .dividend-row > div strong,
+  .dividend-row > strong,
+  .workspace-card-heading h3,
+  .form-fields-grid label,
+  .form-sec-heading,
+  .loan-edit-header h3,
+  .edit-field label,
+  .terms-editor-header h3,
+  .drawer-admin-name,
+  .drawer-nav-item,
+  .mobile-admin-viewport .view-page-title,
+  .mobile-admin-viewport .section-title,
+  .mobile-admin-viewport .kpi-value,
+  .mobile-admin-viewport .queue-count,
+  .mobile-admin-viewport .filter-chip.active
+) {
+  color: var(--rt-text);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .admin-create-panel-heading p,
+  .admin-create-note,
+  .admin-record-main > span,
+  .admin-record-main > small,
+  .admin-member-review-details p,
+  .admin-metric-note,
+  .admin-header-actions,
+  .admin-entry-form .optional-tag,
+  .admin-member-summary p,
+  .dividend-row > div span,
+  .workspace-card-heading,
+  .optional-tag,
+  .loan-edit-header p,
+  .terms-editor-header p,
+  .char-counter,
+  .terms-note,
+  .drawer-admin-role,
+  .drawer-nav-section-label,
+  .drawer-legal-note,
+  .mobile-admin-viewport .view-page-desc,
+  .mobile-admin-viewport .kpi-title,
+  .mobile-admin-viewport .kpi-subtext,
+  .mobile-admin-viewport .queue-label,
+  .mobile-admin-viewport .queue-unit,
+  .mobile-admin-viewport .queue-desc
+) {
+  color: var(--rt-text-muted);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .admin-create-panel :is(input, select, textarea),
+  .admin-entry-form :is(input, select, textarea),
+  .form-card :is(input, select, textarea),
+  .form-fields-grid :is(input, select, textarea),
+  .edit-field :is(input, textarea),
+  .terms-textarea,
+  .admin-terms-editor,
+  .mobile-admin-viewport .search-input-wrap input
+) {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .amount-input-wrap,
+  .admin-entry-form .amount-input-wrap,
+  .mobile-admin-viewport .search-input-wrap
+) {
+  border-color: var(--rt-border);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .amount-input-wrap > span,
+  .admin-entry-form .amount-input-wrap > span,
+  .mobile-admin-viewport .filter-chips,
+  .drawer-nav-icon
+) {
+  border-color: var(--rt-border);
+  color: var(--rt-text-muted);
+  background: var(--rt-surface-high);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .modal-dialog-card,
+  .admin-modal-card,
+  .admin-dialog,
+  .mobile-admin-drawer-panel
+) {
+  border: 1px solid var(--rt-border-orange);
+  background: var(--rt-surface);
+  box-shadow: var(--admin-shadow-lg);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .modal-dialog-header,
+  .modal-actions-bar,
+  .admin-table-detail-row > td,
+  .mobile-admin-viewport .modern-admin-table thead th,
+  .mobile-admin-viewport .modern-admin-table tbody tr:hover,
+  .mobile-admin-viewport .admin-table-container
+) {
+  border-color: var(--rt-border);
+  background-color: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .queue-action-button,
+  .quick-btn,
+  .template-button,
+  .action-btn-cancel,
+  .modal-close-btn,
+  .drawer-refresh-btn,
+  .strip-manage-btn,
+  .loan-ref-pill,
+  .open-loan-item,
+  .mobile-admin-viewport .filter-chip,
+  .mobile-admin-viewport .timestamp-badge,
+  .mobile-admin-viewport .count-pill
+) {
+  border-color: var(--rt-border);
+  color: var(--rt-text-muted);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .queue-action-button:hover,
+  .quick-btn:hover,
+  .template-button:hover,
+  .action-btn-cancel:hover,
+  .modal-close-btn:hover,
+  .drawer-refresh-btn:hover,
+  .mobile-admin-viewport .quick-btn:active,
+  .mobile-admin-viewport .filter-chip.active,
+  .mobile-admin-viewport .bulk-import-mode button.active
+) {
+  border-color: var(--rt-border-orange);
+  color: var(--rt-text);
+  background: var(--rt-orange-dim);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .drawer-nav-item:hover,
+  .drawer-nav-item:active
+) {
+  color: var(--rt-text);
+  background: var(--rt-orange-dim);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-nav-item.is-active {
+  border: 1px solid var(--rt-border-orange);
+  color: var(--rt-orange-warm);
+  background: var(--rt-orange-dim);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-nav-item.is-active .drawer-nav-icon {
+  color: var(--rt-orange-warm);
+  background: rgb(245 114 36 / 18%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .drawer-header,
+  .drawer-profile-card,
+  .drawer-financial-summary > div,
+  .admin-member-review-details > div,
+  .signatories-governance-strip,
+  .open-loan-item,
+  .open-loan-item:hover,
+  .open-loan-item.selected-loan
+) {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .strip-text,
+  .strip-text strong,
+  .strip-names,
+  .drawer-member-title h2,
+  .open-loan-item,
+  .borrower-name,
+  .loan-ref-pill
+) {
+  color: var(--rt-text);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .drawer-id,
+  .drawer-financial-summary span,
+  .dividend-expanded-detail,
+  .term-note
+) {
+  color: var(--rt-text-muted);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .role-display.role-standard,
+  .role-tag
+) {
+  border-color: var(--rt-border);
+  color: var(--rt-text-muted);
+  background: var(--rt-surface-high);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .status-tag.status-approved,
+  .role-display.role-signatory
+) {
+  border-color: rgb(87 181 132 / 32%);
+  color: #a8e5c2;
+  background: rgb(16 120 76 / 20%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .status-tag.status-pending
+) {
+  border-color: var(--rt-border-orange);
+  color: var(--rt-orange-warm);
+  background: var(--rt-orange-dim);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .status-tag.status-rejected
+) {
+  border-color: rgb(255 113 113 / 30%);
+  color: #ffc2ba;
+  background: rgb(147 0 10 / 22%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .role-display.role-standard {
+  border-color: var(--rt-border);
+  color: var(--rt-text-muted);
+  background: var(--rt-surface-high);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .mobile-admin-viewport .savings-icon,
+  .mobile-admin-viewport .loans-icon,
+  .mobile-admin-viewport .pending-icon,
+  .strip-icon-circle,
+  .drawer-nav-item.is-active .drawer-nav-icon
+) {
+  border-color: var(--rt-border-orange);
+  color: var(--rt-orange-warm);
+  background: rgb(245 114 36 / 18%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .mobile-admin-ledger-bar,
+  .mobile-ledger-segmented-control,
+  .filter-chips,
+  .bulk-import-mode
+) {
+  border-color: var(--rt-border);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .admin-record:hover,
+  .modern-admin-table tbody tr:hover,
+  .admin-table-detail-row > td
+) {
+  border-color: var(--rt-border);
+  background: rgb(31 21 63 / 76%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .modern-admin-table :is(th, td) {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .modern-admin-table thead th {
+  color: var(--rt-text-muted);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .modern-admin-table tbody tr.row-selected {
+  background: rgb(245 114 36 / 12%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .member-drawer-backdrop,
+:is(.admin-root-layout, .mobile-admin-root-layout) .modal-backdrop {
+  background: rgb(4 2 13 / 72%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .preview-valid,
+  .status-pill.status-approved,
+  .status-pill.status-disbursed,
+  .role-tag-signatory
+) {
+  border-color: rgb(87 181 132 / 32%);
+  color: #a8e5c2;
+  background: rgb(16 120 76 / 20%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .preview-invalid,
+  .bulk-errors,
+  .status-pill.status-rejected,
+  .role-tag-admin
+) {
+  border-color: rgb(255 113 113 / 30%);
+  color: #ffc2ba;
+  background: rgb(147 0 10 / 22%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .status-pill.status-pending,
+  .status-tag.status-pending
+) {
+  border-color: var(--rt-border-orange);
+  color: var(--rt-orange-warm);
+  background: var(--rt-orange-dim);
 }
 
 @media (max-width: 768px) {
@@ -1247,4 +1840,200 @@ textarea {
   :root,
   html,
   body { color-scheme: dark; }
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .member-details-drawer {
+  border-left: 1px solid var(--rt-border);
+  color: var(--rt-text);
+  background: var(--rt-surface);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-active-loan {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-active-loan:hover {
+  border-color: var(--rt-border-orange);
+  background: rgb(245 114 36 / 10%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-active-loan strong,
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-active-loan > span {
+  color: var(--rt-orange-light);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-active-loan small,
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-active-loans-heading span,
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-pending-loans-note,
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-no-active-loans {
+  color: var(--rt-text-muted);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-action-callout {
+  border-color: var(--rt-border-orange);
+  background: rgb(245 114 36 / 9%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-action-callout p {
+  color: var(--rt-orange-light);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-bank-card {
+  border-color: var(--rt-border);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-bank-card strong {
+  color: var(--rt-text);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-bank-card p {
+  color: var(--rt-orange-light);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-bank-card small,
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-contacts-sublist,
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-contacts-sublist .sublist-title {
+  color: var(--rt-text-muted);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-dl dd {
+  color: var(--rt-text);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-contacts-sublist strong {
+  color: var(--rt-text);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-footer {
+  border-color: var(--rt-border);
+  background: var(--rt-surface);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-edit-btn,
+:is(.admin-root-layout, .mobile-admin-root-layout) .role-pill-btn {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-edit-btn:hover:not(:disabled),
+:is(.admin-root-layout, .mobile-admin-root-layout) .role-pill-btn:hover:not(:disabled) {
+  border-color: var(--rt-border-orange);
+  color: var(--rt-text);
+  background: var(--rt-orange-dim);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .role-pill-btn.active {
+  border-color: var(--rt-border-orange);
+  color: var(--rt-orange-light);
+  background: var(--rt-orange-dim);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-delete-btn {
+  border-color: rgb(255 113 113 / 38%);
+  color: #ffc2ba;
+  background: rgb(147 0 10 / 22%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-delete-btn:hover:not(:disabled) {
+  border-color: rgb(255 113 113 / 65%);
+  background: rgb(147 0 10 / 38%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-statement-panel {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background: var(--rt-surface-glass);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-statement-title h2 {
+  color: var(--rt-text);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-filter-trigger {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-filter-trigger:hover,
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-filter-trigger.has-filters {
+  border-color: var(--rt-border-orange);
+  color: var(--rt-orange-light);
+  background: var(--rt-orange-dim);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-filter-dialog form {
+  border: 1px solid var(--rt-border-orange);
+  color: var(--rt-text);
+  background: var(--rt-surface);
+  box-shadow: 0 18px 48px rgb(5 2 15 / 65%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-filter-dialog-heading span,
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-filter-dialog-heading h2 {
+  color: var(--rt-text);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-filter-fields label {
+  color: var(--rt-text-muted);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-filter-fields input,
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-filter-fields select {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-filter-close,
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-filter-reset {
+  color: var(--rt-text-muted);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-filter-reset:hover,
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-filter-close:hover {
+  color: var(--rt-orange-light);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-filter-error,
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-edit-error {
+  color: #ffc2ba;
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-edit-drawer {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background: var(--rt-surface);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-edit-form label {
+  color: var(--rt-text);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-edit-form input {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-statement-panel .admin-table thead th {
+  border-color: var(--rt-border);
+  color: var(--rt-text-muted);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-statement-panel .admin-table tbody td {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background: transparent;
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-statement-panel .admin-table tbody tr:hover,
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-statement-panel .admin-table tbody tr:hover > td {
+  color: var(--rt-text);
+  background: rgb(31 21 63 / 76%);
 }

@@ -123,6 +123,13 @@ export function MobileAdminPortal({
   onSetPopupMessageActive,
   onDeletePopupMessage,
   onRefresh,
+  memberId,
+  setMemberId,
+  amount,
+  setAmount,
+  description,
+  setDescription,
+  onSavingsEntry,
   repaymentLoanId, setRepaymentLoanId, repaymentAmount, setRepaymentAmount,
   repaymentDescription, setRepaymentDescription, onLoanRepayment, submitting,
 }: MobileAdminPortalProps) {
@@ -171,8 +178,6 @@ export function MobileAdminPortal({
     isRoot,
   })
 
-  const totalPending = ui.pendingMembers.length + ui.pendingApplications.length
-
   return (
     <div className="mobile-admin-root-layout">
       {showExitToast && (
@@ -185,7 +190,6 @@ export function MobileAdminPortal({
       <MobileAdminTopbar
         signedInAdmin={signedInAdmin}
         isRefreshing={ui.isRefreshing}
-        pendingCount={totalPending}
         onRefresh={() => void ui.handleRefreshClick()}
         onToggleMenu={() => setDrawerOpen(true)}
       />
@@ -305,6 +309,15 @@ export function MobileAdminPortal({
           <AdminSavingsView
             statementRefreshKey={statementRefreshKey}
             onRecordsChanged={onRefresh}
+            members={members}
+            memberId={memberId}
+            setMemberId={setMemberId}
+            amount={amount}
+            setAmount={setAmount}
+            description={description}
+            setDescription={setDescription}
+            onSavingsEntry={onSavingsEntry}
+            submitting={submitting}
           />
         )}
 

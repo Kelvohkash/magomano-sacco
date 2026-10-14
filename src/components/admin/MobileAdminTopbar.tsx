@@ -1,9 +1,8 @@
-import { Landmark, Menu, RefreshCcw } from 'lucide-react'
+import { Landmark, RefreshCcw } from 'lucide-react'
 
 interface MobileAdminTopbarProps {
   signedInAdmin: string
   isRefreshing: boolean
-  pendingCount?: number
   onRefresh: () => void
   onToggleMenu: () => void
 }
@@ -11,7 +10,6 @@ interface MobileAdminTopbarProps {
 export function MobileAdminTopbar({
   signedInAdmin,
   isRefreshing,
-  pendingCount = 0,
   onRefresh,
   onToggleMenu,
 }: MobileAdminTopbarProps) {
@@ -21,16 +19,6 @@ export function MobileAdminTopbar({
   return (
     <header className="mobile-admin-topbar">
       <div className="mobile-admin-topbar-left">
-        <button
-          type="button"
-          className="mobile-admin-icon-btn menu-btn"
-          onClick={onToggleMenu}
-          aria-label="Open administration menu"
-        >
-          <Menu size={22} />
-          {pendingCount > 0 && <span className="mobile-admin-btn-badge" />}
-        </button>
-
         <a className="mobile-admin-brand" href="/" aria-label="Magomano County Sacco core administration">
           <div className="mobile-admin-brand-crest">
             <Landmark size={18} strokeWidth={2.4} />

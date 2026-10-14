@@ -93,6 +93,7 @@ export function AdminPortal({
   terms, setTerms, termsUpdatedAt, onSaveTerms, onRefresh,
   maintenanceEnabled, maintenanceMessage, setMaintenanceMessage, onUpdateMaintenance,
   popupMessages, onCreatePopupMessage, onSetPopupMessageActive, onDeletePopupMessage,
+  memberId, setMemberId, amount, setAmount, description, setDescription, onSavingsEntry,
   repaymentLoanId, setRepaymentLoanId, repaymentAmount, setRepaymentAmount,
   repaymentDescription, setRepaymentDescription, onLoanRepayment, submitting,
 }: AdminPortalProps) {
@@ -210,6 +211,15 @@ export function AdminPortal({
             <AdminSavingsView
               statementRefreshKey={statementRefreshKey}
               onRecordsChanged={onRefresh}
+              members={members}
+              memberId={memberId}
+              setMemberId={setMemberId}
+              amount={amount}
+              setAmount={setAmount}
+              description={description}
+              setDescription={setDescription}
+              onSavingsEntry={onSavingsEntry}
+              submitting={submitting}
             />
           )}
 

@@ -19,7 +19,7 @@
   .join-shell .registration-panel .form-content {
     width: min(100%, 660px);
     margin: 0 auto;
-    padding: 154px 36px 30px;
+    padding: 204px 36px 30px;
   }
 }
 
@@ -36,7 +36,7 @@
   .join-shell .mobile-auth-wordmark { top: 30px; }
   .join-shell .mobile-auth-wordmark strong { font-size: 22px; }
   .join-shell .mobile-auth-wordmark span { font-size: 9px; }
-  .join-shell .registration-panel .form-content { width: 100%; padding: 144px 18px 24px; }
+  .join-shell .registration-panel .form-content { width: 100%; padding: 222px 18px 24px; }
   .join-heading { margin-bottom: 17px; }
   .join-heading h1 { font-size: 24px; }
   .join-progress { margin-bottom: 14px; padding: 12px; }
@@ -56,7 +56,7 @@
 @media (max-width: 380px) {
   .join-shell { padding: 7px; }
   .join-shell .registration-panel { min-height: calc(100svh - 14px); max-height: calc(100svh - 14px); border-radius: 18px; }
-  .join-shell .registration-panel .form-content { padding: 140px 13px 20px; }
+  .join-shell .registration-panel .form-content { padding: 216px 13px 20px; }
   .join-step-labels > span { font-size: 8px; }
   .join-progress-top { font-size: 9px; }
   .join-progress-top strong { font-size: 10px; }

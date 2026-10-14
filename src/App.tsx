@@ -8,15 +8,14 @@ import { MemberPopupLayer } from './components/member/MemberPopupLayer'
 import { useAdminOperations } from './hooks/useAdminOperations'
 import { useAuthSession } from './hooks/useAuthSession'
 import { useMemberOperations } from './hooks/useMemberOperations'
-import { useAppearance } from './hooks/useAppearance'
 import './App.css'
 import './Portal.css'
 import './Admin.css'
+import './styles/royal-twilight.css'
 
 function App() {
   const member = useMemberOperations()
   const admin = useAdminOperations()
-  const appearance = useAppearance(member.dashboard?.member.national_id)
   const { refreshDashboard, resetMemberState } = member
   const { setSignedInAdmin, refreshAdminData, resetAdminState } = admin
 
@@ -86,8 +85,6 @@ function App() {
         loanSubmitting={member.loanSubmitting}
         onLoanApplication={member.handleLoanApplication}
         onLogout={auth.handleLogout}
-        forceLightAppearance={appearance.forceLight}
-        onToggleLightAppearance={appearance.toggleForceLight}
         isSyncing={member.isSyncing}
         syncError={member.syncError}
         onSync={member.syncDashboard}

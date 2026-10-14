@@ -1,5 +1,6 @@
 import { useRef, useState, type Dispatch, type FormEventHandler, type SetStateAction } from 'react'
 import type { AuthMode, MemberRegistrationForm } from '../../types'
+import countyLogo from '../../../Logo.webp'
 import { AdminLoginForm } from './AdminLoginForm'
 import { AuthWelcomeAside } from './AuthWelcomeAside'
 import { MemberLoginForm } from './MemberLoginForm'
@@ -99,9 +100,10 @@ export function AuthScreen({
       <AuthWelcomeAside />
 
       <section className={`form-panel ${mode === 'register' ? 'registration-panel' : ''}`}>
-        <div className="mobile-auth-wordmark" aria-label="Magomano Savings SACCO">
+        <div className="mobile-auth-wordmark" aria-label="Magomano County SACCO">
+          <img className="mobile-auth-emblem" src={countyLogo} alt="" />
           <strong>MAGOMANO</strong>
-          <span>SAVINGS SACCO</span>
+          <span className="mobile-auth-tagline">COUNTY SACCO</span>
         </div>
 
         <div className="form-content" key={mode}>
@@ -191,4 +193,3 @@ export function AuthScreen({
     </main>
   )
 }
-

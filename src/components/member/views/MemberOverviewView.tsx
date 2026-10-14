@@ -11,6 +11,7 @@ import type { StatementState } from '../statementHelpers'
 interface MemberOverviewViewProps {
   firstName: string
   dashboard: DashboardData
+  focus: 'overview' | 'savings' | 'activity'
   savingsPage: StatementState<SavingsTransaction>
   setSavingsPage: Dispatch<SetStateAction<StatementState<SavingsTransaction>>>
   loansPage: StatementState<MemberLoanRecord>
@@ -32,6 +33,7 @@ interface MemberOverviewViewProps {
 export function MemberOverviewView({
   firstName,
   dashboard,
+  focus,
   savingsPage,
   setSavingsPage,
   loansPage,
@@ -41,17 +43,31 @@ export function MemberOverviewView({
   onPageChange,
   onUpdateFilter,
 }: MemberOverviewViewProps) {
-  return (
-    <section className="dashboard-content">
-      <div className="dashboard-intro">
-        <MemberWelcome
-          firstName={firstName}
-          savingsBalance={dashboard.savings.balance}
-          outstandingLoans={dashboard.loans.outstandingBalance}
-        />
-      </div>
+  const showOverview = focus === 'overview'
+  const showSavings = focus === 'savings'
+  const showActivity = focus === 'activity'
 
-      <section className="balance-grid" aria-label="Account totals">
+  return (
+    <section className={`dashboard-content member-content-${focus}`}>
+      {showOverview ? (
+        <div className="dashboard-intro">
+          <MemberWelcome
+            firstName={firstName}
+            savingsBalance={dashboard.savings.balance}
+            outstandingLoans={dashboard.loans.outstandingBalance}
+          />
+        </div>
+      ) : (
+        <div className="dashboard-intro member-section-intro">
+          <p className="dashboard-kicker">{focus === 'savings' ? 'YOUR SAVINGS' : 'ACCOUNT ACTIVITY'}</p>
+          <h1>{focus === 'savings' ? 'Savings' : 'Statements'}</h1>
+          <p>{focus === 'savings'
+            ? 'Review your savings balance and deposit history.'
+            : 'Review your loan records and repayment history.'}</p>
+        </div>
+      )}
+
+      {showOverview && <section className="balance-grid" aria-label="Account totals">
         <article className="balance-panel savings-panel">
           <div className="balance-heading">
             <span><Wallet size={18} /></span>
@@ -82,11 +98,11 @@ export function MemberOverviewView({
           </p>
           <p className="balance-caption">Current loan balance</p>
         </article>
-      </section>
+      </section>}
 
-      <div className="statement-grid">
+      {(showSavings || showActivity) && <div className={`statement-grid ${focus === 'savings' ? 'single-statement-grid' : ''}`}>
         {/* Savings Statement */}
-        <section className="statement-section">
+        {showSavings && <section className="statement-section" id="member-savings-statement">
           <div className="statement-heading">
             <div>
               <p className="section-kicker">ACCOUNT ACTIVITY</p>
@@ -139,10 +155,10 @@ export function MemberOverviewView({
               onPageChange<SavingsTransaction>('savings', page, savingsPage.filters, setSavingsPage)
             }
           />
-        </section>
+        </section>}
 
         {/* Loans Taken */}
-        <section className="statement-section">
+        {showActivity && <section className="statement-section">
           <div className="statement-heading">
             <div>
               <p className="section-kicker">BORROWING</p>
@@ -215,11 +231,11 @@ export function MemberOverviewView({
               onPageChange<MemberLoanRecord>('loans', page, loansPage.filters, setLoansPage)
             }
           />
-        </section>
-      </div>
+        </section>}
+      </div>}
 
       {/* Loan Repayment History */}
-      <section className="statement-section repayment-history-section">
+      {showActivity && <section className="statement-section repayment-history-section" id="member-activity-statement">
         <div className="statement-heading">
           <div>
             <p className="section-kicker">LOAN ACCOUNT ACTIVITY</p>
@@ -271,8 +287,7 @@ export function MemberOverviewView({
             onPageChange<LoanRepayment>('repayments', page, repaymentsPage.filters, setRepaymentsPage)
           }
         />
-      </section>
+      </section>}
     </section>
   )
 }
-

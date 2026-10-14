@@ -18,6 +18,7 @@ import { MemberLoanStatusView } from './views/MemberLoanStatusView'
 import { MemberOverviewView } from './views/MemberOverviewView'
 import { readJsonResponse, requestErrorMessage } from '../../networkErrors'
 import { useMobileBackHandler } from '../../hooks/useMobileBackHandler'
+import { Activity, House, PiggyBank, UserRound, WalletCards } from 'lucide-react'
 
 export interface MemberPortalProps {
   dashboard: DashboardData
@@ -36,8 +37,6 @@ export interface MemberPortalProps {
   loanSubmitting: boolean
   onLoanApplication: FormEventHandler<HTMLFormElement>
   onLogout: () => void
-  forceLightAppearance: boolean
-  onToggleLightAppearance: () => void
   isSyncing: boolean
   syncError: string
   onSync: () => void
@@ -61,8 +60,6 @@ export function MemberPortal({
   loanSubmitting,
   onLoanApplication,
   onLogout,
-  forceLightAppearance,
-  onToggleLightAppearance,
   isSyncing,
   syncError,
   onSync,
@@ -267,13 +264,11 @@ export function MemberPortal({
         menuOpen={menuOpen}
         setMenuOpen={setMenuOpen}
         onLogout={onLogout}
-        forceLightAppearance={forceLightAppearance}
-        onToggleLightAppearance={onToggleLightAppearance}
         isSyncing={isSyncing}
         syncError={syncError}
         onSync={onSync}
       />
-      {view === 'overview' ? (
+      {view === 'overview' || view === 'savings' || view === 'activity' ? (
         <MemberOverviewView
           firstName={firstName}
           dashboard={dashboard}
@@ -283,6 +278,7 @@ export function MemberPortal({
           setLoansPage={setLoansPage}
           repaymentsPage={repaymentsPage}
           setRepaymentsPage={setRepaymentsPage}
+          focus={view}
           onPageChange={changePage}
           onUpdateFilter={updateStatementFilter}
         />
@@ -312,6 +308,48 @@ export function MemberPortal({
           setApplicationsPage={setApplicationsPage}
         />
       )}
+      <nav className="member-bottom-nav" aria-label="Member navigation">
+        <button
+          type="button"
+          className={view === 'overview' ? 'is-active' : ''}
+          aria-current={view === 'overview' ? 'page' : undefined}
+          onClick={() => setView('overview')}
+        >
+          <House size={19} /><span>Overview</span>
+        </button>
+        <button
+          type="button"
+          className={view === 'apply-loan' || view === 'loan-status' ? 'is-active' : ''}
+          aria-current={view === 'apply-loan' || view === 'loan-status' ? 'page' : undefined}
+          onClick={() => setView('apply-loan')}
+        >
+          <WalletCards size={19} /><span>Loans</span>
+        </button>
+        <button
+          type="button"
+          className={view === 'savings' ? 'is-active' : ''}
+          aria-current={view === 'savings' ? 'page' : undefined}
+          onClick={() => setView('savings')}
+        >
+          <PiggyBank size={19} /><span>Savings</span>
+        </button>
+        <button
+          type="button"
+          className={view === 'activity' ? 'is-active' : ''}
+          aria-current={view === 'activity' ? 'page' : undefined}
+          onClick={() => setView('activity')}
+        >
+          <Activity size={19} /><span>Activity</span>
+        </button>
+        <button
+          type="button"
+          className={view === 'account-info' || view === 'terms' ? 'is-active' : ''}
+          aria-current={view === 'account-info' || view === 'terms' ? 'page' : undefined}
+          onClick={() => setView('account-info')}
+        >
+          <UserRound size={19} /><span>Account</span>
+        </button>
+      </nav>
     </main>
   )
 }

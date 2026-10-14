@@ -1,57 +1,89 @@
+/* ============================================================
+   ROYAL TWILIGHT — Global Design Tokens
+   Magomano County Sacco — Fixed application appearance
+   ============================================================ */
 :root {
+  color-scheme: dark;
   font-size: 16px;
   -webkit-text-size-adjust: 100% !important;
   text-size-adjust: 100% !important;
   -moz-text-size-adjust: 100% !important;
-  font-family: 'Manrope', 'Avenir Next', Avenir, 'Segoe UI', sans-serif;
-  color: #0f172a;
-  background: #f8fafc;
+
+  /* Fonts */
+  font-family: 'Manrope', 'Plus Jakarta Sans', 'Avenir Next', Avenir, 'Segoe UI', sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-optical-sizing: auto;
   font-weight: 400;
-  --ink: #211b2d;
-  --muted: #64748b;
-  --line: #e2e8f0;
-  --paper: #f8fafc;
-  --white: #fff;
-  --forest: #2c1971;
-  --forest-deep: #1d104f;
-  --leaf: #e97f35;
-  --coral: #e97f35;
-  --focus: #5a4696;
-  --sacco-blue: #2c1971;
-  --sacco-blue-hover: #211255;
-  --sacco-blue-dark: #1d104f;
-  --sacco-blue-light: #f3f0fa;
-  --sacco-blue-border: #c8bde6;
-  --sacco-orange: #e97f35;
-  --sacco-orange-hover: #c76624;
-  --sacco-orange-vibrant: #f09a54;
-  --sacco-orange-light: #fff4ea;
-  --sacco-orange-border: #e9b487;
+
+  /* Royal Twilight Color Tokens */
+  --rt-bg:              #0e0921;
+  --rt-surface:         #130d2e;
+  --rt-surface-low:     #1d182f;
+  --rt-surface-card:    #221c38;
+  --rt-surface-high:    #2c273e;
+  --rt-surface-elevated: #2e1e5c;
+  --rt-surface-glass:   rgba(31, 23, 66, 0.72);
+
+  --rt-orange:          #f57224;
+  --rt-orange-light:    #ff8838;
+  --rt-orange-glow:     #ff6d19;
+  --rt-orange-dim:      rgba(245, 114, 36, 0.15);
+  --rt-orange-border:   rgba(245, 114, 36, 0.30);
+  --rt-orange-warm:     #ffaa75;
+  --rt-orange-pale:     #ffb693;
+
+  --rt-indigo:          #241468;
+  --rt-indigo-deep:     #1b1142;
+  --rt-indigo-darker:   #0e0921;
+
+  --rt-text:            #fff5eb;
+  --rt-text-warm:       #ffb693;
+  --rt-text-muted:      #b8afd0;
+  --rt-text-dim:        #7d7299;
+  --rt-text-white:      #ffffff;
+
+  --rt-border:          rgba(255, 255, 255, 0.10);
+  --rt-border-orange:   rgba(245, 114, 36, 0.30);
+  --rt-border-bright:   rgba(255, 255, 255, 0.18);
+
+  --rt-shadow-card:     0 12px 36px -8px rgba(0, 0, 0, 0.6), 0 0 24px 0 rgba(245, 114, 36, 0.12);
+  --rt-shadow-orange:   0 0 40px -10px rgba(245, 114, 36, 0.20);
+  --rt-shadow-float:    0 16px 48px rgba(7, 4, 18, 0.8);
+
+  /* Legacy variable aliases → Royal Twilight (keeps old references working) */
+  --ink:                var(--rt-text);
+  --muted:              var(--rt-text-muted);
+  --line:               var(--rt-border);
+  --paper:              var(--rt-surface);
+  --white:              var(--rt-text-white);
+  --forest:             var(--rt-indigo);
+  --forest-deep:        var(--rt-indigo-deep);
+  --leaf:               var(--rt-orange);
+  --coral:              var(--rt-orange);
+  --focus:              var(--rt-orange);
+  --sacco-blue:         var(--rt-indigo);
+  --sacco-blue-hover:   var(--rt-indigo-deep);
+  --sacco-blue-dark:    var(--rt-indigo-darker);
+  --sacco-blue-light:   var(--rt-surface-elevated);
+  --sacco-blue-border:  var(--rt-border);
+  --sacco-orange:       var(--rt-orange);
+  --sacco-orange-hover: var(--rt-orange-glow);
+  --sacco-orange-vibrant: var(--rt-orange-light);
+  --sacco-orange-light: var(--rt-orange-dim);
+  --sacco-orange-border: var(--rt-orange-border);
+
+  /* Global defaults */
+  color: var(--rt-text);
+  background: var(--rt-surface);
 }
 
-.login-shell,
-.join-shell,
-.member-dashboard {
-  --forest: #193a61;
-  --forest-deep: #142d4a;
-  --leaf: #d9ad27;
-  --coral: #d9ad27;
-  --focus: #315f91;
-  --sacco-blue: #315f91;
-  --sacco-blue-hover: #284d78;
-  --sacco-blue-dark: #193a61;
-  --sacco-blue-light: #eaf2fa;
-  --sacco-blue-border: #c5d4e3;
-  --sacco-orange: #d9ad27;
-  --sacco-orange-hover: #aa8112;
-  --sacco-orange-vibrant: #eccb61;
-  --sacco-orange-light: #fff9e8;
-  --sacco-orange-border: #e7d28a;
+/* Force dark everywhere — override any element that might go light */
+html, body {
+  background-color: var(--rt-bg) !important;
+  color: var(--rt-text) !important;
 }
 
 * { box-sizing: border-box; }
@@ -62,17 +94,20 @@ body {
   margin: 0;
 }
 
-button, input { font: inherit; }
+button, input, select, textarea { font: inherit; color: inherit; }
 button { cursor: pointer; }
 
 button:focus-visible,
 a:focus-visible,
-input:focus-visible {
-  outline: 3px solid #8d7bc1;
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--rt-orange);
   outline-offset: 3px;
 }
 
-::selection { color: var(--forest-deep); background: #f0eafa; }
+::selection { color: #fff; background: var(--rt-orange); }
+::-webkit-scrollbar { display: none; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -89,29 +124,23 @@ input:focus-visible {
   bottom: calc(72px + env(safe-area-inset-bottom, 0));
   left: 50%;
   transform: translateX(-50%);
-  background-color: rgba(29, 16, 79, 0.94);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  color: #ffffff;
+  background-color: rgba(14, 9, 33, 0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--rt-text);
   font-size: 13px;
   font-weight: 600;
-  padding: 10px 20px;
+  padding: 10px 22px;
   border-radius: 9999px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--rt-border);
+  border: 1px solid var(--rt-border-orange);
   z-index: 99999;
   pointer-events: none;
-  animation: exitToastIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: exitToastIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap;
 }
 
 @keyframes exitToastIn {
-  from {
-    opacity: 0;
-    transform: translate(-50%, 12px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, 0) scale(1);
-  }
+  from { opacity: 0; transform: translate(-50%, 14px) scale(0.94); }
+  to   { opacity: 1; transform: translate(-50%, 0) scale(1); }
 }

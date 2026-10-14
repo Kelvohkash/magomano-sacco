@@ -293,4 +293,4 @@ export interface AdminOpenLoan {
 
 export type AdminView = 'overview' | 'members' | 'loans' | 'repayments' | 'savings' | 'bulk' | 'terms'
 export type AuthMode = 'login' | 'register' | 'admin-login'
-export type MemberView = 'overview' | 'apply-loan' | 'loan-status' | 'account-info' | 'terms'
+export type MemberView = 'overview' | 'apply-loan' | 'loan-status' | 'savings' | 'activity' | 'account-info' | 'terms'

@@ -1,0 +1,206 @@
+<!DOCTYPE html><html class="h-full" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>Magomano Savings SACCO - Sign In</title>
+<!-- Tailwind CSS CDN with Forms & Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Plus Jakarta Sans Font -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<!-- Tailwind Configuration matching Royal Twilight Design System -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            twilight: {
+              bg: '#100b21',
+              surface: '#151026',
+              low: '#1d182f',
+              card: '#221c38',
+              bright: '#3b364e',
+              border: '#352e4d',
+            },
+            brand: {
+              orange: '#f57224',
+              orangeHover: '#ea580c',
+              gold: '#fba94b',
+              purple: '#2c1959',
+            }
+          },
+          boxShadow: {
+            'glow-orange': '0 8px 24px -4px rgba(245, 114, 36, 0.35)',
+            'card-soft': '0 10px 30px -10px rgba(0, 0, 0, 0.5)',
+          }
+        }
+      }
+    }
+  </script>
+<!-- Custom Styles for Mobile Shell and Ambient Shapes -->
+<style data-purpose="custom-styling">
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #0b0717;
+      color: #f1f0f5;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Subtle organic wave backdrop resembling County brand curves */
+    .brand-wave-bg {
+      background: radial-gradient(135% 90% at 50% 0%, #2f1d5e 0%, #1a1236 55%, #151026 100%);
+    }
+
+    .curve-mask {
+      border-bottom-left-radius: 40px;
+      border-bottom-right-radius: 40px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-0 sm:p-4 bg-slate-950">
+<!-- BEGIN: MobileDeviceContainer -->
+<!-- Container shaped as standard iOS mobile canvas -->
+<div class="w-full max-w-[420px] min-h-screen sm:min-h-[860px] sm:h-auto bg-[#151026] text-white flex flex-col justify-between relative overflow-hidden sm:rounded-[36px] sm:shadow-2xl sm:border sm:border-twilight-border" data-purpose="mobile-viewport">
+<!-- BEGIN: TopBrandHeroArea -->
+<header class="relative brand-wave-bg curve-mask pt-10 pb-8 px-6 overflow-hidden flex flex-col items-center border-b border-twilight-border/40">
+<!-- Ambient decorative glow elements -->
+<div class="absolute -top-16 -right-12 w-48 h-48 bg-brand-orange/15 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute -top-12 -left-12 w-48 h-48 bg-purple-600/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-brand-orange/40 to-transparent"></div>
+<!-- County / SACCO Brand Emblem Badge -->
+<div class="relative z-10 flex items-center justify-center mb-3">
+<div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#2f1f54] to-[#1d1637] p-2 border border-brand-orange/30 shadow-lg shadow-black/40 flex items-center justify-center relative group">
+<!-- Logo Image insertion from Snapshot data -->
+
+<!-- Subtle corner accent pip -->
+<span class="absolute -top-1 -right-1 flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-orange opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-brand-orange"></span>
+</span>
+</div>
+</div>
+<!-- Brand Typography -->
+<div class="text-center relative z-10">
+<h1 class="text-2xl font-extrabold tracking-wider text-slate-100 uppercase">
+          MAGOMANO
+        </h1>
+<p class="text-xs font-bold tracking-[0.22em] text-brand-gold uppercase mt-1">
+          SAVINGS SACCO
+        </p>
+</div>
+</header>
+<!-- END: TopBrandHeroArea -->
+<!-- BEGIN: FormContentSection -->
+<main class="flex-1 px-6 pt-6 pb-4 flex flex-col justify-between">
+<div>
+<!-- Welcome Headings -->
+<div class="mb-6">
+<h2 class="text-2xl font-bold text-white tracking-tight">
+            Welcome back
+          </h2>
+<p class="text-sm text-slate-400 mt-1">
+            Sign in to access your Magomano SACCO account
+          </p>
+</div>
+<!-- Authentication Form -->
+<form class="space-y-4" data-purpose="login-form" onsubmit="event.preventDefault();">
+<!-- Input Field: National ID -->
+<div class="space-y-1.5" data-purpose="field-national-id">
+<label class="block text-xs font-semibold uppercase tracking-wider text-slate-300" for="nationalId">
+              National ID
+            </label>
+<div class="relative">
+<!-- ID Card Icon -->
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<input class="w-full bg-[#1b152f] text-slate-100 placeholder-slate-500 text-sm font-medium rounded-xl pl-11 pr-4 py-3.5 border border-twilight-border focus:border-brand-orange focus:ring-1 focus:ring-brand-orange outline-none transition-all duration-200" id="nationalId" inputmode="numeric" placeholder="Enter National ID" type="text" value="37765731">
+</div>
+</div>
+<!-- Input Field: Password -->
+<div class="space-y-1.5" data-purpose="field-password">
+<div class="flex items-center justify-between">
+<label class="block text-xs font-semibold uppercase tracking-wider text-slate-300" for="password">
+                Password
+              </label>
+<a class="text-xs text-brand-orange hover:text-brand-gold font-medium transition-colors duration-150" href="#">
+                Forgot?
+              </a>
+</div>
+<div class="relative">
+<!-- Lock Icon -->
+<div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<input class="w-full bg-[#1b152f] text-slate-100 placeholder-slate-500 text-sm font-medium rounded-xl pl-11 pr-11 py-3.5 border border-twilight-border focus:border-brand-orange focus:ring-1 focus:ring-brand-orange outline-none transition-all duration-200" id="password" placeholder="Enter your password" type="password">
+<!-- Password Eye Visibility Toggle Button -->
+<button aria-label="Toggle password visibility" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-200 transition-colors duration-150 focus:outline-none" id="passwordToggleBtn" type="button">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</div>
+</div>
+<!-- Primary Action: Sign In Button -->
+<div class="pt-2">
+<button class="w-full bg-gradient-to-r from-brand-orange to-[#ea580c] hover:from-[#f67f38] hover:to-brand-orange text-white font-semibold py-3.5 px-4 rounded-xl flex items-center justify-center space-x-2 shadow-glow-orange active:scale-[0.99] transition duration-150" type="submit">
+<span class="text-sm font-bold tracking-wide">Sign in</span>
+<svg class="h-4 w-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</div>
+</form>
+<!-- Divider with "or" badge -->
+<div class="relative flex py-5 items-center">
+<div class="flex-grow border-t border-twilight-border/70"></div>
+<span class="flex-shrink mx-3 text-xs uppercase font-medium text-slate-400 tracking-wider">or</span>
+<div class="flex-grow border-t border-twilight-border/70"></div>
+</div>
+<!-- Secondary Action: Join SACCO Button -->
+<div>
+<button class="w-full bg-twilight-card/60 hover:bg-twilight-card text-slate-200 hover:text-white font-medium py-3.5 px-4 rounded-xl border border-twilight-border hover:border-slate-500 transition-all duration-150 flex items-center justify-center active:scale-[0.99]" type="button">
+<span class="text-sm font-medium">Join the SACCO</span>
+</button>
+</div>
+</div>
+<!-- Tertiary Footer Link -->
+<footer class="pt-6 pb-2 text-center">
+<a class="inline-block text-xs font-medium text-slate-400 hover:text-brand-orange transition-colors duration-150" href="#">
+          Admin sign in
+        </a>
+</footer>
+</main>
+<!-- END: FormContentSection -->
+<!-- BEGIN: iOSHomeIndicator -->
+<!-- Home Bar Indicator for modern iOS device screen -->
+<div class="w-full flex justify-center pb-2 pt-1 pointer-events-none">
+<div class="w-32 h-1 bg-slate-600/60 rounded-full"></div>
+</div>
+<!-- END: iOSHomeIndicator -->
+</div>
+<!-- END: MobileDeviceContainer -->
+<!-- Interactivity for Password Visibility Toggle -->
+<script data-purpose="password-toggle-behavior">
+    const toggleBtn = document.getElementById('passwordToggleBtn');
+    const pwdInput = document.getElementById('password');
+
+    if (toggleBtn && pwdInput) {
+      toggleBtn.addEventListener('click', () => {
+        const isPassword = pwdInput.type === 'password';
+        pwdInput.type = isPassword ? 'text' : 'password';
+        toggleBtn.classList.toggle('text-brand-orange', isPassword);
+      });
+    }
+  </script>
+
+
+</body></html>

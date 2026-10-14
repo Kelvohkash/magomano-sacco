@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from 'react'
-import { Clock3, FileText, HandCoins, Landmark, LogOut, Menu, Moon, RefreshCw, Sun, UserRound, Wallet, X } from 'lucide-react'
+import { Activity, Clock3, FileText, HandCoins, Landmark, LogOut, Menu, PiggyBank, RefreshCw, UserRound, Wallet, X } from 'lucide-react'
 import type { MemberView } from '../../types'
 
 interface MemberHeaderProps {
@@ -9,8 +9,6 @@ interface MemberHeaderProps {
   menuOpen: boolean
   setMenuOpen: Dispatch<SetStateAction<boolean>>
   onLogout: () => void
-  forceLightAppearance: boolean
-  onToggleLightAppearance: () => void
   isSyncing?: boolean
   syncError?: string
   onSync?: () => void
@@ -23,16 +21,10 @@ export function MemberHeader({
   menuOpen,
   setMenuOpen,
   onLogout,
-  forceLightAppearance,
-  onToggleLightAppearance,
   isSyncing = false,
   syncError = '',
   onSync,
 }: MemberHeaderProps) {
-  const appearanceLabel = forceLightAppearance ? 'dark mode' : 'light mode'
-  const AppearanceIcon = forceLightAppearance ? Moon : Sun
-  const appearanceAction = `Switch to ${appearanceLabel}`
-
   return (
     <header className="dashboard-header">
       <a className="dashboard-brand brand" href="/" aria-label="Magomano County Sacco dashboard">
@@ -71,6 +63,22 @@ export function MemberHeader({
         </button>
         <button
           type="button"
+          aria-current={view === 'savings' ? 'page' : undefined}
+          className={view === 'savings' ? 'active' : ''}
+          onClick={() => setView('savings')}
+        >
+          <PiggyBank size={17} /> Savings
+        </button>
+        <button
+          type="button"
+          aria-current={view === 'activity' ? 'page' : undefined}
+          className={view === 'activity' ? 'active' : ''}
+          onClick={() => setView('activity')}
+        >
+          <Activity size={17} /> Activity
+        </button>
+        <button
+          type="button"
           aria-current={view === 'account-info' ? 'page' : undefined}
           className={view === 'account-info' ? 'active' : ''}
           onClick={() => setView('account-info')}
@@ -90,16 +98,6 @@ export function MemberHeader({
       <div className="member-greeting">
         <span className="member-avatar">{firstName.slice(0, 1).toUpperCase()}</span>
         <span>{firstName}</span>
-        <button
-          type="button"
-          className="member-theme-toggle"
-          aria-label={appearanceAction}
-          aria-pressed={forceLightAppearance}
-          title={appearanceAction}
-          onClick={onToggleLightAppearance}
-        >
-          <AppearanceIcon size={17} /> <span>{appearanceLabel}</span>
-        </button>
         <button type="button" className="admin-signout member-desktop-signout" onClick={onLogout}>
           <LogOut size={16} /> Sign out
         </button>
@@ -125,6 +123,12 @@ export function MemberHeader({
           <button type="button" onClick={() => { setView('loan-status'); setMenuOpen(false) }}>
             <Clock3 size={17} /> Loan application status
           </button>
+          <button type="button" onClick={() => { setView('savings'); setMenuOpen(false) }}>
+            <PiggyBank size={17} /> Savings
+          </button>
+          <button type="button" onClick={() => { setView('activity'); setMenuOpen(false) }}>
+            <Activity size={17} /> Activity and statements
+          </button>
           <button type="button" onClick={() => { setView('account-info'); setMenuOpen(false) }}>
             <UserRound size={17} /> Account info
           </button>
@@ -147,14 +151,6 @@ export function MemberHeader({
               {syncError}
             </div>
           )}
-          <button
-            type="button"
-            className="member-theme-menu-item"
-            aria-pressed={forceLightAppearance}
-            onClick={onToggleLightAppearance}
-          >
-            <AppearanceIcon size={17} /> {appearanceLabel}
-          </button>
           <button type="button" onClick={onLogout}>
             <LogOut size={17} /> Sign out
           </button>
@@ -163,4 +159,3 @@ export function MemberHeader({
     </header>
   )
 }
-

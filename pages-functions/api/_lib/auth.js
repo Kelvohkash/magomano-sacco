@@ -28,10 +28,11 @@ export async function handleAuth(path, request, env) {
           SELECT username, display_name AS displayName, role FROM admins WHERE id = ?
       `).bind(session.adminId).first()
         return json(admin
-          ? { authenticated: true, role: 'admin', isSuperAdmin: admin.role === 'superadmin', admin }
+          ? { authenticated: true, role: 'admin', isSuperAdmin: admin.role === 'superadmin', admin,
+            cacheScope: `admin:${session.adminId}` }
           : { authenticated: false })
       }
-    return json({ authenticated: true, role: 'member' })
+    return json({ authenticated: true, role: 'member', cacheScope: `member:${session.memberId}` })
   }
 
   if (path === '/auth/register' && request.method === 'POST') {

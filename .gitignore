@@ -16,6 +16,10 @@ data/
 .dev.vars
 .dev.vars.*
 _worker.bundle
+android/.gradle/
+android/local.properties
+android/build/
+android/app/build/
 
 # Editor directories and files
 .vscode/*

@@ -113,12 +113,15 @@ async function startSession(env, request, response, session) {
       VALUES (?, ?, ?, ?, ?)
     `).bind(await sha256(token), session.role, session.memberId ?? null, session.adminId ?? null, expiresAt),
   ])
-  response.headers.append('Set-Cookie', `${SESSION_COOKIE}=${token}; HttpOnly; Path=/; SameSite=Strict; Max-Age=${SESSION_TTL_SECONDS}${new URL(request.url).protocol === 'https:' ? '; Secure' : ''}`)
+  const capacitorOrigin = request.headers.get('Origin') === 'https://localhost'
+  const secure = new URL(request.url).protocol === 'https:' || capacitorOrigin
+  response.headers.append('Set-Cookie', `${SESSION_COOKIE}=${token}; HttpOnly; Path=/; SameSite=${capacitorOrigin ? 'None' : 'Strict'}; Max-Age=${SESSION_TTL_SECONDS}${secure ? '; Secure' : ''}`)
   return response
 }
 export function withSessionCookie(response, request, token = '') {
-  const secure = new URL(request.url).protocol === 'https:' ? '; Secure' : ''
-  response.headers.append('Set-Cookie', `${SESSION_COOKIE}=${token}; HttpOnly; Path=/; SameSite=Strict; Max-Age=${token ? SESSION_TTL_SECONDS : 0}${secure}`)
+  const capacitorOrigin = request.headers.get('Origin') === 'https://localhost'
+  const secure = new URL(request.url).protocol === 'https:' || capacitorOrigin ? '; Secure' : ''
+  response.headers.append('Set-Cookie', `${SESSION_COOKIE}=${token}; HttpOnly; Path=/; SameSite=${capacitorOrigin ? 'None' : 'Strict'}; Max-Age=${token ? SESSION_TTL_SECONDS : 0}${secure}`)
   return response
 }
 
@@ -142,8 +145,9 @@ export async function loginSession(env, request, body, role, row) {
         displayName: row.display_name,
         isSuperAdmin: row.role === 'superadmin',
       },
+      cacheScope: `admin:${row.id}`,
     }
-    : { member: { nationalId: row.national_id, fullName: row.full_name } })
+    : { member: { nationalId: row.national_id, fullName: row.full_name }, cacheScope: `member:${row.id}` })
   await startSession(env, request, response, role === 'admin'
     ? { role, adminId: row.id }
     : { role, memberId: row.id })

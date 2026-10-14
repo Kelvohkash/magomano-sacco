@@ -19,7 +19,20 @@ This repository is connected to the `magomano-sacco` Cloudflare Pages project on
 
 Magomano SACCO is an installable Progressive Web App. On desktop, open the deployed HTTPS site in Chrome or Edge and use the install icon in the address bar (or the browser menu's **Install Magomano SACCO** action). On Android, use the browser menu's **Install app** or **Add to Home screen** action. On iPhone or iPad, open the site in Safari, tap **Share**, then **Add to Home Screen**.
 
-The app shell and static assets are cached for offline startup. Account requests and API responses are not cached; signing in and viewing or changing account data still require a connection.
+The PWA shell and static assets are cached for offline startup. In the Android app, authorized GET responses are stored in encrypted SQLite and checked with account-scoped revision IDs. When the server revision is unchanged, the API returns `304 Not Modified` without sending the response body again. Changed data is fetched from the existing API and replaces its cached response. Mutations such as loan applications and profile edits always go to the server; they require a connection and are never queued locally.
+
+## Android APK
+
+The Android app uses Capacitor 8 and `@capacitor-community/sqlite` with SQLCipher encryption. The default API origin is `https://magomano-sacco.pages.dev`; set `VITE_API_BASE_URL` at build time if the Pages deployment uses another hostname. The native API bridge sends session cookies to that origin and the Pages Function allows credentialed requests from the Capacitor Android origin (`https://localhost`).
+
+Apply migration `0017_sync_revisions.sql` to the remote D1 database before deploying the updated API. Then build a debug APK with:
+
+```sh
+npx wrangler d1 migrations apply magomano-db --remote
+npm run android:apk
+```
+
+The APK is written to `android/app/build/outputs/apk/debug/app-debug.apk`. Building requires Android Studio command line tools, an Android SDK, and JDK 21 (required by Capacitor 8). A release APK should be built and signed separately for distribution.
 
 Apply the migration to the existing remote database before deploying these API changes:
 

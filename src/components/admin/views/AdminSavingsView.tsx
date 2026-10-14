@@ -39,7 +39,7 @@ export function AdminSavingsView({ statementRefreshKey, onRecordsChanged }: { st
         <span className="view-intro-icon"><WalletCards size={20} /></span>
       </div>
       <section className="terms-editor-card interest-disbursement-card">
-        <div className="terms-editor-header"><div><h3>Interest held by the SACCO</h3><p>Interest received from member repayments is tracked separately from member savings.</p></div><strong>{currency.format(interest.available)}</strong></div>
+        <div className="terms-editor-header"><div><h3>Interest </h3><p>Interest received from member repayments is tracked separately from member savings.</p></div><strong>{currency.format(interest.available)}</strong></div>
         <form className="member-popup-form" onSubmit={(event) => void disburse(event)}>
           <label>Amount to disburse<input type="number" min="0.01" max={interest.available} step="0.01" value={amount} onChange={(event) => setAmount(event.target.value)} required /></label>
           <label>Description<input maxLength={120} value={description} onChange={(event) => setDescription(event.target.value)} placeholder="Interest payout" /></label>

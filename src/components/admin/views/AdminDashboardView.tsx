@@ -37,10 +37,7 @@ export function AdminDashboardView({
     <div className="admin-view-panel overview-panel">
       <div className="view-intro-header">
         <div>
-          <h1 className="view-page-title">SACCO Financial Overview</h1>
-          <p className="view-page-desc">
-            Organization-wide balance totals, active credit facilities, and review queues.
-          </p>
+          <h1 className="view-page-title">Sacco Financial Overview</h1>
         </div>
         <div className="view-intro-meta">
           <span className="timestamp-badge">
@@ -124,7 +121,6 @@ export function AdminDashboardView({
                 </strong>
                 <span className="queue-unit">accounts pending review</span>
               </div>
-              <p className="queue-desc">New member registrations awaiting ID and verification before access.</p>
             </div>
             <button
               type="button"
@@ -144,7 +140,7 @@ export function AdminDashboardView({
               <ClipboardList size={22} />
             </div>
             <div className="queue-content">
-              <span className="queue-label">LOAN FACILITY APPLICATIONS</span>
+              <span className="queue-label">LOAN APPLICATIONS</span>
               <div className="queue-count-row">
                 <strong className="queue-count">
                   <AnimatedFigure
@@ -154,7 +150,6 @@ export function AdminDashboardView({
                 </strong>
                 <span className="queue-unit">applications submitted</span>
               </div>
-              <p className="queue-desc">Credit applications awaiting committee evaluation and issuance.</p>
             </div>
             <button
               type="button"

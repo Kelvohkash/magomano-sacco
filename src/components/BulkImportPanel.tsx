@@ -200,7 +200,6 @@ export function BulkImportPanel({ onImported }: BulkImportPanelProps) {
       <label className="csv-dropzone">
         <FileUp size={22} />
         <span>{fileName || 'Choose a CSV file to preview'}</span>
-        <small>CSV only · up to 400 rows · date format YYYY-MM-DD</small>
         <input type="file" accept=".csv,text/csv" onChange={handleFileChange} />
       </label>
 

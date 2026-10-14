@@ -182,10 +182,7 @@ export function AdminTermsView({
 
       <div className="view-intro-header">
         <div>
-          <h1 className="view-page-title">Member Terms &amp; SACCO By-Laws</h1>
-          <p className="view-page-desc">
-            Draft, update, and publish official rules and credit terms presented to members on registration and within their account.
-          </p>
+          <h1 className="view-page-title">Member Terms &amp; Conditions</h1>
         </div>
         {termsUpdatedAt && (
           <div className="view-intro-meta">
@@ -197,8 +194,7 @@ export function AdminTermsView({
       <form className="terms-editor-card" onSubmit={onSaveTerms}>
         <div className="terms-editor-header">
           <div>
-            <h3>Published SACCO Terms &amp; Policies</h3>
-            <p>Enter the legally binding rules governing member savings, loans, and guarantees.</p>
+            <h3>Published Sacco Terms &amp; Policies</h3>
           </div>
           <span className="char-counter">{terms.length} / 20,000 characters</span>
         </div>
@@ -214,7 +210,7 @@ export function AdminTermsView({
           rows={16}
           maxLength={20000}
           minLength={20}
-          placeholder="Enter the official SACCO terms and conditions..."
+          placeholder="Enter the official Sacco terms and conditions..."
           required
         />
 

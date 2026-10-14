@@ -73,9 +73,9 @@ export function AdminLoansView({
     <div className="admin-view-panel">
       <div className="view-intro-header">
         <div>
-          <h1 className="view-page-title">Loan Applications &amp; Credit Facilities</h1>
+          <h1 className="view-page-title">Loan Applications</h1>
           <p className="view-page-desc">
-            Review incoming borrowing requests, inspect electronic signatures, and print official facility agreements.
+            Review incoming borrowing requests, inspect electronic signatures and print Loan applications.
           </p>
         </div>
         <div className="view-intro-meta">

@@ -84,9 +84,9 @@ export function AdminMembersView({
     <div className="admin-view-panel">
       <div className="view-intro-header">
         <div>
-          <h1 className="view-page-title">Member Accounts Directory</h1>
+          <h1 className="view-page-title">Member Accounts </h1>
           <p className="view-page-desc">
-            Manage member verification, contact details, bank accounts, and role permissions.
+            Manage member verification, contact details, bank accounts and role permissions.
           </p>
         </div>
         <div className="view-intro-meta">

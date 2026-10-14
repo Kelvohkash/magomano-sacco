@@ -1,0 +1,268 @@
+﻿memberIdentifier,transactionType,amount,description,date
+A/005,savings,1500,Savings,2026-07-31
+A/011,savings,1000,Savings,2026-07-31
+A/025,savings,500,Savings,2026-07-31
+A/027,savings,500,Savings,2026-07-31
+A/045,savings,1500,Savings,2026-07-31
+A/053,savings,200,Savings,2026-07-31
+A/077,savings,200,Savings,2026-07-31
+A/082,savings,700,Savings,2026-07-31
+A/083,savings,500,Savings,2026-07-31
+B/009,savings,200,Savings,2026-07-31
+B/048,savings,500,Savings,2026-07-31
+B/049,savings,2000,Savings,2026-07-31
+B/066,savings,2000,Savings,2026-07-31
+B/069,savings,500,Savings,2026-07-31
+B/077,savings,200,Savings,2026-07-31
+C/003,savings,500,Savings,2026-07-31
+C/022,savings,200,Savings,2026-07-31
+C/023,savings,1500,Savings,2026-07-31
+C/050,savings,500,Savings,2026-07-31
+C/061,savings,200,Savings,2026-07-31
+C/066,savings,200,Savings,2026-07-31
+C/076,savings,500,Savings,2026-07-31
+C/079,savings,5000,Savings,2026-07-31
+C/082,savings,1000,Savings,2026-07-31
+D/002,savings,5000,Savings,2026-07-31
+D/008,savings,1500,Savings,2026-07-31
+D/035,savings,500,Savings,2026-07-31
+D/039,savings,200,Savings,2026-07-31
+D/047,savings,500,Savings,2026-07-31
+D/061,savings,200,Savings,2026-07-31
+D/063,savings,2000,Savings,2026-07-31
+D/082,savings,300,Savings,2026-07-31
+D/089,savings,1000,Savings,2026-07-31
+D/101,savings,500,Savings,2026-07-31
+E/001,savings,5000,Savings,2026-07-31
+E/011,savings,1000,Savings,2026-07-31
+E/012,savings,2000,Savings,2026-07-31
+E/047,savings,1000,Savings,2026-07-31
+E/057,savings,500,Savings,2026-07-31
+E/070,savings,500,Savings,2026-07-31
+E/078,savings,1000,Savings,2026-07-31
+E/080,savings,3000,Savings,2026-07-31
+E/083,savings,500,Savings,2026-07-31
+E/090,savings,1000,Savings,2026-07-31
+E/095,savings,1000,Savings,2026-07-31
+E/096,savings,3000,Savings,2026-07-31
+E/097,savings,500,Savings,2026-07-31
+E/098,savings,500,Savings,2026-07-31
+E/100,savings,500,Savings,2026-07-31
+F/030,savings,1000,Savings,2026-07-31
+F/045,savings,1000,Savings,2026-07-31
+F/055,savings,1000,Savings,2026-07-31
+G/003,savings,1000,Savings,2026-07-31
+G/014,savings,3000,Savings,2026-07-31
+G/035,savings,500,Savings,2026-07-31
+G/047,savings,200,Savings,2026-07-31
+G/059,savings,1500,Savings,2026-07-31
+G/061,savings,200,Savings,2026-07-31
+I/020,savings,500,Savings,2026-07-31
+I/024,savings,1000,Savings,2026-07-31
+I/026,savings,500,Savings,2026-07-31
+J/009,savings,1000,Savings,2026-07-31
+J/014,savings,1000,Savings,2026-07-31
+J/016,savings,200,Savings,2026-07-31
+J/028,savings,3000,Savings,2026-07-31
+J/030,savings,2000,Savings,2026-07-31
+J/036,savings,200,Savings,2026-07-31
+J/074,savings,500,Savings,2026-07-31
+J/082,savings,200,Savings,2026-07-31
+J/088,savings,500,Savings,2026-07-31
+J/096,savings,200,Savings,2026-07-31
+J/098,savings,2000,Savings,2026-07-31
+J/120,savings,500,Savings,2026-07-31
+J/124,savings,2000,Savings,2026-07-31
+J/128,savings,200,Savings,2026-07-31
+J/132,savings,2000,Savings,2026-07-31
+J/145,savings,500,Savings,2026-07-31
+J/153,savings,1000,Savings,2026-07-31
+J/175,savings,500,Savings,2026-07-31
+K/024,savings,2000,Savings,2026-07-31
+K/029,savings,1000,Savings,2026-07-31
+K/034,savings,500,Savings,2026-07-31
+K/348,savings,200,Savings,2026-07-31
+K/349,savings,500,Savings,2026-07-31
+K/353,savings,500,Savings,2026-07-31
+K/355,savings,500,Savings,2026-07-31
+K/357,savings,1000,Savings,2026-07-31
+K/359,savings,200,Savings,2026-07-31
+K/360,savings,300,Savings,2026-07-31
+K/361,savings,1000,Savings,2026-07-31
+L/019,savings,500,Savings,2026-07-31
+L/026,savings,1000,Savings,2026-07-31
+L/027,savings,1000,Savings,2026-07-31
+L/032,savings,1000,Savings,2026-07-31
+L/033,savings,1000,Savings,2026-07-31
+L/038,savings,200,Savings,2026-07-31
+L/043,savings,1000,Savings,2026-07-31
+L/044,savings,500,Savings,2026-07-31
+M/006,savings,200,Savings,2026-07-31
+M/024,savings,1000,Savings,2026-07-31
+M/095,savings,200,Savings,2026-07-31
+M/109,savings,1000,Savings,2026-07-31
+M/113,savings,200,Savings,2026-07-31
+M/115,savings,1000,Savings,2026-07-31
+M/122,savings,1000,Savings,2026-07-31
+M/123,savings,500,Savings,2026-07-31
+M/124,savings,1000,Savings,2026-07-31
+M/132,savings,2000,Savings,2026-07-31
+M/133,savings,1000,Savings,2026-07-31
+M/137,savings,6000,Savings,2026-07-31
+M/143,savings,1000,Savings,2026-07-31
+M/146,savings,1000,Savings,2026-07-31
+M/150,savings,300,Savings,2026-07-31
+M/151,savings,500,Savings,2026-07-31
+M/158,savings,200,Savings,2026-07-31
+M/160,savings,1000,Savings,2026-07-31
+N/037,savings,500,Savings,2026-07-31
+N/044,savings,500,Savings,2026-07-31
+O/005,savings,500,Savings,2026-07-31
+O/008,savings,200,Savings,2026-07-31
+P/002,savings,500,Savings,2026-07-31
+P/003,savings,500,Savings,2026-07-31
+P/039,savings,500,Savings,2026-07-31
+P/040,savings,1000,Savings,2026-07-31
+P/050,savings,1000,Savings,2026-07-31
+P/062,savings,200,Savings,2026-07-31
+P/066,savings,200,Savings,2026-07-31
+P/069,savings,2000,Savings,2026-07-31
+P/074,savings,1000,Savings,2026-07-31
+P/083,savings,1000,Savings,2026-07-31
+P/084,savings,1000,Savings,2026-07-31
+P/088,savings,500,Savings,2026-07-31
+P/089,savings,500,Savings,2026-07-31
+P/090,savings,500,Savings,2026-07-31
+P/091,savings,1000,Savings,2026-07-31
+P/093,savings,1000,Savings,2026-07-31
+P/094,savings,400,Savings,2026-07-31
+R/001,savings,1000,Savings,2026-07-31
+R/015,savings,300,Savings,2026-07-31
+R/038,savings,200,Savings,2026-07-31
+R/039,savings,300,Savings,2026-07-31
+R/042,savings,500,Savings,2026-07-31
+R/043,savings,1000,Savings,2026-07-31
+R/046,savings,1000,Savings,2026-07-31
+R/047,savings,1000,Savings,2026-07-31
+R/051,savings,4000,Savings,2026-07-31
+R/053,savings,1000,Savings,2026-07-31
+S/001,savings,3000,Savings,2026-07-31
+S/011,savings,300,Savings,2026-07-31
+S/027,savings,500,Savings,2026-07-31
+S/036,savings,300,Savings,2026-07-31
+S/078,savings,500,Savings,2026-07-31
+S/082,savings,1000,Savings,2026-07-31
+S/083,savings,500,Savings,2026-07-31
+S/086,savings,1000,Savings,2026-07-31
+S/087,savings,1000,Savings,2026-07-31
+S/095,savings,200,Savings,2026-07-31
+S/099,savings,500,Savings,2026-07-31
+S/101,savings,1500,Savings,2026-07-31
+S/104,savings,500,Savings,2026-07-31
+T/003,savings,500,Savings,2026-07-31
+T/011,savings,1000,Savings,2026-07-31
+T/012,savings,1400,Savings,2026-07-31
+T/014,savings,500,Savings,2026-07-31
+T/018,savings,1000,Savings,2026-07-31
+T/019,savings,3000,Savings,2026-07-31
+V/002,savings,200,Savings,2026-07-31
+V/006,savings,300,Savings,2026-07-31
+V/021,savings,2000,Savings,2026-07-31
+V/022,savings,200,Savings,2026-07-31
+V/026,savings,1500,Savings,2026-07-31
+W/001,savings,3000,Savings,2026-07-31
+W/002,savings,500,Savings,2026-07-31
+Z/891,savings,2500,Savings,2026-07-31
+A/011,repayment,6682.25,Loan repayment,2026-07-31
+A/025,repayment,3300,Loan repayment,2026-07-31
+A/053,repayment,2108.34,Loan repayment,2026-07-31
+A/077,repayment,1650,Loan repayment,2026-07-31
+B/009,repayment,6600,Loan repayment,2026-07-31
+B/048,repayment,2291.67,Loan repayment,2026-07-31
+B/049,repayment,4812.5,Loan repayment,2026-07-31
+B/066,repayment,1650,Loan repayment,2026-07-31
+C/003,repayment,2200,Loan repayment,2026-07-31
+C/022,repayment,11169.1,Loan repayment,2026-07-31
+C/023,repayment,2520.84,Loan repayment,2026-07-31
+C/050,repayment,1540,Loan repayment,2026-07-31
+C/066,repayment,3300,Loan repayment,2026-07-31
+D/002,repayment,25666.67,Loan repayment,2026-07-31
+D/008,repayment,3208.34,Loan repayment,2026-07-31
+D/035,repayment,2200,Loan repayment,2026-07-31
+D/035,repayment,3300,Loan repayment,2026-07-31
+D/039,repayment,5500,Loan repayment,2026-07-31
+D/061,repayment,1375,Loan repayment,2026-07-31
+D/063,repayment,3666.67,Loan repayment,2026-07-31
+D/082,repayment,2566.67,Loan repayment,2026-07-31
+E/001,repayment,7700,Loan repayment,2026-07-31
+E/047,repayment,6875,Loan repayment,2026-07-31
+E/078,repayment,2200,Loan repayment,2026-07-31
+E/083,repayment,1925,Loan repayment,2026-07-31
+E/095,repayment,1100,Loan repayment,2026-07-31
+E/096,repayment,1100,Loan repayment,2026-07-31
+E/098,repayment,1100,Loan repayment,2026-07-31
+E/100,repayment,2200,Loan repayment,2026-07-31
+F/045,repayment,3300,Loan repayment,2026-07-31
+G/003,repayment,4468.75,Loan repayment,2026-07-31
+G/014,repayment,4984.38,Loan repayment,2026-07-31
+G/035,repayment,2200,Loan repayment,2026-07-31
+G/047,repayment,3712.5,Loan repayment,2026-07-31
+G/059,repayment,1512.5,Loan repayment,2026-07-31
+G/061,repayment,2200,Loan repayment,2026-07-31
+J/009,repayment,5500,Loan repayment,2026-07-31
+J/030,repayment,9428.57,Loan repayment,2026-07-31
+J/074,repayment,4583.34,Loan repayment,2026-07-31
+J/088,repayment,2750,Loan repayment,2026-07-31
+J/120,repayment,4400,Loan repayment,2026-07-31
+J/124,repayment,3300,Loan repayment,2026-07-31
+J/128,repayment,3116.67,Loan repayment,2026-07-31
+J/132,repayment,1100,Loan repayment,2026-07-31
+J/145,repayment,1100,Loan repayment,2026-07-31
+J/153,repayment,1466.67,Loan repayment,2026-07-31
+J/175,repayment,5500,Loan repayment,2026-07-31
+K/024,repayment,10240.48,Loan repayment,2026-07-31
+K/034,repayment,3080,Loan repayment,2026-07-31
+K/348,repayment,2200,Loan repayment,2026-07-31
+K/349,repayment,8250,Loan repayment,2026-07-31
+K/357,repayment,1540,Loan repayment,2026-07-31
+L/026,repayment,4840,Loan repayment,2026-07-31
+L/027,repayment,2933.34,Loan repayment,2026-07-31
+M/006,repayment,6525,Loan repayment,2026-07-31
+M/024,repayment,2200,Loan repayment,2026-07-31
+M/095,repayment,3300,Loan repayment,2026-07-31
+M/109,repayment,4537.5,Loan repayment,2026-07-31
+M/122,repayment,4400,Loan repayment,2026-07-31
+M/123,repayment,9166.67,Loan repayment,2026-07-31
+M/133,repayment,5500,Loan repayment,2026-07-31
+M/143,repayment,2200,Loan repayment,2026-07-31
+N/037,repayment,1925,Loan repayment,2026-07-31
+O/005,repayment,3972.22,Loan repayment,2026-07-31
+O/008,repayment,3300,Loan repayment,2026-07-31
+P/050,repayment,5578.58,Loan repayment,2026-07-31
+P/062,repayment,11000,Loan repayment,2026-07-31
+P/066,repayment,6829.17,Loan repayment,2026-07-31
+P/069,repayment,2200,Loan repayment,2026-07-31
+P/093,repayment,2200,Loan repayment,2026-07-31
+R/001,repayment,4400,Loan repayment,2026-07-31
+R/015,repayment,1833.34,Loan repayment,2026-07-31
+R/042,repayment,8014.29,Loan repayment,2026-07-31
+R/047,repayment,3300,Loan repayment,2026-07-31
+S/001,repayment,5500,Loan repayment,2026-07-31
+S/011,repayment,2640,Loan repayment,2026-07-31
+S/027,repayment,3300,Loan repayment,2026-07-31
+S/036,repayment,4400,Loan repayment,2026-07-31
+S/078,repayment,1257.15,Loan repayment,2026-07-31
+S/082,repayment,1100,Loan repayment,2026-07-31
+S/083,repayment,2933.34,Loan repayment,2026-07-31
+S/086,repayment,3666.67,Loan repayment,2026-07-31
+S/087,repayment,1375,Loan repayment,2026-07-31
+T/003,repayment,3080,Loan repayment,2026-07-31
+T/011,repayment,1375,Loan repayment,2026-07-31
+T/012,repayment,2050.12,Loan repayment,2026-07-31
+T/018,repayment,3142.86,Loan repayment,2026-07-31
+V/006,repayment,1375,Loan repayment,2026-07-31
+V/006,repayment,1283.34,Loan repayment,2026-07-31
+V/018,repayment,3666.67,Loan repayment,2026-07-31
+V/022,repayment,1100,Loan repayment,2026-07-31
+W/001,repayment,5024.03,Loan repayment,2026-07-31
+W/002,repayment,3666.67,Loan repayment,2026-07-31

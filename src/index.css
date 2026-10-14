@@ -4,24 +4,32 @@
   text-size-adjust: 100% !important;
   -moz-text-size-adjust: 100% !important;
   font-family: 'Manrope', 'Avenir Next', Avenir, 'Segoe UI', sans-serif;
-  color: #203331;
-  background: #f7f8f5;
+  color: #0f172a;
+  background: #f8fafc;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-optical-sizing: auto;
   font-weight: 400;
-  --ink: #203331;
-  --muted: #78817e;
-  --line: #e3e8e4;
-  --paper: #f7f8f5;
+  --ink: #0f172a;
+  --muted: #64748b;
+  --line: #e2e8f0;
+  --paper: #f8fafc;
   --white: #fff;
-  --forest: #153d3a;
-  --forest-deep: #102e2c;
-  --leaf: #b8d882;
-  --coral: #d8795c;
-  --focus: #287a70;
+  --forest: #1d4ed8;
+  --forest-deep: #0f2b5c;
+  --leaf: #3b82f6;
+  --coral: #ea580c;
+  --focus: #2563eb;
+  --sacco-blue: #1d4ed8;
+  --sacco-blue-hover: #1e40af;
+  --sacco-blue-dark: #0f2b5c;
+  --sacco-blue-light: #eff6ff;
+  --sacco-orange: #ea580c;
+  --sacco-orange-hover: #c2410c;
+  --sacco-orange-vibrant: #f97316;
+  --sacco-orange-light: #fff7ed;
 }
 
 * { box-sizing: border-box; }

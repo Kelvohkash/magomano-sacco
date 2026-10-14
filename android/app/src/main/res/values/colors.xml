@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Magomano SACCO brand colours -->
+    <color name="colorPrimary">#153d3a</color>
+    <color name="colorPrimaryDark">#0d2928</color>
+    <color name="colorAccent">#c8a96b</color>
+    <color name="splashBackground">#153d3a</color>
+</resources>

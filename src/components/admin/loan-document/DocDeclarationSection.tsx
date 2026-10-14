@@ -20,7 +20,7 @@ export function DocDeclarationSection({ application }: DocDeclarationSectionProp
       <div className="doc-declaration-wrapper">
         <p className="declaration-legal-text">
           I hereby declare that the information provided in this application is true, accurate and complete.
-          I authorize Magomano Sacco to recover any outstanding loan installments directly from my salary in accordance
+          I authorize Magomano County Sacco to recover any outstanding loan installments directly from my salary in accordance
            with the SACCO laws.
           I confirm that my accumulated member savings constitute valid security for this loan.
         </p>

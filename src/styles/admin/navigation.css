@@ -1,5 +1,5 @@
 /* ==========================================================================
-   2. MAIN CONTAINER & SIDEBAR NAVIGATION
+   2. MAIN CONTAINER & SIDEBAR NAVIGATION — MAGOMANO COUNTY SACCO
    ========================================================================== */
 
 .admin-main-container {
@@ -57,9 +57,9 @@
 }
 
 .admin-nav-link.active {
-  background: linear-gradient(90deg, rgba(16, 185, 129, 0.18) 0%, rgba(16, 185, 129, 0.08) 100%);
-  border-color: rgba(16, 185, 129, 0.3);
-  color: #34d399;
+  background: linear-gradient(90deg, rgba(29, 78, 216, 0.22) 0%, rgba(29, 78, 216, 0.1) 100%);
+  border-color: rgba(29, 78, 216, 0.4);
+  color: #93c5fd;
   font-weight: 700;
 }
 
@@ -73,7 +73,7 @@
 
 .admin-nav-link:hover .nav-icon-wrap,
 .admin-nav-link.active .nav-icon-wrap {
-  color: #34d399;
+  color: var(--sacco-blue-border);
 }
 
 .admin-nav-link .nav-label {
@@ -83,15 +83,15 @@
 .admin-nav-link .nav-badge-pill {
   padding: 2px 7px;
   border-radius: 12px;
-  background: #f59e0b;
-  color: #000000;
+  background: var(--sacco-orange);
+  color: #ffffff;
   font-size: 11px;
   font-weight: 800;
   line-height: 1;
 }
 
 .admin-nav-link .active-arrow {
-  color: #34d399;
+  color: #93c5fd;
   opacity: 0.8;
 }
 

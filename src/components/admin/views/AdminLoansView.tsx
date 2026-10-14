@@ -1,5 +1,6 @@
 import { useState, type Dispatch, type FormEvent, type SetStateAction } from 'react'
 import {
+  Banknote,
   Check,
   ClipboardList,
   Clock,
@@ -10,6 +11,7 @@ import {
   Plus,
   X,
 } from 'lucide-react'
+import { RowActionDropdown } from '../RowActionDropdown'
 import { AnimatedFigure } from '../../AnimatedFigure'
 import { currency, formatDate } from '../../../format'
 import type { AdminLoanApplication, AdminLoanCreate, AdminMember } from '../../../types'
@@ -223,65 +225,66 @@ export function AdminLoansView({
                       <span>View / Print</span>
                     </button>
 
-                    {app.status === 'pending' && (
-                      <>
-                        <button
-                          type="button"
-                          className="table-btn-edit"
-                          onClick={() => beginApplicationEdit(app)}
-                          title="Edit application details"
-                          aria-label="Edit application details"
-                        >
-                          <Pencil size={14} />
-                        </button>
-                        <button
-                          type="button"
-                          className="table-btn-approve"
-                          onClick={() => onReviewLoan(app.id, 'approve')}
-                          disabled={reviewingId === `loan-${app.id}`}
-                          title="Approve application"
-                          aria-label="Approve application"
-                        >
-                          <Check size={14} />
-                        </button>
-                        <button
-                          type="button"
-                          className="table-btn-reject"
-                          onClick={() => onReviewLoan(app.id, 'reject')}
-                          disabled={reviewingId === `loan-${app.id}`}
-                          title="Reject application"
-                          aria-label="Reject application"
-                        >
-                          <X size={14} />
-                        </button>
-                      </>
-                    )}
-
-                    {app.status === 'approved' && (
-                      <button
-                        type="button"
-                        className="table-btn-approve"
-                        onClick={() => onDisburseLoan(app.id, app.payoutBankName, app.payoutAccountNumber)}
-                        disabled={reviewingId === `disburse-loan-${app.id}`}
-                        title="Record funds as disbursed to the selected bank account"
-                      >
-                        <Check size={14} />
-                        <span>{reviewingId === `disburse-loan-${app.id}` ? 'Recording…' : 'Mark disbursed'}</span>
-                      </button>
-                    )}
-
-                    {['pending', 'rejected'].includes(app.status) && (
-                      <button
-                        type="button"
-                        className="table-btn-delete"
-                        onClick={() => void removeApplication(app)}
-                        disabled={reviewingId === `delete-loan-${app.id}`}
-                        title="Delete application"
-                        aria-label="Delete application"
-                      >
-                        <Trash2 size={14} />
-                      </button>
-                    )}
+                    <RowActionDropdown
+                      items={[
+                        ...(app.status === 'pending'
+                          ? [
+                              {
+                                id: `approve-loan-${app.id}`,
+                                label: 'Approve Loan',
+                                sublabel: `Approve ${currency.format(app.requestedAmount)} (${app.repaymentMonths} mos)`,
+                                icon: <Check size={15} />,
+                                variant: 'success' as const,
+                                disabled: reviewingId === `loan-${app.id}`,
+                                onClick: () => onReviewLoan(app.id, 'approve'),
+                              },
+                              {
+                                id: `reject-loan-${app.id}`,
+                                label: 'Reject Loan',
+                                sublabel: 'Decline this loan application',
+                                icon: <X size={15} />,
+                                variant: 'danger' as const,
+                                disabled: reviewingId === `loan-${app.id}`,
+                                onClick: () => onReviewLoan(app.id, 'reject'),
+                              },
+                              {
+                                id: `edit-loan-${app.id}`,
+                                label: 'Edit Details',
+                                sublabel: 'Adjust amount, term or payout info',
+                                icon: <Pencil size={15} />,
+                                variant: 'default' as const,
+                                onClick: () => beginApplicationEdit(app),
+                              },
+                            ]
+                          : []),
+                        ...(app.status === 'approved'
+                          ? [
+                              {
+                                id: `disburse-loan-${app.id}`,
+                                label: reviewingId === `disburse-loan-${app.id}` ? 'Recording…' : 'Mark Disbursed',
+                                sublabel: `Pay to ${app.payoutBankName || 'Bank'} (${app.payoutAccountNumber || 'Account'})`,
+                                icon: <Banknote size={15} />,
+                                variant: 'orange' as const,
+                                disabled: reviewingId === `disburse-loan-${app.id}`,
+                                onClick: () => onDisburseLoan(app.id, app.payoutBankName, app.payoutAccountNumber),
+                              },
+                            ]
+                          : []),
+                        ...(['pending', 'rejected'].includes(app.status)
+                          ? [
+                              {
+                                id: `delete-loan-${app.id}`,
+                                label: 'Delete Application',
+                                sublabel: 'Permanently remove application record',
+                                icon: <Trash2 size={15} />,
+                                variant: 'danger' as const,
+                                disabled: reviewingId === `delete-loan-${app.id}`,
+                                onClick: () => void removeApplication(app),
+                              },
+                            ]
+                          : []),
+                      ]}
+                    />
                   </div>
                 </td>
               </tr>

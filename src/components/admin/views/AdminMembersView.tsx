@@ -1,5 +1,6 @@
 import { useState, type Dispatch, type FormEvent, type SetStateAction } from 'react'
 import {
+  AlertTriangle,
   Check,
   Clock,
   Eye,
@@ -11,6 +12,7 @@ import {
   UserPlus,
   X,
 } from 'lucide-react'
+import { RowActionDropdown } from '../RowActionDropdown'
 import { AnimatedFigure } from '../../AnimatedFigure'
 import type { AdminMember, AdminMemberCreate } from '../../../types'
 
@@ -237,51 +239,62 @@ export function AdminMembersView({
                       <span>View</span>
                     </button>
 
-                    <button
-                      type="button"
-                      className="table-btn-edit"
-                      onClick={() => beginMemberEdit(member)}
-                      title="Edit member"
-                    >
-                      <Pencil size={14} />
-                    </button>
-
-                    {member.accountStatus === 'pending' && (
-                      <>
-                        <button
-                          type="button"
-                          className="table-btn-approve"
-                          onClick={() => onReviewMember(member.id, 'approve')}
-                          disabled={reviewingId === `member-${member.id}`}
-                          title="Approve account"
-                        >
-                          <Check size={14} />
-                        </button>
-                        <button
-                          type="button"
-                          className="table-btn-reject"
-                          onClick={() => onReviewMember(member.id, 'reject')}
-                          disabled={reviewingId === `member-${member.id}`}
-                          title="Reject account"
-                        >
-                          <X size={14} />
-                        </button>
-                      </>
-                    )}
-
-                    {member.accountStatus === 'approved' && <button type="button" className="table-btn-reject" onClick={() => void terminateMember(member)} disabled={terminatingId === member.id} title="Settle savings and loans, then terminate membership">
-                      {terminatingId === member.id ? 'Settling…' : 'Terminate'}
-                    </button>}
-
-                    <button
-                      type="button"
-                      className="table-btn-delete"
-                      onClick={() => void removeMember(member)}
-                      disabled={reviewingId === `delete-member-${member.id}`}
-                      title="Delete account"
-                    >
-                      <Trash2 size={14} />
-                    </button>
+                    <RowActionDropdown
+                      items={[
+                        ...(member.accountStatus === 'pending'
+                          ? [
+                              {
+                                id: `approve-${member.id}`,
+                                label: 'Approve Account',
+                                sublabel: 'Activate SACCO membership',
+                                icon: <Check size={15} />,
+                                variant: 'success' as const,
+                                disabled: reviewingId === `member-${member.id}`,
+                                onClick: () => onReviewMember(member.id, 'approve'),
+                              },
+                              {
+                                id: `reject-${member.id}`,
+                                label: 'Reject Account',
+                                sublabel: 'Decline membership registration',
+                                icon: <X size={15} />,
+                                variant: 'danger' as const,
+                                disabled: reviewingId === `member-${member.id}`,
+                                onClick: () => onReviewMember(member.id, 'reject'),
+                              },
+                            ]
+                          : []),
+                        {
+                          id: `edit-${member.id}`,
+                          label: 'Edit Details',
+                          sublabel: 'Update contact & bank details',
+                          icon: <Pencil size={15} />,
+                          variant: 'default' as const,
+                          onClick: () => beginMemberEdit(member),
+                        },
+                        ...(member.accountStatus === 'approved'
+                          ? [
+                              {
+                                id: `terminate-${member.id}`,
+                                label: terminatingId === member.id ? 'Settling…' : 'Terminate Membership',
+                                sublabel: 'Settle savings & active loans, close account',
+                                icon: <AlertTriangle size={15} />,
+                                variant: 'danger' as const,
+                                disabled: terminatingId === member.id,
+                                onClick: () => void terminateMember(member),
+                              },
+                            ]
+                          : []),
+                        {
+                          id: `delete-${member.id}`,
+                          label: 'Delete Record',
+                          sublabel: 'Permanently remove member from database',
+                          icon: <Trash2 size={15} />,
+                          variant: 'danger' as const,
+                          disabled: reviewingId === `delete-member-${member.id}`,
+                          onClick: () => void removeMember(member),
+                        },
+                      ]}
+                    />
                   </div>
                 </td>
               </tr>

@@ -41,6 +41,7 @@ export interface MemberPortalProps {
   isSyncing: boolean
   syncError: string
   onSync: () => void
+  dataRefreshKey: number
 }
 
 export function MemberPortal({
@@ -65,6 +66,7 @@ export function MemberPortal({
   isSyncing,
   syncError,
   onSync,
+  dataRefreshKey,
 }: MemberPortalProps) {
   const firstName = dashboard.member.full_name.trim().split(/\s+/)[0] || 'Member'
   useLayoutEffect(() => {
@@ -197,6 +199,7 @@ export function MemberPortal({
     repaymentsPage.filters,
     applicationsPage.page,
     applicationsPage.filters,
+    dataRefreshKey,
   ])
 
   function changePage<T>(
@@ -312,4 +315,3 @@ export function MemberPortal({
     </main>
   )
 }
-

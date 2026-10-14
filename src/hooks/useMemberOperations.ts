@@ -15,6 +15,7 @@ export function useMemberOperations() {
   const [loanSubmitting, setLoanSubmitting] = useState(false)
   const [isSyncing, setIsSyncing] = useState(false)
   const [syncError, setSyncError] = useState('')
+  const [memberDataRefreshKey, setMemberDataRefreshKey] = useState(0)
 
   const refreshDashboard = useCallback(async () => {
     const response = await fetch('/api/member/dashboard')
@@ -35,6 +36,7 @@ export function useMemberOperations() {
       requireOnline()
       await forceSync()
       await refreshDashboard()
+      setMemberDataRefreshKey((key) => key + 1)
     } catch (error) {
       setSyncError(requestErrorMessage(error, 'Could not sync. Please try again.'))
     } finally {
@@ -73,6 +75,7 @@ export function useMemberOperations() {
       setLoanMessageSuccess(true)
       setLoanAmount('')
       setLoanPurpose('')
+      setMemberDataRefreshKey((key) => key + 1)
       void refreshDashboard().catch(() => undefined)
       setMemberView('loan-status')
     } catch (error) {
@@ -87,11 +90,13 @@ export function useMemberOperations() {
     setDashboard(null)
     setMemberView('overview')
     setMenuOpen(false)
+    setMemberDataRefreshKey(0)
   }, [])
 
   return {
     dashboard,
     setDashboard,
+    memberDataRefreshKey,
     memberView,
     setMemberView,
     menuOpen,

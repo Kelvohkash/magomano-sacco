@@ -219,7 +219,7 @@ export function MobileAdminDrawer({
           </button>
 
           <div className="drawer-legal-note">
-            <span>Magomano SACCO Core Banking Platform</span>
+            <span>Magomano County Sacco Core Banking Platform</span>
           </div>
         </div>
       </aside>

@@ -38,7 +38,7 @@ export function MemberTermsPage() {
       <article className="member-account-card member-terms-card">
         <div className="member-account-card-heading">
           <span><FileText size={18} /></span>
-          <div><h2>Magomano sacco terms</h2>{updatedAt && <p>Last updated {formatDate(updatedAt)}</p>}</div>
+          <div><h2>Magomano County Sacco terms</h2>{updatedAt && <p>Last updated {formatDate(updatedAt)}</p>}</div>
         </div>
         {error ? <p className="form-message error" role="alert">{error}</p>
           : loading ? <p className="admin-empty">Loading terms and conditions…</p>

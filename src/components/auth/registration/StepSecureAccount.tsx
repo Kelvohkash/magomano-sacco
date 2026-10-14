@@ -127,7 +127,7 @@ export function StepSecureAccount({
             required
             disabled={termsLoading || !terms || !termsVersion}
           />
-          <span>I have read and agree to the current Magomano SACCO terms and conditions.</span>
+          <span>I have read and agree to the current Magomano County Sacco terms and conditions.</span>
         </label>
       </section>
     </section>

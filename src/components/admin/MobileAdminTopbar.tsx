@@ -31,7 +31,7 @@ export function MobileAdminTopbar({
           {pendingCount > 0 && <span className="mobile-admin-btn-badge" />}
         </button>
 
-        <a className="mobile-admin-brand" href="/" aria-label="Magomano SACCO core administration">
+        <a className="mobile-admin-brand" href="/" aria-label="Magomano County Sacco core administration">
           <div className="mobile-admin-brand-crest">
             <Landmark size={18} strokeWidth={2.4} />
           </div>

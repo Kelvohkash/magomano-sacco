@@ -16,12 +16,12 @@ export function AdminTopbar({
   return (
     <header className="admin-topbar">
       <div className="admin-topbar-left">
-        <a className="admin-topbar-brand" href="/" aria-label="Magomano Sacco administration">
+        <a className="admin-topbar-brand" href="/" aria-label="Magomano County Sacco administration">
           <div className="admin-brand-icon">
             <Landmark size={20} strokeWidth={2.2} />
           </div>
           <div className="admin-brand-titles">
-            <span className="brand-title-main">MAGOMANO SACCO</span>
+            <span className="brand-title-main">MAGOMANO COUNTY SACCO</span>
             <span className="brand-title-badge">ADMINISTRATION PORTAL</span>
           </div>
         </a>

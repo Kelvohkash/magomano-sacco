@@ -91,6 +91,7 @@ function App() {
         isSyncing={member.isSyncing}
         syncError={member.syncError}
         onSync={member.syncDashboard}
+        dataRefreshKey={member.memberDataRefreshKey}
       />
     )
     return <MemberPopupLayer messages={member.dashboard.memberMessages}>{memberScreen}</MemberPopupLayer>

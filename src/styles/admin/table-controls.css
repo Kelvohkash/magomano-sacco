@@ -40,8 +40,8 @@
 
 .search-input-wrap input:focus {
   outline: none;
-  border-color: var(--admin-primary);
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+  border-color: var(--sacco-blue);
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
 }
 
 .clear-search {

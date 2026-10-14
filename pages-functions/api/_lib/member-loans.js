@@ -61,13 +61,23 @@ async function applyForLoan(request, session, env) {
   const effectivePurpose = purpose || 'Personal'
   const signedAt = new Date().toISOString().replace('T', ' ').slice(0, 19)
 
-  // Direct insert without re-running expensive nested subqueries
+  // Recheck borrowing capacity in the insert itself so concurrent applications
+  // cannot both pass the earlier read and exceed the member's limit.
   const insertResult = await env.DB.prepare(`
     INSERT INTO loan_applications (
       member_id, requested_amount, repayment_months, purpose, security_type,
       payout_bank_name, payout_bank_branch, payout_account_name, payout_account_number,
       electronic_signature_name, electronically_signed_at
-    ) VALUES (?, ?, ?, ?, 'savings', ?, ?, ?, ?, ?, ?)
+    )
+    SELECT ?, ?, ?, ?, 'savings', ?, ?, ?, ?, ?, ?
+    WHERE ? <= CAST(MAX(0,
+      COALESCE((SELECT SUM(CASE WHEN entry_type = 'deposit' THEN amount ELSE -amount END)
+        FROM savings_transactions WHERE member_id = ?), 0)
+      - COALESCE((SELECT SUM(outstanding_balance)
+        FROM member_loans WHERE member_id = ? AND outstanding_balance > 0), 0)
+      - COALESCE((SELECT SUM(requested_amount * 1.1)
+        FROM loan_applications WHERE member_id = ? AND status IN ('pending', 'approved')), 0)
+    ) * 0.9 * 100 AS INTEGER) / 100.0
   `).bind(
     session.memberId,
     requestedAmount,
@@ -79,7 +89,16 @@ async function applyForLoan(request, session, env) {
     member.accountNumber,
     signatureName,
     signedAt,
+    requestedAmount,
+    session.memberId,
+    session.memberId,
+    session.memberId,
   ).run()
+
+  if (!insertResult.meta.changes) {
+    const latestCapacity = await getMemberBorrowingCapacity(env, session.memberId)
+    throw new ApiError(`Requested loan exceeds your available borrowing balance of ${Number(latestCapacity.availableBalance).toFixed(2)}.`)
+  }
 
   const applicationId = insertResult.meta.last_row_id
   const securityHash = loanApplicationHash({

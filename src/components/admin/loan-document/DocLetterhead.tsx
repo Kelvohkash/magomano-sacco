@@ -16,7 +16,7 @@ export function DocLetterhead({ application, refCode }: DocLetterheadProps) {
             <Landmark size={28} strokeWidth={2.2} />
           </div>
           <div className="doc-org-text">
-            <h1 className="doc-org-name">MAGOMANO SAVINGS SACCO</h1>
+            <h1 className="doc-org-name">MAGOMANO COUNTY SACCO</h1>
             <p className="doc-org-address">
               Head Office: P.O. Box 482-00100 Thika, Kenya · Tel: +254 700 000 000 · Email: info@magomanosacco.co.ke
             </p>

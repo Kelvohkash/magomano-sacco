@@ -15,7 +15,7 @@ export function RegistrationStepsIndicator({ step, steps }: RegistrationStepsInd
     <>
       <div className="join-heading">
         <span className="join-kicker">MEMBERSHIP APPLICATION</span>
-        <h1>Join Magomano SACCO</h1>
+        <h1>Join Magomano County Sacco</h1>
         <p>Your details are saved securely and reviewed by our team.</p>
       </div>
 

@@ -52,7 +52,7 @@
 }
 
 .modern-admin-table tbody tr.row-selected {
-  background-color: #f0fdf4;
+  background-color: var(--sacco-blue-light);
 }
 
 .modern-admin-table tbody td {
@@ -81,7 +81,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: linear-gradient(135deg, var(--sacco-blue) 0%, var(--sacco-blue-hover) 100%);
   color: #ffffff;
   font-size: 13px;
   font-weight: 800;

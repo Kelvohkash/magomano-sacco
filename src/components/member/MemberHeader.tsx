@@ -35,12 +35,12 @@ export function MemberHeader({
 
   return (
     <header className="dashboard-header">
-      <a className="dashboard-brand brand" href="/" aria-label="Magomano sacco dashboard">
+      <a className="dashboard-brand brand" href="/" aria-label="Magomano County Sacco dashboard">
         <span className="brand-mark">
           <Landmark size={21} strokeWidth={1.8} />
         </span>
         <span className="brand-name">
-          Magomano<span>sacco</span>
+          Magomano<span>County Sacco</span>
         </span>
       </a>
 

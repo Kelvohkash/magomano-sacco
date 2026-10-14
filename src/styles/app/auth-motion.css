@@ -91,20 +91,20 @@
 }
 
 .login-shell {
-  background-color: #153d3a;
-  background-image: linear-gradient(164deg, transparent 0 13%, rgb(16 46 44 / 42%) 13% 31%, transparent 31% 100%), linear-gradient(16deg, transparent 0 73%, rgb(44 103 81 / 45%) 73% 87%, transparent 87% 100%);
+  background-color: var(--sacco-blue-dark);
+  background-image: linear-gradient(164deg, transparent 0 13%, rgb(29 16 79 / 42%) 13% 31%, transparent 31% 100%), linear-gradient(16deg, transparent 0 73%, rgb(90 70 150 / 36%) 73% 87%, transparent 87% 100%);
 }
 
 .login-shell .form-panel {
-  background-color: #153d3a;
-  background-image: linear-gradient(18deg, transparent 0 67%, rgb(77 132 101 / 35%) 67% 78%, transparent 78% 100%);
+  background-color: var(--sacco-blue-dark);
+  background-image: linear-gradient(18deg, transparent 0 67%, rgb(90 70 150 / 35%) 67% 78%, transparent 78% 100%);
 }
 
 .login-shell .form-panel::after {
-  background: linear-gradient(145deg, rgb(16 75 68 / 74%), rgb(49 111 86 / 58%) 57%, rgb(25 83 69 / 45%));
+  background: linear-gradient(145deg, rgb(44 25 113 / 68%), rgb(90 70 150 / 55%) 57%, rgb(29 16 79 / 45%));
 }
 
 .login-shell .submit-button { border-color: var(--forest); background: var(--forest); }
-.login-shell .submit-button:hover:not(:disabled) { background: #20534c; }
-.login-shell .secondary-auth-button:hover { border-color: #39776d; color: #235b50; background: #f3f8f4; }
-.login-shell .admin-entry-link { color: #39776d; }
+.login-shell .submit-button:hover:not(:disabled) { background: var(--sacco-blue-hover); }
+.login-shell .secondary-auth-button:hover { border-color: var(--sacco-blue); color: var(--sacco-blue); background: var(--sacco-blue-light); }
+.login-shell .admin-entry-link { color: var(--sacco-blue); }

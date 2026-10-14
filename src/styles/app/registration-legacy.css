@@ -39,14 +39,14 @@
 .registration-grid .registration-wide { grid-column: 1 / -1; }
 .registration-optional { color: #829084; font-size: 10px; font-weight: 500; }
 .registration-optional-details { margin-top: 14px; padding-top: 12px; border-top: 1px solid rgb(96 128 102 / 13%); }
-.registration-optional-details summary, .registration-terms details summary { color: #39776d; font-size: 11px; font-weight: 700; cursor: pointer; }
+.registration-optional-details summary, .registration-terms details summary { color: var(--sacco-blue); font-size: 11px; font-weight: 700; cursor: pointer; }
 .registration-optional-details .registration-grid { margin-top: 13px; }
 .registration-terms { display: grid; gap: 12px; margin: 22px 0 16px; padding: 17px; border: 1px solid rgb(69 111 86 / 16%); border-radius: 13px; background: rgb(248 251 247 / 82%); }
 .registration-terms > p { margin: 0; color: #78877b; font-size: 11px; line-height: 1.5; }
 .registration-terms-error { color: #8d392f !important; }
 .registration-terms-content { max-height: 210px; overflow-y: auto; margin-top: 10px; padding: 12px; border: 1px solid rgb(118 143 121 / 16%); border-radius: 9px; color: #445b4c; background: rgb(255 255 255 / 86%); font-size: 11px; line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere; }
 .registration-consent { display: flex; align-items: flex-start; gap: 9px; color: #40594a; font-size: 11px; line-height: 1.5; cursor: pointer; }
-.registration-consent input { width: 16px; height: 16px; flex: 0 0 16px; margin: 1px 0 0; accent-color: #286348; }
+.registration-consent input { width: 16px; height: 16px; flex: 0 0 16px; margin: 1px 0 0; accent-color: var(--sacco-blue); }
 .login-shell .registration-panel .form-content form > .password-label-row { margin-top: 22px; }
 
 @media (max-width: 720px) {

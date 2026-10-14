@@ -57,9 +57,9 @@
 }
 
 .admin-nav-link.active {
-  background: linear-gradient(90deg, rgba(29, 78, 216, 0.22) 0%, rgba(29, 78, 216, 0.1) 100%);
-  border-color: rgba(29, 78, 216, 0.4);
-  color: #93c5fd;
+  background: linear-gradient(90deg, rgba(44, 25, 113, 0.22) 0%, rgba(44, 25, 113, 0.1) 100%);
+  border-color: rgba(44, 25, 113, 0.4);
+  color: #c8bde6;
   font-weight: 700;
 }
 
@@ -91,7 +91,7 @@
 }
 
 .admin-nav-link .active-arrow {
-  color: #93c5fd;
+  color: #c8bde6;
   opacity: 0.8;
 }
 

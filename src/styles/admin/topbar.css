@@ -21,7 +21,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 28px;
-  background: linear-gradient(135deg, var(--sacco-blue-dark) 0%, #0d2147 100%);
+  background: linear-gradient(135deg, var(--sacco-blue-dark) 0%, #1d104f 100%);
   border-bottom: 3px solid var(--sacco-orange);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
@@ -49,7 +49,7 @@
   border-radius: 10px;
   background: linear-gradient(135deg, var(--sacco-orange) 0%, var(--sacco-orange-hover) 100%);
   color: #ffffff;
-  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.4);
+  box-shadow: 0 4px 12px rgba(233, 127, 53, 0.4);
 }
 
 .admin-brand-titles {
@@ -79,9 +79,9 @@
   gap: 7px;
   padding: 4px 10px;
   border-radius: 20px;
-  background-color: rgba(29, 78, 216, 0.2);
+  background-color: rgba(44, 25, 113, 0.2);
   border: 1px solid rgba(147, 197, 253, 0.3);
-  color: #93c5fd;
+  color: #c8bde6;
   font-size: 11px;
   font-weight: 600;
 }
@@ -90,8 +90,8 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background-color: #60a5fa;
-  box-shadow: 0 0 8px #3b82f6;
+  background-color: #8d7bc1;
+  box-shadow: 0 0 8px #5a4696;
   animation: pulse-dot 2s infinite ease-in-out;
 }
 

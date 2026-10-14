@@ -2,55 +2,55 @@
 .application-status-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
 .application-status-section { max-width: 760px; }
 .loan-progress-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: -6px 0 18px; }
-.loan-progress-tabs button { min-height: 38px; padding: 0 12px; border: 1px solid rgb(29 78 216 / 20%); border-radius: 999px; color: #1d4ed8; background: rgb(255 255 255 / 80%); font: inherit; font-size: 10px; font-weight: 700; cursor: pointer; }
-.loan-progress-tabs button.is-active { border-color: var(--sacco-blue, #1d4ed8); color: #fff; background: var(--sacco-blue, #1d4ed8); }
+.loan-progress-tabs button { min-height: 38px; padding: 0 12px; border: 1px solid rgb(44 25 113 / 20%); border-radius: 999px; color: #2c1971; background: rgb(255 255 255 / 80%); font: inherit; font-size: 10px; font-weight: 700; cursor: pointer; }
+.loan-progress-tabs button.is-active { border-color: var(--sacco-blue, #2c1971); color: #fff; background: var(--sacco-blue, #2c1971); }
 .loan-application-status-list { display: grid; gap: 12px; }
 .loan-application-status-card {
   padding: 22px 24px;
-  border: 1.5px solid #93c5fd;
+  border: 1.5px solid #c8bde6;
   border-radius: 18px;
   background: #ffffff;
-  box-shadow: 0 16px 36px -4px rgba(15, 43, 92, 0.16), 0 6px 14px -2px rgba(15, 43, 92, 0.08);
+  box-shadow: 0 16px 36px -4px rgba(29, 16, 79, 0.16), 0 6px 14px -2px rgba(29, 16, 79, 0.08);
   transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
 }
 .loan-application-status-card:hover {
-  border-color: #60a5fa;
-  box-shadow: 0 22px 46px -4px rgba(15, 43, 92, 0.22), 0 8px 18px -3px rgba(15, 43, 92, 0.12);
+  border-color: #8d7bc1;
+  box-shadow: 0 22px 46px -4px rgba(29, 16, 79, 0.22), 0 8px 18px -3px rgba(29, 16, 79, 0.12);
 }
 .loan-application-status-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 15px; }
 .application-date { display: inline-flex; align-items: center; gap: 6px; color: #64748b; font-size: 10px; }
-.loan-application-status-card h3 { margin: 8px 0 0; color: #0f2b5c; font-family: 'Manrope', sans-serif; font-size: 21px; font-weight: 700; letter-spacing: -.035em; }
+.loan-application-status-card h3 { margin: 8px 0 0; color: #1d104f; font-family: 'Manrope', sans-serif; font-size: 21px; font-weight: 700; letter-spacing: -.035em; }
 .loan-application-status-card > p { margin: 9px 0 0; color: #475569; font-size: 11px; line-height: 1.55; }
 .loan-application-status-card > small { display: block; margin-top: 8px; color: #64748b; font-size: 10px; line-height: 1.5; }
 .application-status-badge { display: inline-flex; flex: 0 0 auto; align-items: center; gap: 6px; padding: 7px 9px; border-radius: 99px; font-size: 10px; font-weight: 700; }
-.application-status-badge.pending { color: #ea580c; background: #fff7ed; border: 1px solid #fdba74; }
-.application-status-badge.approved { color: #1d4ed8; background: #eff6ff; border: 1px solid #93c5fd; }
+.application-status-badge.pending { color: #e97f35; background: #fff4ea; border: 1px solid #e9b487; }
+.application-status-badge.approved { color: #2c1971; background: #f3f0fa; border: 1px solid #c8bde6; }
 .application-status-badge.disbursed { color: #15803d; background: #f0fdf4; border: 1px solid #86efac; }
 .application-status-badge.rejected { color: #be123c; background: #fff1f2; border: 1px solid #fecdd3; }
-.back-link { margin-bottom: 26px; color: #1d4ed8; font-weight: 700; }
-.back-link:hover { color: #0f2b5c; }
+.back-link { margin-bottom: 26px; color: #2c1971; font-weight: 700; }
+.back-link:hover { color: #1d104f; }
 .loan-capacity-card {
   position: relative;
   overflow: hidden;
   width: min(100%, 620px);
   margin-bottom: 20px;
   padding: 0;
-  border: 1.5px solid #93c5fd;
+  border: 1.5px solid #c8bde6;
   border-radius: 18px;
   background: #ffffff;
-  box-shadow: 0 16px 38px -4px rgba(15, 43, 92, 0.18), 0 6px 14px -2px rgba(15, 43, 92, 0.1);
+  box-shadow: 0 16px 38px -4px rgba(29, 16, 79, 0.18), 0 6px 14px -2px rgba(29, 16, 79, 0.1);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 }
-.loan-capacity-main { display: grid; gap: 6px; padding: 20px 22px 17px; border-left: 4px solid var(--sacco-orange, #ea580c); }
+.loan-capacity-main { display: grid; gap: 6px; padding: 20px 22px 17px; border-left: 4px solid var(--sacco-orange, #e97f35); }
 .loan-capacity-main > span { color: #64748b; font-size: 11px; font-weight: 700; }
-.loan-capacity-main > strong { color: #0f2b5c; font-size: 27px; letter-spacing: -.035em; }
+.loan-capacity-main > strong { color: #1d104f; font-size: 27px; letter-spacing: -.035em; }
 .loan-capacity-main > small,
 .loan-capacity-footnote { color: #64748b; font-size: 10px; line-height: 1.5; }
 .loan-capacity-breakdown { display: flex; align-items: center; gap: 12px; padding: 14px 21px; border-top: 1px solid rgb(226 232 240 / 80%); }
 .loan-capacity-breakdown > div { display: grid; min-width: 0; gap: 4px; }
 .loan-capacity-breakdown > div > span { color: #64748b; font-size: 9px; }
-.loan-capacity-breakdown > div > strong { color: #0f2b5c; font-size: 11px; white-space: nowrap; }
+.loan-capacity-breakdown > div > strong { color: #1d104f; font-size: 11px; white-space: nowrap; }
 .capacity-operator { color: #94a3b8; font-size: 13px; }
 .loan-capacity-footnote { display: block; padding: 0 21px 15px; }
 .loan-application-form {
@@ -58,10 +58,10 @@
   width: min(100%, 620px);
   margin-top: 0;
   padding: 26px 28px;
-  border: 1.5px solid #93c5fd;
+  border: 1.5px solid #c8bde6;
   border-radius: 22px;
   background: #ffffff;
-  box-shadow: 0 18px 42px -4px rgba(15, 43, 92, 0.18), 0 6px 16px -2px rgba(15, 43, 92, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  box-shadow: 0 18px 42px -4px rgba(29, 16, 79, 0.18), 0 6px 16px -2px rgba(29, 16, 79, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
 }
@@ -71,8 +71,8 @@
 .loan-application-form .months-input-wrap { border-color: rgb(203 213 225 / 80%); border-radius: 11px; background: rgb(255 255 255 / 90%); }
 .loan-application-form textarea:focus,
 .loan-application-form .amount-input-wrap:focus-within,
-.loan-application-form .months-input-wrap:focus-within { border-color: var(--sacco-blue, #1d4ed8); box-shadow: 0 0 0 4px rgb(29 78 216 / 15%); outline: none; }
-.loan-estimate { gap: 11px 16px; padding: 17px; border: 1px solid rgb(255 255 255 / 85%); border-left: 3px solid var(--sacco-orange, #ea580c); border-radius: 13px; background: rgb(255 247 237 / 85%); }
-.loan-estimate > strong { color: var(--sacco-orange, #ea580c); }
-.loan-application-form .submit-button { min-height: 52px; border: 0; border-radius: 12px; background: linear-gradient(110deg, #1d4ed8, #1e40af); box-shadow: 0 8px 18px rgb(29 78 216 / 25%); color: #fff; font-weight: 700; }
-.loan-application-form .submit-button:hover:not(:disabled) { background: linear-gradient(110deg, #1e40af, #1e3a8a); }
+.loan-application-form .months-input-wrap:focus-within { border-color: var(--sacco-blue, #2c1971); box-shadow: 0 0 0 4px rgb(44 25 113 / 15%); outline: none; }
+.loan-estimate { gap: 11px 16px; padding: 17px; border: 1px solid rgb(255 255 255 / 85%); border-left: 3px solid var(--sacco-orange, #e97f35); border-radius: 13px; background: rgb(255 247 237 / 85%); }
+.loan-estimate > strong { color: var(--sacco-orange, #e97f35); }
+.loan-application-form .submit-button { min-height: 52px; border: 0; border-radius: 12px; background: linear-gradient(110deg, #2c1971, #211255); box-shadow: 0 8px 18px rgb(44 25 113 / 25%); color: #fff; font-weight: 700; }
+.loan-application-form .submit-button:hover:not(:disabled) { background: linear-gradient(110deg, #211255, #1e3a8a); }

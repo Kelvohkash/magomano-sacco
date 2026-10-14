@@ -25,8 +25,8 @@
   font-weight: 650;
   transition: color 160ms ease, background 160ms ease, border-color 160ms ease;
 }
-.member-desktop-nav button:hover { color: var(--sacco-blue, #1d4ed8); background: rgb(239 246 255 / 80%); }
-.member-desktop-nav button.active { border-color: rgb(29 78 216 / 35%); color: var(--sacco-blue, #1d4ed8); background: rgb(239 246 255 / 95%); box-shadow: 0 4px 13px rgb(29 78 216 / 12%); }
+.member-desktop-nav button:hover { color: var(--sacco-blue, #2c1971); background: rgb(243 240 250 / 80%); }
+.member-desktop-nav button.active { border-color: rgb(44 25 113 / 35%); color: var(--sacco-blue, #2c1971); background: rgb(243 240 250 / 95%); box-shadow: 0 4px 13px rgb(44 25 113 / 12%); }
 .member-desktop-signout { display: inline-flex; }
 .statement-pagination {
   display: flex;
@@ -48,33 +48,33 @@
   padding: 0 9px;
   border: 1px solid rgb(203 213 225 / 80%);
   border-radius: 9px;
-  color: #1d4ed8;
+  color: #2c1971;
   background: rgb(255 255 255 / 80%);
   font-size: 10px;
   font-weight: 650;
 }
 .statement-pagination button:disabled { cursor: not-allowed; opacity: .45; }
-.statement-pagination button:not(:disabled):hover { border-color: var(--sacco-blue, #1d4ed8); background: #eff6ff; }
+.statement-pagination button:not(:disabled):hover { border-color: var(--sacco-blue, #2c1971); background: #f3f0fa; }
 .statement-page-number { color: #64748b; font-weight: 650; white-space: nowrap; }
 .statement-error { margin: 12px 0; padding: 10px 12px; border-left: 3px solid #e11d48; border-radius: 0 9px 9px 0; color: #9f1239; background: rgb(255 241 242 / 90%); font-size: 11px; line-height: 1.5; }
 .admin-table-actions { display: flex; min-width: 300px; flex-wrap: wrap; gap: 6px; }
-.table-action-button { display: inline-flex; min-height: 31px; align-items: center; justify-content: center; gap: 5px; padding: 0 9px; border: 1px solid rgb(203 213 225 / 80%); border-radius: 8px; color: #1d4ed8; background: rgb(255 255 255 / 85%); font-size: 10px; font-weight: 650; }
-.table-action-button:hover:not(:disabled) { border-color: var(--sacco-blue, #1d4ed8); background: #eff6ff; }
+.table-action-button { display: inline-flex; min-height: 31px; align-items: center; justify-content: center; gap: 5px; padding: 0 9px; border: 1px solid rgb(203 213 225 / 80%); border-radius: 8px; color: #2c1971; background: rgb(255 255 255 / 85%); font-size: 10px; font-weight: 650; }
+.table-action-button:hover:not(:disabled) { border-color: var(--sacco-blue, #2c1971); background: #f3f0fa; }
 .table-action-button.danger { border-color: rgb(244 63 94 / 35%); color: #e11d48; }
 .table-action-button:disabled { cursor: not-allowed; opacity: .48; }
 .member-role-switch { display: flex; gap: 7px; margin: 0; padding: 0; border: 0; }
 .member-role-switch label { display: inline-flex; align-items: center; gap: 4px; color: #475569; font-size: 10px; white-space: nowrap; }
-.member-role-switch input { accent-color: var(--sacco-blue, #1d4ed8); }
+.member-role-switch input { accent-color: var(--sacco-blue, #2c1971); }
 .admin-table-detail-row > td { white-space: normal; background: rgb(248 250 252 / 80%); }
 .member-table-details { display: grid; gap: 5px; padding: 3px 2px; }
 .member-table-details p { margin: 0; color: #64748b; font-size: 10px; line-height: 1.55; }
-.member-table-details strong { color: #0f2b5c; }
+.member-table-details strong { color: #1d104f; }
 .application-purpose-cell { max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
 .loan-application-dialog { position: fixed; z-index: 30; inset: 0; display: grid; place-items: center; padding: 22px; background: rgb(15 23 42 / 60%); backdrop-filter: blur(5px); }
-.loan-application-dialog-card { width: min(100%, 900px); max-height: min(92vh, 1000px); overflow: auto; padding: 28px; border: 1.5px solid #93c5fd; border-radius: 20px; background: #ffffff; box-shadow: 0 24px 70px rgba(15, 43, 92, 0.35); }
+.loan-application-dialog-card { width: min(100%, 900px); max-height: min(92vh, 1000px); overflow: auto; padding: 28px; border: 1.5px solid #c8bde6; border-radius: 20px; background: #ffffff; box-shadow: 0 24px 70px rgba(29, 16, 79, 0.35); }
 .loan-application-dialog-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 17px; }
 .loan-application-dialog-heading .section-kicker { margin: 0 0 5px; font-size: 9px; font-weight: 750; letter-spacing: .14em; }
-.loan-application-dialog-heading h2 { margin: 0; color: #0f2b5c; font-size: 20px; }
+.loan-application-dialog-heading h2 { margin: 0; color: #1d104f; font-size: 20px; }
 .loan-application-edit-form { display: grid; gap: 12px; }
 .loan-application-edit-form label { display: grid; gap: 6px; color: #334155; font-size: 11px; font-weight: 700; }
 .loan-application-edit-form input, .loan-application-edit-form textarea { width: 100%; min-height: 40px; padding: 9px 11px; border: 1px solid rgb(203 213 225 / 80%); border-radius: 9px; color: #0f172a; background: #fff; font: inherit; font-size: 12px; }
@@ -83,9 +83,9 @@
 .loan-payout-accounts { display: grid; gap: 8px; margin: 0; padding: 14px; border: 1px solid rgb(203 213 225 / 80%); border-radius: 12px; background: rgb(255 255 255 / 80%); }
 .loan-payout-accounts legend { padding: 0 5px; color: #334155; font-size: 11px; font-weight: 750; }
 .loan-payout-account { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: start; gap: 3px 9px; padding: 10px; border: 1px solid rgb(203 213 225 / 60%); border-radius: 9px; color: #334155; background: rgb(255 255 255 / 85%); cursor: pointer; }
-.loan-payout-account input { grid-row: span 2; margin-top: 3px; accent-color: var(--sacco-orange, #ea580c); }
+.loan-payout-account input { grid-row: span 2; margin-top: 3px; accent-color: var(--sacco-orange, #e97f35); }
 .loan-payout-account > span { display: grid; gap: 3px; }
-.loan-payout-account strong { color: #0f2b5c; font-size: 11px; }
+.loan-payout-account strong { color: #1d104f; font-size: 11px; }
 .loan-payout-account small { color: #64748b; font-size: 10px; overflow-wrap: anywhere; }
 .loan-electronic-consent { display: flex; align-items: flex-start; gap: 9px; color: #334155; font-size: 11px; line-height: 1.55; cursor: pointer; }
-.loan-electronic-consent input { flex: 0 0 auto; margin-top: 2px; accent-color: var(--sacco-blue, #1d4ed8); }
+.loan-electronic-consent input { flex: 0 0 auto; margin-top: 2px; accent-color: var(--sacco-blue, #2c1971); }

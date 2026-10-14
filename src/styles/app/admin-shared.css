@@ -33,7 +33,7 @@
 .admin-queue-item > div { display: grid; gap: 5px; }
 .admin-queue-item > div > span { color: #6f7d75; font-size: 11px; }
 .admin-queue-item > div > strong { color: #294b40; font-size: 22px; }
-.admin-queue-item > button { display: inline-flex; align-items: center; gap: 6px; padding: 7px 0 7px 8px; border: 0; color: #39776d; background: transparent; font-size: 11px; font-weight: 650; white-space: nowrap; }
+.admin-queue-item > button { display: inline-flex; align-items: center; gap: 6px; padding: 7px 0 7px 8px; border: 0; color: var(--sacco-blue); background: transparent; font-size: 11px; font-weight: 650; white-space: nowrap; }
 .admin-metric-note { margin: 16px 0 0; color: #87928b; font-size: 10px; line-height: 1.5; }
 .admin-record-list { display: grid; }
 .admin-list-heading { display: flex; align-items: center; gap: 9px; margin: 0 0 9px; color: #354b42; font-size: 13px; font-weight: 650; }

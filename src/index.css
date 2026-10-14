@@ -12,24 +12,26 @@
   -moz-osx-font-smoothing: grayscale;
   font-optical-sizing: auto;
   font-weight: 400;
-  --ink: #0f172a;
+  --ink: #211b2d;
   --muted: #64748b;
   --line: #e2e8f0;
   --paper: #f8fafc;
   --white: #fff;
-  --forest: #1d4ed8;
-  --forest-deep: #0f2b5c;
-  --leaf: #3b82f6;
-  --coral: #ea580c;
-  --focus: #2563eb;
-  --sacco-blue: #1d4ed8;
-  --sacco-blue-hover: #1e40af;
-  --sacco-blue-dark: #0f2b5c;
-  --sacco-blue-light: #eff6ff;
-  --sacco-orange: #ea580c;
-  --sacco-orange-hover: #c2410c;
-  --sacco-orange-vibrant: #f97316;
-  --sacco-orange-light: #fff7ed;
+  --forest: #2c1971;
+  --forest-deep: #1d104f;
+  --leaf: #e97f35;
+  --coral: #e97f35;
+  --focus: #5a4696;
+  --sacco-blue: #2c1971;
+  --sacco-blue-hover: #211255;
+  --sacco-blue-dark: #1d104f;
+  --sacco-blue-light: #f3f0fa;
+  --sacco-blue-border: #c8bde6;
+  --sacco-orange: #e97f35;
+  --sacco-orange-hover: #c76624;
+  --sacco-orange-vibrant: #f09a54;
+  --sacco-orange-light: #fff4ea;
+  --sacco-orange-border: #e9b487;
 }
 
 * { box-sizing: border-box; }
@@ -46,11 +48,11 @@ button { cursor: pointer; }
 button:focus-visible,
 a:focus-visible,
 input:focus-visible {
-  outline: 3px solid #75b5a7;
+  outline: 3px solid #8d7bc1;
   outline-offset: 3px;
 }
 
-::selection { color: var(--forest-deep); background: #dce9c3; }
+::selection { color: var(--forest-deep); background: #f0eafa; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -67,7 +69,7 @@ input:focus-visible {
   bottom: calc(72px + env(safe-area-inset-bottom, 0));
   left: 50%;
   transform: translateX(-50%);
-  background-color: rgba(16, 46, 44, 0.94);
+  background-color: rgba(29, 16, 79, 0.94);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   color: #ffffff;
@@ -93,4 +95,3 @@ input:focus-visible {
     transform: translate(-50%, 0) scale(1);
   }
 }
-

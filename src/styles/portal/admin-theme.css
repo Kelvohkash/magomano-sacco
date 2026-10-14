@@ -80,7 +80,7 @@
 .admin-record-main > span { color: #718174; }
 .admin-record-main > small { color: #879387; }
 .admin-member-review-details { margin-top: 5px; }
-.admin-member-review-details > summary { color: #39776d; font-size: 10px; font-weight: 700; cursor: pointer; }
+.admin-member-review-details > summary { color: var(--sacco-blue); font-size: 10px; font-weight: 700; cursor: pointer; }
 .admin-member-review-details > div { display: grid; gap: 5px; margin-top: 9px; padding: 10px; border: 1px solid rgb(96 128 102 / 13%); border-radius: 9px; background: rgb(255 255 255 / 64%); }
 .admin-member-review-details p { margin: 0; color: #68776f; font-size: 10px; line-height: 1.5; overflow-wrap: anywhere; }
 .admin-member-review-details p strong { color: #40594a; }
@@ -141,52 +141,52 @@
 .member-account-card {
   min-width: 0;
   padding: 26px;
-  border: 1.5px solid #bfdbfe;
+  border: 1.5px solid #c8bde6;
   border-radius: 22px;
   background: #ffffff;
-  box-shadow: 0 16px 36px -4px rgba(15, 43, 92, 0.16), 0 6px 14px -2px rgba(15, 43, 92, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  box-shadow: 0 16px 36px -4px rgba(29, 16, 79, 0.16), 0 6px 14px -2px rgba(29, 16, 79, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
 }
 .member-account-card:hover {
-  border-color: #60a5fa;
-  box-shadow: 0 22px 46px -4px rgba(15, 43, 92, 0.22), 0 8px 18px -3px rgba(15, 43, 92, 0.12);
+  border-color: #8d7bc1;
+  box-shadow: 0 22px 46px -4px rgba(29, 16, 79, 0.22), 0 8px 18px -3px rgba(29, 16, 79, 0.12);
 }
 .member-account-card-heading { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
-.member-account-card-heading > span { display: grid; width: 40px; height: 40px; flex: 0 0 40px; place-items: center; border: 1.5px solid #bfdbfe; border-radius: 12px; color: #1d4ed8; background: #eff6ff; box-shadow: 0 2px 8px rgba(29, 78, 216, 0.12); }
-.member-account-card-heading h2 { margin: 0; color: #0f2b5c; font-size: 17px; font-weight: 700; }
+.member-account-card-heading > span { display: grid; width: 40px; height: 40px; flex: 0 0 40px; place-items: center; border: 1.5px solid #c8bde6; border-radius: 12px; color: #2c1971; background: #f3f0fa; box-shadow: 0 2px 8px rgba(44, 25, 113, 0.12); }
+.member-account-card-heading h2 { margin: 0; color: #1d104f; font-size: 17px; font-weight: 700; }
 .member-account-card-heading p { margin: 4px 0 0; color: #64748b; font-size: 11px; }
 .member-contact-form { display: grid; gap: 10px; }
 .member-contact-field { display: grid; align-content: start; gap: 7px; margin-top: 3px; color: #334155; font-size: 11px; font-weight: 700; }
 .member-contact-field input { width: 100%; min-width: 0; min-height: 43px; padding: 0 12px; border: 1.5px solid #cbd5e1; border-radius: 10px; color: #0f172a; background: #ffffff; font: inherit; font-size: 12px; }
-.member-contact-field input:focus { border-color: #1d4ed8; box-shadow: 0 0 0 4px rgba(29, 78, 216, 0.15); outline: none; }
-.member-contact-form .submit-button { display: inline-flex; min-height: 46px; align-items: center; justify-content: space-between; margin-top: 8px; padding: 0 16px; border: 0; border-radius: 11px; color: #fff; background: linear-gradient(110deg, #1d4ed8, #1e40af); box-shadow: 0 6px 16px rgba(29, 78, 216, 0.28); font-size: 12px; font-weight: 700; cursor: pointer; }
-.member-contact-form .submit-button:hover { background: linear-gradient(110deg, #1e40af, #1e3a8a); }
+.member-contact-field input:focus { border-color: #2c1971; box-shadow: 0 0 0 4px rgba(44, 25, 113, 0.15); outline: none; }
+.member-contact-form .submit-button { display: inline-flex; min-height: 46px; align-items: center; justify-content: space-between; margin-top: 8px; padding: 0 16px; border: 0; border-radius: 11px; color: #fff; background: linear-gradient(110deg, #2c1971, #211255); box-shadow: 0 6px 16px rgba(44, 25, 113, 0.28); font-size: 12px; font-weight: 700; cursor: pointer; }
+.member-contact-form .submit-button:hover { background: linear-gradient(110deg, #211255, #1e3a8a); }
 .member-account-note { margin: 0; color: #64748b; font-size: 10px; line-height: 1.5; }
 .member-contact-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 14px 0; border-top: 1px solid #e2e8f0; }
 .member-contact-row > div { display: grid; gap: 5px; min-width: 0; }
-.member-contact-row strong { overflow: hidden; color: #0f2b5c; font-size: 13px; font-weight: 650; text-overflow: ellipsis; }
+.member-contact-row strong { overflow: hidden; color: #1d104f; font-size: 13px; font-weight: 650; text-overflow: ellipsis; }
 .member-contact-row span { color: #64748b; font-size: 11px; }
 .member-contact-remove { display: grid; width: 36px; height: 36px; flex: 0 0 36px; place-items: center; border: 1.5px solid rgb(239 68 68 / 30%); border-radius: 10px; color: #dc2626; background: #fef2f2; }
 .member-terms-card { width: min(100%, 920px); }
 .member-terms-content { color: #334155; font-size: 13px; line-height: 1.8; white-space: pre-wrap; overflow-wrap: anywhere; }
-.loan-security-note { display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: 12px; row-gap: 4px; margin-bottom: 20px; padding: 14px 16px; border: 1.5px solid #bfdbfe; border-radius: 14px; background: linear-gradient(125deg, #eff6ff, #ffffff); box-shadow: 0 8px 20px -2px rgba(15, 43, 92, 0.08); }
-.loan-security-note > span { grid-row: span 2; padding: 7px 10px; border: 1px solid #bfdbfe; border-radius: 9px; color: #1d4ed8; background: #dbeafe; font-size: 11px; font-weight: 800; }
-.loan-security-note strong { color: #0f2b5c; font-size: 11px; }
+.loan-security-note { display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: 12px; row-gap: 4px; margin-bottom: 20px; padding: 14px 16px; border: 1.5px solid #c8bde6; border-radius: 14px; background: linear-gradient(125deg, #f3f0fa, #ffffff); box-shadow: 0 8px 20px -2px rgba(29, 16, 79, 0.08); }
+.loan-security-note > span { grid-row: span 2; padding: 7px 10px; border: 1px solid #c8bde6; border-radius: 9px; color: #2c1971; background: #dbeafe; font-size: 11px; font-weight: 800; }
+.loan-security-note strong { color: #1d104f; font-size: 11px; }
 .loan-security-note small { color: #64748b; font-size: 10px; }
-.member-details-form { margin: 0 0 20px; padding: 24px; border: 1.5px solid #bfdbfe; border-radius: 20px; background: #ffffff; box-shadow: 0 16px 36px -4px rgba(15, 43, 92, 0.16), 0 6px 14px -2px rgba(15, 43, 92, 0.08); }
+.member-details-form { margin: 0 0 20px; padding: 24px; border: 1.5px solid #c8bde6; border-radius: 20px; background: #ffffff; box-shadow: 0 16px 36px -4px rgba(29, 16, 79, 0.16), 0 6px 14px -2px rgba(29, 16, 79, 0.08); }
 .member-details-form-heading { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 17px; }
 .member-details-form-heading .section-kicker { margin: 0 0 5px; color: #64748b; font-size: 9px; font-weight: 750; letter-spacing: .14em; }
-.member-details-form-heading h2 { margin: 0; color: #0f2b5c; font-size: 17px; font-weight: 700; }
+.member-details-form-heading h2 { margin: 0; color: #1d104f; font-size: 17px; font-weight: 700; }
 .member-details-form-heading > span { color: #64748b; font-size: 10px; }
 .member-details-fields { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 17px; }
 .member-details-fields > label { display: grid; align-content: start; gap: 6px; color: #334155; font-size: 10px; font-weight: 700; }
 .member-details-fields input, .member-details-fields select { width: 100%; min-height: 40px; padding: 0 10px; border: 1.5px solid #cbd5e1; border-radius: 9px; color: #0f172a; background: #ffffff; font: inherit; font-size: 11px; }
-.member-details-fields input:focus, .member-details-fields select:focus { border-color: #1d4ed8; box-shadow: 0 0 0 4px rgba(29, 78, 216, 0.15); outline: none; }
+.member-details-fields input:focus, .member-details-fields select:focus { border-color: #2c1971; box-shadow: 0 0 0 4px rgba(44, 25, 113, 0.15); outline: none; }
 .account-info-group { padding: 17px 0 2px; border-top: 1px solid #e2e8f0; }
 .account-info-group .member-details-form-heading { margin-bottom: 13px; }
-.account-info-group .member-details-form-heading > svg { color: #1d4ed8; }
+.account-info-group .member-details-form-heading > svg { color: #2c1971; }
 .member-account-page > .member-contacts-embedded { margin: 0 0 20px; }
 .member-contacts-embedded .member-account-grid { grid-template-columns: minmax(0, 1fr); }
 .member-contacts-embedded .member-account-card { padding: 22px; }
@@ -196,8 +196,8 @@
 .member-contacts-embedded .member-contact-form > .submit-button,
 .member-contacts-embedded .member-contact-form > .member-account-note { grid-column: 1 / -1; }
 .member-contacts-embedded .member-contact-form > .submit-button { justify-self: start; min-width: 190px; }
-.member-details-form > .submit-button, .admin-terms-form > .submit-button { display: inline-flex; min-height: 45px; align-items: center; justify-content: space-between; gap: 18px; padding: 0 16px; border: 0; border-radius: 11px; color: #fff; background: linear-gradient(110deg, #1d4ed8, #1e40af); box-shadow: 0 6px 16px rgba(29, 78, 216, 0.28); font-size: 11px; font-weight: 700; cursor: pointer; }
-.member-details-form > .submit-button:hover, .admin-terms-form > .submit-button:hover { background: linear-gradient(110deg, #1e40af, #1e3a8a); }
+.member-details-form > .submit-button, .admin-terms-form > .submit-button { display: inline-flex; min-height: 45px; align-items: center; justify-content: space-between; gap: 18px; padding: 0 16px; border: 0; border-radius: 11px; color: #fff; background: linear-gradient(110deg, #2c1971, #211255); box-shadow: 0 6px 16px rgba(44, 25, 113, 0.28); font-size: 11px; font-weight: 700; cursor: pointer; }
+.member-details-form > .submit-button:hover, .admin-terms-form > .submit-button:hover { background: linear-gradient(110deg, #211255, #1e3a8a); }
 .member-details-cancel { min-height: 35px; padding: 0 12px; border: 1.5px solid #cbd5e1; border-radius: 9px; color: #475569; background: #ffffff; font-size: 10px; font-weight: 700; }
 .admin-terms-form { display: grid; gap: 13px; }
 .admin-terms-form > p { margin: 0; color: #78877b; font-size: 11px; line-height: 1.55; }

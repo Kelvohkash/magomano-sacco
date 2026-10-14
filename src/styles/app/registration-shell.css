@@ -5,9 +5,9 @@
   justify-content: center;
   padding: 28px 20px;
   background:
-    radial-gradient(ellipse at 12% 8%, rgb(158 193 146 / 24%), transparent 34rem),
-    radial-gradient(ellipse at 90% 85%, rgb(184 210 185 / 20%), transparent 32rem),
-    linear-gradient(145deg, #143a35, #1f5147 58%, #183d37);
+    radial-gradient(ellipse at 12% 8%, rgb(233 127 53 / 20%), transparent 34rem),
+    radial-gradient(ellipse at 90% 85%, rgb(90 70 150 / 20%), transparent 32rem),
+    linear-gradient(145deg, #1d104f, #2c1971 58%, #211255);
 }
 
 .join-shell .welcome-panel { display: none; }
@@ -22,9 +22,9 @@
   padding: 0;
   border: 1px solid rgb(255 255 255 / 62%);
   border-radius: 27px;
-  color: #263d34;
+  color: #211b2d;
   background: #fff;
-  box-shadow: 0 30px 90px rgb(4 28 24 / 34%), inset 0 1px 0 #fff;
+  box-shadow: 0 30px 90px rgb(29 16 79 / 34%), inset 0 1px 0 #fff;
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
@@ -39,8 +39,8 @@
   height: 132px;
   border-radius: 0;
   background:
-    radial-gradient(ellipse at 84% 8%, rgb(191 224 169 / 23%), transparent 40%),
-    linear-gradient(115deg, #1a4a42, #276452);
+    radial-gradient(ellipse at 84% 8%, rgb(233 127 53 / 23%), transparent 40%),
+    linear-gradient(115deg, #1d104f, #2c1971);
   box-shadow: none;
   content: '';
   transform: none;
@@ -75,7 +75,7 @@
 }
 
 .join-shell .mobile-auth-wordmark strong { font-size: 24px; letter-spacing: .04em; }
-.join-shell .mobile-auth-wordmark span { color: #d5e7be; font-size: 10px; letter-spacing: 2px; }
+.join-shell .mobile-auth-wordmark span { color: #f3b17c; font-size: 10px; letter-spacing: 2px; }
 
 .join-shell .registration-panel .form-content {
   position: relative;

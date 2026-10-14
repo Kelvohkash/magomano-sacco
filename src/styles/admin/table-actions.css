@@ -57,7 +57,7 @@
 .table-btn-primary:hover {
   background-color: var(--sacco-blue);
   color: #ffffff;
-  box-shadow: 0 2px 8px rgba(29, 78, 216, 0.35);
+  box-shadow: 0 2px 8px rgba(44, 25, 113, 0.35);
 }
 
 .table-btn-role {
@@ -233,7 +233,7 @@
   border-color: var(--sacco-blue);
   background-color: var(--sacco-blue);
   color: #ffffff;
-  box-shadow: 0 2px 8px rgba(29, 78, 216, 0.3);
+  box-shadow: 0 2px 8px rgba(44, 25, 113, 0.3);
 }
 
 .row-action-popup-menu {
@@ -355,20 +355,20 @@
 
 /* Variant Accents */
 .action-popup-item.variant-primary:hover:not(:disabled) {
-  background-color: rgba(29, 78, 216, 0.2);
-  color: #93c5fd;
+  background-color: rgba(44, 25, 113, 0.2);
+  color: #c8bde6;
 }
 .action-popup-item.variant-primary .action-item-icon {
-  background-color: rgba(29, 78, 216, 0.25);
-  color: #60a5fa;
+  background-color: rgba(44, 25, 113, 0.25);
+  color: #8d7bc1;
 }
 
 .action-popup-item.variant-orange:hover:not(:disabled) {
-  background-color: rgba(234, 88, 12, 0.2);
-  color: #fdba74;
+  background-color: rgba(233, 127, 53, 0.2);
+  color: #e9b487;
 }
 .action-popup-item.variant-orange .action-item-icon {
-  background-color: rgba(234, 88, 12, 0.25);
+  background-color: rgba(233, 127, 53, 0.25);
   color: #fb923c;
 }
 

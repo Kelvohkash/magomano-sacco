@@ -7,22 +7,22 @@
   --admin-surface: #ffffff;
   --admin-border: #e2e8f0;
   --admin-border-subtle: #edf2f7;
-  --admin-dark-bg: #0a1329;
-  --admin-dark-card: #0f1c3d;
-  --admin-dark-border: #1e315b;
+  --admin-dark-bg: #17102f;
+  --admin-dark-card: #211845;
+  --admin-dark-border: #35275e;
 
-  /* SACCO Official Brand Colors: Royal Blue & Vibrant Orange */
-  --sacco-blue: #1d4ed8;
-  --sacco-blue-hover: #1e40af;
-  --sacco-blue-dark: #0f2b5c;
-  --sacco-blue-light: #eff6ff;
-  --sacco-blue-border: #93c5fd;
+  /* SACCO brand colors sampled from the logo. */
+  --sacco-blue: #2c1971;
+  --sacco-blue-hover: #211255;
+  --sacco-blue-dark: #1d104f;
+  --sacco-blue-light: #f3f0fa;
+  --sacco-blue-border: #c8bde6;
 
-  --sacco-orange: #ea580c;
-  --sacco-orange-hover: #c2410c;
-  --sacco-orange-vibrant: #f97316;
-  --sacco-orange-light: #fff7ed;
-  --sacco-orange-border: #fdba74;
+  --sacco-orange: #e97f35;
+  --sacco-orange-hover: #c76624;
+  --sacco-orange-vibrant: #f09a54;
+  --sacco-orange-light: #fff4ea;
+  --sacco-orange-border: #e9b487;
 
   /* Admin Theme Aliases */
   --admin-primary: var(--sacco-blue);

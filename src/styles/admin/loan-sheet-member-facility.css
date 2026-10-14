@@ -3,14 +3,14 @@
   gap: 2.5mm;
   margin-bottom: 2.2mm;
   padding-bottom: 1.5mm;
-  border-bottom: 1pt solid #99f6e4;
+  border-bottom: 1pt solid #c5d4e3;
 }
 
 .doc-section-member .sec-num {
   flex: 0 0 auto;
   padding: 0.8mm 2mm;
-  background: #0f766e;
-  color: #ffffff;
+  background: #eccb61;
+  color: #193a61;
 }
 
 .doc-section-member .sec-title {
@@ -32,9 +32,9 @@
 
 .doc-member-panel-heading {
   padding: 1.4mm 2.8mm;
-  background: #f0fdfa;
-  border-bottom: 0.6pt solid #d5eeea;
-  color: #0f766e;
+  background: #eaf2fa;
+  border-bottom: 0.6pt solid #d5e1ec;
+  color: #315f91;
   font-size: 6.8pt;
   font-weight: 850;
   letter-spacing: 0.07em;
@@ -78,7 +78,7 @@
 
 .doc-member-name {
   grid-column: span 2;
-  background: #fbfefd;
+  background: #fffdf6;
 }
 
 .cell-label {
@@ -99,12 +99,12 @@
 
 .cell-val.primary-text {
   font-weight: 850;
-  color: #042f2e;
+  color: #193a61;
 }
 
 .cell-val.highlight-val {
   font-weight: 850;
-  color: #0f766e;
+  color: #315f91;
 }
 
 /* Section 2: Loan Facility particulars */
@@ -185,7 +185,7 @@
 .calc-v {
   font-size: 9pt;
   font-weight: 850;
-  color: #042f2e;
+  color: #193a61;
 }
 
 .doc-purpose-box {

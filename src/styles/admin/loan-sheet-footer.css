@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: space-between;
   padding-top: 2.8mm;
-  border-top: 1pt solid #0f766e;
+  border-top: 1pt solid #315f91;
   font-size: 6.8pt;
   color: #64748b;
   margin-top: auto;
@@ -31,7 +31,7 @@
 .doc-footer-right {
   font-size: 7pt;
   font-weight: 800;
-  color: #0f766e;
+  color: #315f91;
 }
 
 /* ==========================================================================

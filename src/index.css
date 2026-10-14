@@ -34,6 +34,26 @@
   --sacco-orange-border: #e9b487;
 }
 
+.login-shell,
+.join-shell,
+.member-dashboard {
+  --forest: #193a61;
+  --forest-deep: #142d4a;
+  --leaf: #d9ad27;
+  --coral: #d9ad27;
+  --focus: #315f91;
+  --sacco-blue: #315f91;
+  --sacco-blue-hover: #284d78;
+  --sacco-blue-dark: #193a61;
+  --sacco-blue-light: #eaf2fa;
+  --sacco-blue-border: #c5d4e3;
+  --sacco-orange: #d9ad27;
+  --sacco-orange-hover: #aa8112;
+  --sacco-orange-vibrant: #eccb61;
+  --sacco-orange-light: #fff9e8;
+  --sacco-orange-border: #e7d28a;
+}
+
 * { box-sizing: border-box; }
 
 body {

@@ -4,8 +4,8 @@
   align-items: center;
   justify-content: center;
   padding: 28px 16px;
-  background-color: var(--sacco-blue-dark);
-  background-image: linear-gradient(164deg, transparent 0 13%, rgb(44 25 113 / 38%) 13% 31%, transparent 31% 100%), linear-gradient(16deg, transparent 0 73%, rgb(90 70 150 / 38%) 73% 87%, transparent 87% 100%);
+  background-color: #fff8df;
+  background-image: radial-gradient(ellipse at 12% 10%, rgb(255 229 133 / 55%), transparent 42%), linear-gradient(145deg, #fff8df, #f7f5ee);
 }
 
 .login-shell .welcome-panel { display: none; }
@@ -19,11 +19,13 @@
   justify-content: flex-start;
   overflow: hidden;
   padding: 0;
-  border: 1px solid rgb(29 16 79 / 24%);
+  border: 1px solid rgb(49 95 145 / 18%);
   border-radius: 28px;
-  background-color: var(--sacco-blue-dark);
-  background-image: linear-gradient(18deg, transparent 0 67%, rgb(90 70 150 / 36%) 67% 78%, transparent 78% 100%);
-  box-shadow: 0 24px 70px rgb(29 16 79 / 30%);
+  background-color: rgb(255 255 255 / 76%);
+  background-image: linear-gradient(18deg, transparent 0 67%, rgb(255 229 133 / 40%) 67% 78%, transparent 78% 100%);
+  box-shadow: 0 24px 70px rgb(49 69 88 / 16%);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 }
 
 .login-shell .form-panel::before {
@@ -47,7 +49,7 @@
   width: 136%;
   height: 145px;
   border-radius: 48% 52% 63% 37% / 49% 37% 63% 51%;
-  background: linear-gradient(145deg, rgb(44 25 113 / 68%), rgb(90 70 150 / 55%) 57%, rgb(29 16 79 / 42%));
+  background: linear-gradient(145deg, rgb(255 225 115 / 80%), rgb(236 203 97 / 65%) 57%, rgb(255 248 223 / 38%));
   content: '';
   transform: rotate(-7deg);
 }
@@ -59,15 +61,15 @@
   left: 34px;
   display: inline-flex;
   margin: 0;
-  color: #fff;
+  color: #193a61;
 }
 
 .login-shell .brand-mark {
-  color: var(--sacco-blue-dark);
-  background: var(--sacco-orange);
+  color: #193a61;
+  background: #eccb61;
 }
 
-.login-shell .mobile-brand .brand-name > span { color: rgb(255 255 255 / 78%); }
+.login-shell .mobile-brand .brand-name > span { color: #315f91; }
 
 .login-shell .form-content {
   position: relative;
@@ -100,8 +102,8 @@
 .login-shell .password-field { height: 48px; border-color: #dce3eb; border-radius: 0; }
 .login-shell .password-label-row { margin-top: 18px; }
 .login-shell .remember-row { margin: 16px 0 22px; }
-.login-shell .submit-button { height: 48px; border-color: var(--sacco-blue); background: var(--sacco-blue); }
-.login-shell .submit-button:hover:not(:disabled) { background: var(--sacco-blue-hover); }
+.login-shell .submit-button { height: 48px; border-color: var(--sacco-orange); color: #193a61; background: var(--sacco-orange); }
+.login-shell .submit-button:hover:not(:disabled) { background: var(--sacco-orange-vibrant); }
 .auth-divider { display: flex; align-items: center; gap: 12px; margin: 13px 0; color: #9aa4b0; font-size: 10px; }
 .auth-divider::before, .auth-divider::after { height: 1px; flex: 1; background: #e2e7ec; content: ''; }
 .secondary-auth-button { width: 100%; min-height: 47px; border: 1px solid #d2dbe5; border-radius: 2px; color: #536273; background: #fff; font-size: 12px; font-weight: 600; }

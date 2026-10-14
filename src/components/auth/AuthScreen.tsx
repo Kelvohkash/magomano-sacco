@@ -137,6 +137,7 @@ export function AuthScreen({
                 termsError={termsError}
                 isSubmitting={isSubmitting}
                 onContinue={continueRegistration}
+                onBackToSignIn={() => onChangeMode('login')}
               />
             ) : mode === 'admin-login' ? (
               <AdminLoginForm
@@ -167,17 +168,21 @@ export function AuthScreen({
             )}
           </form>
 
-          <div className="auth-divider">
-            <span>or</span>
-          </div>
+          {mode !== 'register' && (
+            <>
+              <div className="auth-divider">
+                <span>or</span>
+              </div>
 
-          <button
-            type="button"
-            className="secondary-auth-button"
-            onClick={() => onChangeMode(mode === 'login' ? 'register' : 'login')}
-          >
-            {mode === 'register' ? 'Back to sign in' : mode === 'admin-login' ? 'Member sign in' : 'Join the SACCO'}
-          </button>
+              <button
+                type="button"
+                className={`secondary-auth-button ${mode === 'login' ? 'join-sacco-button' : ''}`}
+                onClick={() => onChangeMode(mode === 'login' ? 'register' : 'login')}
+              >
+                {mode === 'admin-login' ? 'Member sign in' : 'Join the SACCO'}
+              </button>
+            </>
+          )}
 
           {mode === 'login' && (
             <button

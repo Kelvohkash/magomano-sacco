@@ -26,6 +26,7 @@ interface RegistrationFormProps {
   termsError: string
   isSubmitting: boolean
   onContinue: () => void
+  onBackToSignIn: () => void
 }
 
 export function RegistrationForm({
@@ -48,6 +49,7 @@ export function RegistrationForm({
   termsError,
   isSubmitting,
   onContinue,
+  onBackToSignIn,
 }: RegistrationFormProps) {
   function setField<K extends keyof MemberRegistrationForm>(
     field: K,
@@ -102,6 +104,9 @@ export function RegistrationForm({
             <ArrowLeft size={17} /> Back
           </button>
         )}
+        <button type="button" className="join-sign-in-button" onClick={onBackToSignIn}>
+          Back to sign in
+        </button>
         {step < totalSteps - 1 ? (
           <button type="button" className="join-next-button" onClick={onContinue}>
             Continue <ArrowRight size={17} />

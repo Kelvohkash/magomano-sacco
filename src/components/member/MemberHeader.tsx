@@ -1,6 +1,7 @@
 import type { Dispatch, SetStateAction } from 'react'
-import { Activity, Clock3, FileText, HandCoins, Landmark, LogOut, Menu, PiggyBank, RefreshCw, UserRound, Wallet, X } from 'lucide-react'
+import { Activity, Clock3, FileText, HandCoins, LogOut, Menu, PiggyBank, RefreshCw, UserRound, Wallet, X } from 'lucide-react'
 import type { MemberView } from '../../types'
+import countyLogo from '../../../Logo.webp'
 
 interface MemberHeaderProps {
   firstName: string
@@ -28,9 +29,7 @@ export function MemberHeader({
   return (
     <header className="dashboard-header">
       <a className="dashboard-brand brand" href="/" aria-label="Magomano County Sacco dashboard">
-        <span className="brand-mark">
-          <Landmark size={21} strokeWidth={1.8} />
-        </span>
+        <img className="member-nav-logo" src={countyLogo} alt="County Supermarket" />
         <span className="brand-name">
           Magomano<span>County Sacco</span>
         </span>
@@ -113,48 +112,58 @@ export function MemberHeader({
       </div>
 
       {menuOpen && (
-        <nav className="dashboard-menu" aria-label="Member menu">
-          <button type="button" onClick={() => { setView('overview'); setMenuOpen(false) }}>
-            <Wallet size={17} /> Overview
-          </button>
-          <button type="button" onClick={() => { setView('apply-loan'); setMenuOpen(false) }}>
-            <HandCoins size={17} /> Apply loan
-          </button>
-          <button type="button" onClick={() => { setView('loan-status'); setMenuOpen(false) }}>
-            <Clock3 size={17} /> Loan application status
-          </button>
-          <button type="button" onClick={() => { setView('savings'); setMenuOpen(false) }}>
-            <PiggyBank size={17} /> Savings
-          </button>
-          <button type="button" onClick={() => { setView('activity'); setMenuOpen(false) }}>
-            <Activity size={17} /> Activity and statements
-          </button>
-          <button type="button" onClick={() => { setView('account-info'); setMenuOpen(false) }}>
-            <UserRound size={17} /> Account info
-          </button>
-          <button type="button" onClick={() => { setView('terms'); setMenuOpen(false) }}>
-            <FileText size={17} /> Terms and conditions
-          </button>
+        <>
           <button
             type="button"
-            className="member-menu-sync-btn"
-            disabled={isSyncing}
-            onClick={() => {
-              if (onSync) onSync()
-            }}
-          >
-            <RefreshCw size={17} className={isSyncing ? 'spin-icon' : ''} />
-            <span>{isSyncing ? 'Syncing records…' : 'Sync SACCO records'}</span>
-          </button>
-          {syncError && (
-            <div className="member-menu-sync-error" role="alert">
-              {syncError}
-            </div>
-          )}
-          <button type="button" onClick={onLogout}>
-            <LogOut size={17} /> Sign out
-          </button>
-        </nav>
+            className="member-menu-backdrop"
+            aria-label="Close member menu"
+            onClick={() => setMenuOpen(false)}
+          />
+          <nav className="dashboard-menu" aria-label="Member menu">
+            <button type="button" aria-current={view === 'overview' ? 'page' : undefined} onClick={() => { setView('overview'); setMenuOpen(false) }}>
+              <Wallet size={17} /> Overview
+            </button>
+            <button type="button" aria-current={view === 'apply-loan' ? 'page' : undefined} onClick={() => { setView('apply-loan'); setMenuOpen(false) }}>
+              <HandCoins size={17} /> Apply loan
+            </button>
+            <button type="button" aria-current={view === 'loan-status' ? 'page' : undefined} onClick={() => { setView('loan-status'); setMenuOpen(false) }}>
+              <Clock3 size={17} /> Loan application status
+            </button>
+            <button type="button" aria-current={view === 'savings' ? 'page' : undefined} onClick={() => { setView('savings'); setMenuOpen(false) }}>
+              <PiggyBank size={17} /> Savings
+            </button>
+            <button type="button" aria-current={view === 'activity' ? 'page' : undefined} onClick={() => { setView('activity'); setMenuOpen(false) }}>
+              <Activity size={17} /> Activity and statements
+            </button>
+            <button type="button" aria-current={view === 'account-info' ? 'page' : undefined} onClick={() => { setView('account-info'); setMenuOpen(false) }}>
+              <UserRound size={17} /> Account info
+            </button>
+            <div className="dashboard-menu-divider" />
+            <button type="button" aria-current={view === 'terms' ? 'page' : undefined} onClick={() => { setView('terms'); setMenuOpen(false) }}>
+              <FileText size={17} /> Terms and conditions
+            </button>
+            <button
+              type="button"
+              className="member-menu-sync-btn"
+              disabled={isSyncing}
+              onClick={() => {
+                if (onSync) onSync()
+              }}
+            >
+              <RefreshCw size={17} className={isSyncing ? 'spin-icon' : ''} />
+              <span>{isSyncing ? 'Syncing records…' : 'Sync SACCO records'}</span>
+            </button>
+            {syncError && (
+              <div className="member-menu-sync-error" role="alert">
+                {syncError}
+              </div>
+            )}
+            <div className="dashboard-menu-divider" />
+            <button type="button" onClick={onLogout}>
+              <LogOut size={17} /> Sign out
+            </button>
+          </nav>
+        </>
       )}
     </header>
   )

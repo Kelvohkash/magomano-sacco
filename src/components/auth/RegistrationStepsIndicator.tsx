@@ -13,12 +13,6 @@ interface RegistrationStepsIndicatorProps {
 export function RegistrationStepsIndicator({ step, steps }: RegistrationStepsIndicatorProps) {
   return (
     <>
-      <div className="join-heading">
-        <span className="join-kicker">MEMBERSHIP APPLICATION</span>
-        <h1>Join Magomano County Sacco</h1>
-        <p>Your details are saved securely and reviewed by our team.</p>
-      </div>
-
       <div className="join-progress" aria-label={`Step ${step + 1} of ${steps.length}`}>
         <div className="join-progress-top">
           <span>
@@ -49,4 +43,3 @@ export function RegistrationStepsIndicator({ step, steps }: RegistrationStepsInd
     </>
   )
 }
-

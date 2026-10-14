@@ -44,13 +44,11 @@ export function MemberOverviewView({
   return (
     <section className="dashboard-content">
       <div className="dashboard-intro">
-        <p className="dashboard-kicker">MEMBER OVERVIEW</p>
         <MemberWelcome
           firstName={firstName}
           savingsBalance={dashboard.savings.balance}
           outstandingLoans={dashboard.loans.outstandingBalance}
         />
-        <p>National ID · {dashboard.member.national_id}</p>
       </div>
 
       <section className="balance-grid" aria-label="Account totals">
@@ -175,7 +173,7 @@ export function MemberOverviewView({
                   <div className="statement-details">
                     <strong><AnimatedFigure value={loan.principalAmount} /></strong>
                     <span>
-                      <CalendarDays size={13} /> {formatDate(loan.issuedAt)} · {loan.repaymentMonths} months · {loan.interestRate}% interest · Savings security · {loan.status}
+                      <CalendarDays size={13} /> {formatDate(loan.issuedAt)} · {loan.repaymentMonths} months · {loan.status}
                     </span>
                     <div className="loan-progress" role="group" aria-label={`Loan of ${loan.principalAmount} repayment progress`}>
                       <div className="loan-progress-heading">

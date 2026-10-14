@@ -88,7 +88,7 @@ export function MemberLoanStatusView({ setView }: MemberLoanStatusViewProps) {
         {[
           { value: '', label: 'All requests' },
           { value: 'pending', label: '1. Awaiting approval' },
-          { value: 'decision', label: '2. Decision' },
+          { value: 'decision', label: '2. Received' },
           { value: 'disbursed', label: '3. Funds disbursed' },
         ].map((stage) => (
           <button
@@ -154,7 +154,7 @@ export function MemberLoanStatusView({ setView }: MemberLoanStatusViewProps) {
                     </span>
                   </div>
                   <p>
-                    {application.repaymentMonths}-month repayment period <span aria-hidden="true">·</span> Savings security <span aria-hidden="true">·</span> {application.purpose}
+                    {application.repaymentMonths}-month repayment period
                   </p>
                   {application.status === 'pending' && (
                     <small>Your application has been received and is waiting for admin review.</small>

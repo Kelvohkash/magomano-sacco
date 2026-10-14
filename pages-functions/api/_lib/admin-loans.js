@@ -200,7 +200,7 @@ export async function handleAdminLoans(path, request, session, db) {
     const reference = `LN-${Date.now()}-${applicationId}-${randomBytes(3).toString('hex').toUpperCase()}`
     const totalRepayable = Math.round(application.requestedAmount * 1.1 * 100) / 100
     const accountLastFour = application.payoutAccountNumber.slice(-4)
-    const disbursementMessage = `Funds have been disbursed to ${application.payoutBankName} account ending ${accountLastFour}. Please allow 2–3 business days for the funds to reflect. Thank you for your patience.`
+    const disbursementMessage = `Funds have been disbursed to ${application.payoutBankName} account  ******${accountLastFour}. Please allow 2–3 business days for the funds to reflect. Thank you for your patience.`
     const pendingRows = await db.prepare(`
       SELECT id, remaining_amount AS remainingAmount, paid_at AS paidAt
       FROM unallocated_loan_payments

@@ -147,7 +147,7 @@ export function MemberLoanApplicationView({
         </div>
 
         <div className="loan-estimate">
-          <span>Flat interest rate</span>
+          <span>Interest rate</span>
           <strong>10%</strong>
           <span>Estimated total repayment</span>
           <strong>
@@ -157,9 +157,6 @@ export function MemberLoanApplicationView({
           <strong>
             <AnimatedFigure value={(Number(loanAmount || 0) * 1.1) / Math.max(1, Number(repaymentMonths) || 1)} />
           </strong>
-          <small>
-            Your maximum principal is 90% of savings remaining after current loan balances and requests are reserved. Loan interest is calculated separately at 10%. Final approval is subject to SACCO review.
-          </small>
         </div>
 
         <label htmlFor="loan-purpose">Purpose of the loan</label>
@@ -171,7 +168,6 @@ export function MemberLoanApplicationView({
           value={loanPurpose}
           onChange={(event) => setLoanPurpose(event.target.value)}
           placeholder="Briefly tell us what the loan is for"
-          required
         />
 
         <label className="loan-electronic-consent">

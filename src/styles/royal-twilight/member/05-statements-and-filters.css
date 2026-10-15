@@ -20,10 +20,17 @@
   font-weight: 800;
   text-shadow: 0 0 16px rgb(245 114 36 / 28%);
 }
+.member-content-savings .statement-amount.withdrawal {
+  color: #ffc2ba;
+}
 .member-content-activity .repayment-history-section .statement-amount {
   color: #ffd166;
   font-size: 15px;
   font-weight: 800;
+  text-shadow: 0 0 16px rgb(255 209 102 / 28%);
+}
+.application-status-section .loan-application-status-card h3 {
+  color: #ffd166;
   text-shadow: 0 0 16px rgb(255 209 102 / 28%);
 }
 .statement-icon,

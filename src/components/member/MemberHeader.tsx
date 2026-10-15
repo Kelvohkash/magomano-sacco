@@ -26,12 +26,10 @@ export function MemberHeader({
   syncError = '',
   onSync,
 }: MemberHeaderProps) {
-  const logoSrc = typeof window !== 'undefined' && (window as any).__NEW_LOGO_BASE64__ ? (window as any).__NEW_LOGO_BASE64__ : countyLogo
-
   return (
     <header className="dashboard-header">
       <a className="dashboard-brand brand" href="/" aria-label="Magomano County Sacco dashboard">
-        <img className="member-nav-logo" src={logoSrc} alt="County Supermarket" />
+        <img className="member-nav-logo" src={countyLogo} alt="County Supermarket" />
         <span className="brand-name">
           Magomano<span>County Sacco</span>
         </span>

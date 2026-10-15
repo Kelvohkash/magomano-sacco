@@ -132,7 +132,7 @@ export async function memberTransactions(request, session, env) {
   }
 
   if (type === 'savings') {
-    const where = ['member_id = ?', "entry_type = 'deposit'", ...dateConditions]
+    const where = ['member_id = ?', ...dateConditions]
     const params = [memberId, ...dateParams]
     if (filters.search) {
       where.push('(description LIKE ?)')

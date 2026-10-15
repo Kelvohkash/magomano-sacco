@@ -1,4 +1,4 @@
-import { Landmark } from 'lucide-react'
+import countyLogo from '../../../../Logo.webp'
 import { formatDate } from '../../../format'
 import type { AdminLoanApplication } from '../../../types'
 
@@ -13,7 +13,7 @@ export function DocLetterhead({ application, refCode }: DocLetterheadProps) {
       <header className="doc-letterhead">
         <div className="doc-brand-block">
           <div className="doc-crest-icon">
-            <Landmark size={28} strokeWidth={2.2} />
+            <img src={countyLogo} alt="Magomano County Sacco" />
           </div>
           <div className="doc-org-text">
             <h1 className="doc-org-name">MAGOMANO COUNTY SACCO</h1>
@@ -44,4 +44,3 @@ export function DocLetterhead({ application, refCode }: DocLetterheadProps) {
     </>
   )
 }
-

@@ -20,6 +20,18 @@ interface AdminChargeRecord {
   insufficientCount: number
 }
 
+async function fetchAdminCharges() {
+  const response = await fetch('/api/admin/charges')
+  const result = await readJsonResponse<{ charges?: AdminChargeRecord[]; error?: string }>(response)
+  if (!response.ok) {
+    const message = response.status === 404
+      ? 'Admin charges API is not available. Rebuild and restart the Pages dev server.'
+      : result.error ?? 'Could not load admin charges.'
+    throw new Error(message)
+  }
+  return result.charges ?? []
+}
+
 export function AdminChargesView({ members, onRefresh }: AdminChargesViewProps) {
   const approvedMembers = members.filter((member) => member.accountStatus === 'approved')
   const [targetType, setTargetType] = useState<'individual' | 'group' | 'all'>('individual')
@@ -37,15 +49,7 @@ export function AdminChargesView({ members, onRefresh }: AdminChargesViewProps) 
     setLoading(true)
     setHistoryError('')
     try {
-      const response = await fetch('/api/admin/charges')
-      const result = await readJsonResponse<{ charges?: AdminChargeRecord[]; error?: string }>(response)
-      if (!response.ok) {
-        const message = response.status === 404
-          ? 'Admin charges API is not available. Rebuild and restart the Pages dev server.'
-          : result.error ?? 'Could not load admin charges.'
-        throw new Error(message)
-      }
-      setRecords(result.charges ?? [])
+      setRecords(await fetchAdminCharges())
     } catch (loadError) {
       setHistoryError(requestErrorMessage(loadError, 'Could not load admin charges.'))
     } finally {
@@ -54,8 +58,21 @@ export function AdminChargesView({ members, onRefresh }: AdminChargesViewProps) 
   }, [])
 
   useEffect(() => {
-    void loadCharges()
-  }, [loadCharges])
+    let active = true
+    void fetchAdminCharges()
+      .then((charges) => {
+        if (active) setRecords(charges)
+      })
+      .catch((loadError: unknown) => {
+        if (active) setHistoryError(requestErrorMessage(loadError, 'Could not load admin charges.'))
+      })
+      .finally(() => {
+        if (active) setLoading(false)
+      })
+    return () => {
+      active = false
+    }
+  }, [])
 
   function updateTargetType(value: 'individual' | 'group' | 'all') {
     setTargetType(value)

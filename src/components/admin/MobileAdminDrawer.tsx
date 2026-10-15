@@ -50,6 +50,7 @@ export function MobileAdminDrawer({
   onRefresh,
   onLogout,
 }: MobileAdminDrawerProps) {
+  const { canInstall, triggerInstall } = usePwaInstall()
   if (!isOpen) return null
 
   const navItems: NavItem[] = [
@@ -111,8 +112,6 @@ export function MobileAdminDrawer({
     setView(view)
     onClose()
   }
-
-  const { canInstall, triggerInstall } = usePwaInstall()
 
   return (
     <div className="mobile-admin-drawer-backdrop" onClick={onClose}>

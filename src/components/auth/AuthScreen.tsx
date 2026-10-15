@@ -66,8 +66,6 @@ export function AuthScreen({
 }: AuthScreenProps) {
   const [step, setStep] = useState(0)
   const formRef = useRef<HTMLFormElement>(null)
-  const logoSrc = typeof window !== 'undefined' && (window as any).__NEW_LOGO_BASE64__ ? (window as any).__NEW_LOGO_BASE64__ : countyLogo
-
   function continueRegistration() {
     const form = formRef.current
     if (!form) return
@@ -102,7 +100,7 @@ export function AuthScreen({
 
       <section className={`form-panel ${mode === 'register' ? 'registration-panel' : ''}`}>
         <div className="mobile-auth-wordmark" aria-label="Magomano County SACCO">
-          <img className="mobile-auth-emblem" src={logoSrc} alt="" />
+          <img className="mobile-auth-emblem" src={countyLogo} alt="" />
           <strong>MAGOMANO</strong>
           <span className="mobile-auth-tagline">COUNTY SACCO</span>
         </div>

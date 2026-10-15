@@ -88,7 +88,7 @@ export interface AdminPopupMessageCreate {
 }
 
 export interface SavingsTransaction {
-  entryType: 'deposit'
+  entryType: 'deposit' | 'withdrawal'
   amount: number
   description: string
   occurredAt: string

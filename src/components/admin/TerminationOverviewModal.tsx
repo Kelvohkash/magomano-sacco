@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Download, LoaderCircle, Printer, X } from 'lucide-react'
+import countyLogo from '../../../Logo.webp'
 import { currency, formatDate } from '../../format'
 
 interface TerminationReport {
@@ -149,9 +150,35 @@ export function TerminationOverviewModal({ memberId, onClose }: TerminationOverv
         <div className="termination-overview-body">
           {error && <p className="termination-overview-error" role="alert">{error}</p>}
           {!report && !error && <p className="termination-overview-loading"><LoaderCircle size={17} /> Loading member history…</p>}
-          {report && <>
+          {report && <article className="termination-report-document">
+            <header className="termination-report-letterhead">
+              <div className="termination-report-brand">
+                <span className="termination-report-crest">
+                  <img src={countyLogo} alt="Magomano County Sacco" />
+                </span>
+                <div>
+                  <h1>MAGOMANO COUNTY SACCO</h1>
+                  <p>MEMBERSHIP &amp; FINANCIAL SERVICES</p>
+                  <span>Official member termination and settlement record</span>
+                </div>
+              </div>
+              <div className="termination-report-reference">
+                <span>DOCUMENT REF</span>
+                <strong>MAG-TR-{String(memberId).padStart(5, '0')}</strong>
+                <small>SETTLEMENT DATE · {formatDate(report.termination.settledAt)}</small>
+              </div>
+            </header>
+
+            <div className="termination-report-banner">
+              <strong>MEMBER TERMINATION STATEMENT</strong>
+              <span>FINAL SETTLEMENT</span>
+            </div>
+
             <section className="termination-report-section">
-              <h3>Member details</h3>
+              <div className="termination-section-heading">
+                <span>SECTION 01</span>
+                <h3>Member details</h3>
+              </div>
               <dl className="termination-member-details">
                 <div><dt>SACCO number</dt><dd>{report.member.saccoNumber || '—'}</dd></div>
                 <div><dt>National ID</dt><dd>{report.member.nationalId || '—'}</dd></div>
@@ -161,7 +188,10 @@ export function TerminationOverviewModal({ memberId, onClose }: TerminationOverv
             </section>
 
             <section className="termination-report-section">
-              <h3>Final settlement</h3>
+              <div className="termination-section-heading">
+                <span>SECTION 02</span>
+                <h3>Final settlement</h3>
+              </div>
               <dl className="termination-settlement-summary">
                 <div><dt>Savings before settlement</dt><dd>{currency.format(report.termination.savingsBefore)}</dd></div>
                 <div><dt>Savings applied to loans</dt><dd>{currency.format(report.termination.savingsApplied)}</dd></div>
@@ -178,8 +208,11 @@ export function TerminationOverviewModal({ memberId, onClose }: TerminationOverv
               )}
             </section>
 
-            <section className="termination-report-section">
-              <h3>Member transaction statement</h3>
+            <section className="termination-report-section termination-ledger-section">
+              <div className="termination-section-heading">
+                <span>SECTION 03</span>
+                <h3>Member transaction statement</h3>
+              </div>
               <div className="termination-report-table-wrap">
                 <table className="termination-report-table">
                   <thead><tr><th>Date</th><th>Description</th><th>Debit</th><th>Credit</th><th>Balance</th></tr></thead>
@@ -204,7 +237,44 @@ export function TerminationOverviewModal({ memberId, onClose }: TerminationOverv
                 </table>
               </div>
             </section>
-          </>}
+
+            <section className="termination-report-section termination-acknowledgement">
+              <div className="termination-section-heading">
+                <span>SECTION 04</span>
+                <h3>Acknowledgement &amp; disbursement</h3>
+              </div>
+              <div className="termination-disbursement-note">
+                <span>REMAINING PAYOUT TO MEMBER</span>
+                <strong>{currency.format(report.termination.payoutAmount)}</strong>
+                <p>The member acknowledges receipt of the remaining payout shown above. SACCO signatories confirm and authorize the disbursement as part of this final settlement.</p>
+              </div>
+              <div className="termination-signatories">
+                <div className="termination-signature-block">
+                  <span>SACCO AUTHORIZED SIGNATORY 1</span>
+                  <div className="termination-signature-line" />
+                  <small>Name / designation</small>
+                  <div className="termination-signature-date">Date: ____________________</div>
+                </div>
+                <div className="termination-signature-block">
+                  <span>SACCO AUTHORIZED SIGNATORY 2</span>
+                  <div className="termination-signature-line" />
+                  <small>Name / designation</small>
+                  <div className="termination-signature-date">Date: ____________________</div>
+                </div>
+                <div className="termination-signature-block termination-member-acknowledgement">
+                  <span>MEMBER ACKNOWLEDGEMENT OF DISBURSEMENT</span>
+                  <div className="termination-signature-line" />
+                  <small>{report.member.fullName} · Signature</small>
+                  <div className="termination-signature-date">Date: ____________________</div>
+                </div>
+              </div>
+            </section>
+
+            <footer className="termination-report-footer">
+              <span>Confidential member financial record · Magomano County Sacco</span>
+              <strong>MAG-TR-{String(memberId).padStart(5, '0')}</strong>
+            </footer>
+          </article>}
         </div>
       </section>
     </div>

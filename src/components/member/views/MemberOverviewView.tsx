@@ -108,13 +108,13 @@ export function MemberOverviewView({
               <p className="section-kicker">ACCOUNT ACTIVITY</p>
               <h2>Savings statement</h2>
               <span className="statement-total">
-                {savingsPage.loading ? 'Loading…' : `${savingsPage.total} deposits`}
+                {savingsPage.loading ? 'Loading…' : `${savingsPage.total} transactions`}
               </span>
             </div>
             <div className="statement-heading-actions">
               <Wallet size={19} aria-hidden="true" />
               <StatementFilterPopover
-                label="savings deposits"
+                label="savings transactions"
                 filters={savingsPage.filters}
                 onApply={(filters) => onUpdateFilter(setSavingsPage, filters)}
               />
@@ -127,26 +127,26 @@ export function MemberOverviewView({
                 <article className="statement-row" key={`${entry.occurredAt}-${index}`}>
                   <div className="statement-icon savings-icon"><Wallet size={16} /></div>
                   <div className="statement-details">
-                    <strong>{entry.description || 'Savings deposit'}</strong>
+                    <strong>{entry.description || (entry.entryType === 'deposit' ? 'Savings deposit' : 'Savings withdrawal')}</strong>
                     <span><CalendarDays size={13} /> {formatDate(entry.occurredAt)}</span>
                   </div>
-                  <strong className="statement-amount deposit">
-                    +<AnimatedFigure value={entry.amount} />
+                  <strong className={`statement-amount ${entry.entryType === 'deposit' ? 'deposit' : 'withdrawal'}`}>
+                    {entry.entryType === 'deposit' ? '+' : '−'}<AnimatedFigure value={entry.amount} />
                   </strong>
                 </article>
               ))}
             </div>
           ) : savingsPage.loading ? (
-            <p className="empty-statement">Loading savings deposits…</p>
+            <p className="empty-statement">Loading savings transactions…</p>
           ) : !savingsPage.error && (
             <p className="empty-statement">
               {savingsPage.filters.search || savingsPage.filters.from || savingsPage.filters.to
-                ? 'No deposits match these filters.'
-                : 'No savings deposits have been recorded yet.'}
+                ? 'No savings transactions match these filters.'
+                : 'No savings transactions have been recorded yet.'}
             </p>
           )}
           <StatementPagination
-            label="savings deposits"
+            label="savings transactions"
             page={savingsPage.page}
             pageSize={savingsPage.pageSize}
             total={savingsPage.total}
@@ -159,30 +159,6 @@ export function MemberOverviewView({
 
         {/* Loans Taken */}
         {showActivity && <>
-          <section className="activity-cards">
-            <article className="activity-card admin-charges-card">
-              <div className="activity-card-heading">
-                <span><HandCoins size={18} /></span>
-                <p>Admin Charges</p>
-              </div>
-              <p className="activity-card-amount">
-                <AnimatedFigure value={dashboard?.adminCharges?.total ?? 0} />
-              </p>
-              <p className="activity-card-caption">Charges applied by administrators</p>
-              {dashboard?.adminCharges?.recent && dashboard.adminCharges.recent.length > 0 && (
-                <ul className="admin-charges-list">
-                  {dashboard.adminCharges.recent.map((c) => (
-                    <li key={c.id} className="admin-charge-item">
-                      <span className="admin-charge-date">{formatDate(c.occurredAt)}</span>
-                      <span className="admin-charge-desc">{c.description}</span>
-                      <strong className="admin-charge-amount">-<AnimatedFigure value={c.amount} /></strong>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </article>
-          </section>
-
           <section className="statement-section">
           <div className="statement-heading">
             <div>
@@ -313,6 +289,29 @@ export function MemberOverviewView({
             onPageChange<LoanRepayment>('repayments', page, repaymentsPage.filters, setRepaymentsPage)
           }
         />
+      </section>}
+      {showActivity && <section className="activity-cards">
+        <article className="activity-card admin-charges-card">
+          <div className="activity-card-heading">
+            <span><HandCoins size={18} /></span>
+            <p>Admin Charges</p>
+          </div>
+          <p className="activity-card-amount">
+            <AnimatedFigure value={dashboard?.adminCharges?.total ?? 0} />
+          </p>
+          <p className="activity-card-caption">Charges applied by administrators</p>
+          {dashboard?.adminCharges?.recent && dashboard.adminCharges.recent.length > 0 && (
+            <ul className="admin-charges-list">
+              {dashboard.adminCharges.recent.map((c) => (
+                <li key={c.id} className="admin-charge-item">
+                  <span className="admin-charge-date">{formatDate(c.occurredAt)}</span>
+                  <span className="admin-charge-desc">{c.description}</span>
+                  <strong className="admin-charge-amount">-<AnimatedFigure value={c.amount} /></strong>
+                </li>
+              ))}
+            </ul>
+          )}
+        </article>
       </section>}
     </section>
   )

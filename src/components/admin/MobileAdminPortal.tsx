@@ -258,7 +258,7 @@ export function MobileAdminPortal({
             setMemberFilter={ui.setMemberFilter}
             pendingMembersCount={ui.pendingMembers.length}
             approvedMembersCount={ui.approvedMembers.length}
-            signatoriesCount={ui.signatories.length}
+            signatories={ui.signatories}
             viewingMemberId={ui.viewingMemberId}
             setViewingMemberId={ui.setViewingMemberId}
             beginMemberEdit={ui.beginMemberEdit}

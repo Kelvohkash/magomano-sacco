@@ -334,18 +334,34 @@
   list-style: none;
 }
 
+.termination-custom-charges {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.termination-custom-charges h4 {
+  margin: 0;
+  color: #193a61;
+  font-size: 11px;
+  font-weight: 800;
+}
+
 .termination-charge-list li {
   display: flex;
   justify-content: space-between;
   gap: 10px;
-  padding: 8px 11px;
-  border-bottom: 1px solid var(--admin-border-subtle);
-  color: var(--admin-text-muted);
+  padding: 9px 11px;
+  border: 1px solid #dbe4ec;
+  border-radius: 5px;
+  background: #f8fafc;
+  color: #334155;
   font-size: 12px;
 }
 
 .termination-charge-list strong {
-  color: var(--admin-text-dark);
+  color: #193a61;
+  font-weight: 800;
   white-space: nowrap;
 }
 
@@ -409,9 +425,9 @@
   flex: 0 0 auto;
   place-items: center;
   overflow: hidden;
-  border: 1px solid #e7d28a;
+  border: 1px solid #315f91;
   border-radius: 12px;
-  background: #fff;
+  background: #315f91;
 }
 
 .termination-report-crest img {
@@ -612,7 +628,7 @@
 
 .termination-signatories {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 12px;
 }
 
@@ -642,6 +658,23 @@
   margin-top: 5px;
   color: #64748b;
   font-size: 9px;
+}
+
+.termination-signature-block > strong {
+  display: block;
+  margin-top: 5px;
+  color: #193a61;
+  font-size: 10px;
+}
+
+.termination-no-signatories {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 12px;
+  border: 1px dashed #94a3b8;
+  border-radius: 6px;
+  color: #475569;
+  font-size: 10px;
 }
 
 .termination-signature-date {
@@ -851,6 +884,27 @@
     overflow: visible !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
+  }
+
+  .termination-custom-charges,
+  .termination-charge-list li,
+  .termination-charge-list li span,
+  .termination-charge-list li strong,
+  .termination-no-signatories {
+    visibility: visible !important;
+    color: #1e293b !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .termination-charge-list li {
+    border-color: #cbd5e1 !important;
+    background: #f8fafc !important;
+  }
+
+  .termination-charge-list li strong,
+  .termination-custom-charges h4 {
+    color: #193a61 !important;
   }
 
   .termination-report-letterhead {

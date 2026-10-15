@@ -28,7 +28,7 @@ interface AdminMembersViewProps {
   setMemberFilter: Dispatch<SetStateAction<'all' | 'pending' | 'approved' | 'signatory' | 'admin'>>
   pendingMembersCount: number
   approvedMembersCount: number
-  signatoriesCount: number
+  signatories: AdminMember[]
   viewingMemberId: number | null
   setViewingMemberId: (id: number | null) => void
   beginMemberEdit: (member: AdminMember) => void
@@ -48,7 +48,7 @@ export function AdminMembersView({
   setMemberFilter,
   pendingMembersCount,
   approvedMembersCount,
-  signatoriesCount,
+  signatories,
   viewingMemberId,
   setViewingMemberId,
   beginMemberEdit,
@@ -178,7 +178,7 @@ export function AdminMembersView({
           </div>
         </form>
       </div>}
-      {overviewMemberId !== null && <TerminationOverviewModal memberId={overviewMemberId} onClose={() => setOverviewMemberId(null)} />}
+      {overviewMemberId !== null && <TerminationOverviewModal memberId={overviewMemberId} signatories={signatories} onClose={() => setOverviewMemberId(null)} />}
 
       {/* Search & Filter Controls */}
       <div className="table-controls-bar">
@@ -224,7 +224,7 @@ export function AdminMembersView({
             className={`filter-chip ${memberFilter === 'signatory' ? 'active' : ''}`}
             onClick={() => setMemberFilter('signatory')}
           >
-            Signatories ({signatoriesCount})
+            Signatories ({signatories.length})
           </button>
         </div>
       </div>

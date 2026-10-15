@@ -126,13 +126,13 @@
 }
 
 .metric-box.principal-box {
-  background-color: #f0fdfa;
-  border-color: #99f6e4;
+  background-color: #eff6ff;
+  border-color: #bfdbfe;
 }
 
 .metric-box.highlight-box {
-  background-color: #f0fdf4;
-  border-color: #bbf7d0;
+  background-color: #eff6ff;
+  border-color: #bfdbfe;
 }
 
 .m-label {
@@ -151,7 +151,7 @@
 }
 
 .m-val.highlight-val {
-  color: #15803d;
+  color: #1d4ed8;
 }
 
 .m-note {

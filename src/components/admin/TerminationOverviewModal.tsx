@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Download, LoaderCircle, Printer, X } from 'lucide-react'
 import countyLogo from '../../../Logo.webp'
 import { currency, formatDate } from '../../format'
+import type { AdminMember } from '../../types'
 
 interface TerminationReport {
   member: {
@@ -31,6 +32,7 @@ interface TerminationReport {
 
 interface TerminationOverviewModalProps {
   memberId: number
+  signatories: AdminMember[]
   onClose: () => void
 }
 
@@ -101,7 +103,7 @@ function downloadExcel(report: TerminationReport) {
   window.setTimeout(() => URL.revokeObjectURL(url), 0)
 }
 
-export function TerminationOverviewModal({ memberId, onClose }: TerminationOverviewModalProps) {
+export function TerminationOverviewModal({ memberId, signatories, onClose }: TerminationOverviewModalProps) {
   const [report, setReport] = useState<TerminationReport | null>(null)
   const [error, setError] = useState('')
   const statementTotals = report?.ledger.reduce((sum, entry) => ({
@@ -201,11 +203,14 @@ export function TerminationOverviewModal({ memberId, onClose }: TerminationOverv
                 <div><dt>Loan balance remaining</dt><dd>{currency.format(report.termination.remainingLoanDue)}</dd></div>
               </dl>
               {report.termination.charges.length > 0 && (
-                <ul className="termination-charge-list">
-                  {report.termination.charges.map((charge, index) => (
-                    <li key={`${charge.description}-${index}`}><span>{charge.description}</span><strong>{currency.format(charge.amount)}</strong></li>
-                  ))}
-                </ul>
+                <div className="termination-custom-charges">
+                  <h4>Custom charge breakdown</h4>
+                  <ul className="termination-charge-list">
+                    {report.termination.charges.map((charge, index) => (
+                      <li key={`${charge.description}-${index}`}><span>{charge.description}</span><strong>{currency.format(charge.amount)}</strong></li>
+                    ))}
+                  </ul>
+                </div>
               )}
             </section>
 
@@ -250,18 +255,18 @@ export function TerminationOverviewModal({ memberId, onClose }: TerminationOverv
                 <p>The member acknowledges receipt of the remaining payout shown above. SACCO signatories confirm and authorize the disbursement as part of this final settlement.</p>
               </div>
               <div className="termination-signatories">
-                <div className="termination-signature-block">
-                  <span>SACCO AUTHORIZED SIGNATORY 1</span>
-                  <div className="termination-signature-line" />
-                  <small>Name / designation</small>
-                  <div className="termination-signature-date">Date: ____________________</div>
-                </div>
-                <div className="termination-signature-block">
-                  <span>SACCO AUTHORIZED SIGNATORY 2</span>
-                  <div className="termination-signature-line" />
-                  <small>Name / designation</small>
-                  <div className="termination-signature-date">Date: ____________________</div>
-                </div>
+                {signatories.map((signatory) => (
+                  <div className="termination-signature-block" key={signatory.id}>
+                    <strong>{signatory.fullName}</strong>
+                    <span>Authorized Signatory</span>
+                    <div className="termination-signature-line" />
+                    <small>Authorized Signature</small>
+                    <div className="termination-signature-date">Date: ____________________</div>
+                  </div>
+                ))}
+                {!signatories.length && (
+                  <p className="termination-no-signatories">No authorized signatories are currently assigned.</p>
+                )}
                 <div className="termination-signature-block termination-member-acknowledgement">
                   <span>MEMBER ACKNOWLEDGEMENT OF DISBURSEMENT</span>
                   <div className="termination-signature-line" />

@@ -1,0 +1,492 @@
+.termination-charge-backdrop,
+.termination-overview-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.58);
+}
+
+.termination-charge-modal,
+.termination-overview-modal {
+  width: min(100%, 760px);
+  max-height: min(90vh, 900px);
+  overflow: auto;
+  border: 1px solid var(--admin-border);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.25);
+}
+
+.termination-charge-modal {
+  width: min(100%, 620px);
+  padding: 24px;
+}
+
+.termination-charge-heading,
+.termination-overview-header,
+.termination-charge-lines-heading,
+.termination-charge-line,
+.termination-payout-preview,
+.termination-charge-actions,
+.termination-overview-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.termination-charge-heading {
+  margin-bottom: 12px;
+}
+
+.termination-charge-heading p,
+.termination-overview-eyebrow {
+  margin: 0 0 5px;
+  color: var(--admin-primary);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.termination-charge-heading h2,
+.termination-overview-header h2 {
+  margin: 0;
+  color: var(--admin-text-dark);
+  font-size: 20px;
+}
+
+.termination-charge-summary {
+  margin: 0 0 20px;
+  color: var(--admin-text-muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.termination-charge-summary strong {
+  color: var(--admin-text-dark);
+  white-space: nowrap;
+}
+
+.termination-charge-lines-heading {
+  margin-bottom: 10px;
+}
+
+.termination-charge-lines-heading h3,
+.termination-report-section h3 {
+  margin: 0;
+  color: var(--admin-text-dark);
+  font-size: 14px;
+}
+
+.termination-add-charge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px;
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--admin-text-dark);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.termination-charge-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.termination-charge-line {
+  align-items: flex-end;
+}
+
+.termination-charge-line label {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 5px;
+  color: var(--admin-text-muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.termination-charge-line input {
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 10px;
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  color: var(--admin-text-dark);
+  font: inherit;
+  font-size: 13px;
+}
+
+.termination-charge-line label:first-child {
+  flex: 2;
+}
+
+.termination-remove-charge,
+.termination-overview-close {
+  display: inline-flex;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  background: #fff;
+  color: #b42318;
+  cursor: pointer;
+}
+
+.termination-no-charges {
+  margin: 0;
+  padding: 14px;
+  border: 1px dashed var(--admin-border);
+  border-radius: 8px;
+  color: var(--admin-text-muted);
+  font-size: 12px;
+  text-align: center;
+}
+
+.termination-payout-preview {
+  margin-top: 18px;
+  padding: 14px;
+  border-radius: 9px;
+  background: #f1f5f9;
+  color: var(--admin-text-muted);
+  font-size: 12px;
+}
+
+.termination-payout-preview strong {
+  color: var(--admin-text-dark);
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+}
+
+.termination-charge-actions {
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.termination-charge-actions .submit-button {
+  flex: 0 1 240px;
+}
+
+.termination-overview-modal {
+  width: min(100%, 1120px);
+}
+
+.termination-overview-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--admin-border);
+  background: #fff;
+}
+
+.termination-overview-header > div:first-child {
+  min-width: 0;
+}
+
+.termination-overview-header h2 {
+  overflow-wrap: anywhere;
+}
+
+.termination-overview-header > div:first-child > p:last-child {
+  margin: 5px 0 0;
+  color: var(--admin-text-muted);
+  font-size: 12px;
+}
+
+.termination-overview-actions {
+  flex: 0 0 auto;
+}
+
+.termination-overview-actions .table-btn-view {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+}
+
+.termination-overview-close {
+  color: var(--admin-text-muted);
+}
+
+.termination-overview-close:disabled,
+.termination-add-charge:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.termination-modal-error {
+  margin: 12px 0 0;
+  color: #b91c1c;
+  font-size: 12px;
+}
+
+.termination-overview-body {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 22px 24px 28px;
+}
+
+.termination-report-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.termination-member-details,
+.termination-settlement-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+}
+
+.termination-member-details > div,
+.termination-settlement-summary > div {
+  min-width: 0;
+  padding: 11px 12px;
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.termination-member-details dt,
+.termination-settlement-summary dt {
+  margin-bottom: 5px;
+  color: var(--admin-text-muted);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.termination-member-details dd,
+.termination-settlement-summary dd {
+  margin: 0;
+  color: var(--admin-text-dark);
+  font-size: 12px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.termination-report-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+}
+
+.termination-report-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.termination-report-table th,
+.termination-report-table td {
+  padding: 9px 11px;
+  border-bottom: 1px solid var(--admin-border-subtle);
+  text-align: left;
+}
+
+.termination-report-table th {
+  background: #f8fafc;
+  color: var(--admin-text-muted);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.termination-report-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.termination-report-table .termination-statement-totals td {
+  border-top: 2px solid var(--admin-border);
+  color: var(--admin-text-dark);
+  font-weight: 800;
+}
+
+.termination-report-table td:nth-last-child(-n+3) {
+  font-variant-numeric: tabular-nums;
+}
+
+.termination-charge-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.termination-charge-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 11px;
+  border-bottom: 1px solid var(--admin-border-subtle);
+  color: var(--admin-text-muted);
+  font-size: 12px;
+}
+
+.termination-charge-list strong {
+  color: var(--admin-text-dark);
+  white-space: nowrap;
+}
+
+.termination-repayments-title {
+  margin: 8px 0 -4px;
+  color: var(--admin-text-dark);
+  font-size: 12px;
+}
+
+.termination-overview-error {
+  margin: 0;
+  padding: 12px;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 13px;
+}
+
+.termination-overview-loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--admin-text-muted);
+  font-size: 13px;
+}
+
+@media (max-width: 700px) {
+  .termination-charge-backdrop,
+  .termination-overview-backdrop {
+    padding: 8px;
+  }
+
+  .termination-charge-modal {
+    padding: 18px;
+  }
+
+  .termination-charge-line {
+    flex-wrap: wrap;
+  }
+
+  .termination-charge-line label:first-child {
+    flex-basis: 100%;
+  }
+
+  .termination-overview-header {
+    align-items: flex-start;
+    padding: 16px;
+  }
+
+  .termination-overview-header h2 {
+    font-size: 16px;
+  }
+
+  .termination-overview-actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .termination-overview-actions .table-btn-view {
+    padding: 8px;
+    font-size: 0;
+  }
+
+  .termination-overview-body {
+    padding: 16px;
+  }
+
+  .termination-charge-actions .submit-button {
+    flex-basis: 190px;
+  }
+
+  .termination-member-details,
+  .termination-settlement-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+
+  .termination-overview-backdrop,
+  .termination-overview-modal,
+  .termination-overview-modal * {
+    visibility: visible !important;
+  }
+
+  .termination-overview-backdrop {
+    position: absolute;
+    inset: 0;
+    display: block;
+    padding: 0;
+    background: #fff;
+  }
+
+  .termination-overview-modal {
+    position: static;
+    width: 100%;
+    max-height: none;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .termination-overview-header {
+    position: static;
+    padding: 0 0 14px;
+  }
+
+  .termination-overview-actions {
+    display: none !important;
+  }
+
+  .termination-overview-body {
+    gap: 14px;
+    padding: 14px 0 0;
+  }
+
+  .termination-report-section {
+    break-inside: avoid;
+  }
+
+  .termination-report-table-wrap {
+    overflow: visible;
+  }
+
+  .termination-report-table {
+    font-size: 8px;
+    white-space: normal;
+  }
+
+  .termination-report-table th,
+  .termination-report-table td {
+    padding: 5px;
+  }
+
+  @page {
+    size: landscape;
+    margin: 12mm;
+  }
+}

@@ -1,0 +1,86 @@
+
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-filter-trigger {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-filter-trigger:hover,
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-filter-trigger.has-filters {
+  border-color: var(--rt-border-orange);
+  color: var(--rt-orange-light);
+  background: var(--rt-orange-dim);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-filter-dialog form {
+  border: 1px solid var(--rt-border-orange);
+  color: var(--rt-text);
+  background: var(--rt-surface);
+  box-shadow: 0 18px 48px rgb(5 2 15 / 65%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-filter-dialog-heading span,
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-filter-dialog-heading h2 {
+  color: var(--rt-text);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-filter-fields label {
+  color: var(--rt-text-muted);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-filter-fields input,
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-filter-fields select {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-filter-close,
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-filter-reset {
+  color: var(--rt-text-muted);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-filter-reset:hover,
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-filter-close:hover {
+  color: var(--rt-orange-light);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-filter-error,
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-edit-error {
+  color: #ffc2ba;
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-edit-drawer {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background: var(--rt-surface);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-edit-form label {
+  color: var(--rt-text);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .statement-edit-form input {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-statement-panel .admin-table thead th {
+  border-color: var(--rt-border);
+  color: var(--rt-text-muted);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-statement-panel .admin-table tbody td {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background: transparent;
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-statement-panel .admin-table tbody tr:hover,
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-statement-panel .admin-table tbody tr:hover > td {
+  color: var(--rt-text);
+  background: rgb(31 21 63 / 76%);
+}

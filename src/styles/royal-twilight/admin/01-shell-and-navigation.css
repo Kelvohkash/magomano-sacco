@@ -1,0 +1,90 @@
+/* Admin portal: keep every admin surface in the same fixed palette */
+.admin-root-layout,
+.mobile-admin-root-layout {
+  color: var(--rt-text);
+  background:
+    radial-gradient(ellipse at 88% 10%, rgb(52 36 125 / 16%), transparent 36rem),
+    linear-gradient(160deg, #130d2e, #0e0921 72%, #080517);
+}
+
+.admin-root-layout :is(.admin-viewport, .mobile-admin-viewport),
+.mobile-admin-root-layout .mobile-admin-viewport {
+  color: var(--rt-text);
+  background: transparent;
+}
+
+.admin-topbar,
+.mobile-admin-topbar {
+  border-bottom: 1px solid var(--rt-border-orange);
+  background: linear-gradient(110deg, #130d2e, #1b1142 70%, #241468);
+  box-shadow: 0 4px 24px rgb(0 0 0 / 34%);
+}
+
+.admin-navbar,
+.mobile-admin-drawer,
+.mobile-admin-ledger-bar,
+.mobile-admin-bottom-nav,
+.mobile-admin-drawer-panel {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background: var(--rt-surface);
+}
+
+.admin-nav-link,
+.mobile-admin-drawer button,
+.mobile-admin-icon-btn,
+.mobile-ledger-tab-btn { color: var(--rt-text-muted); }
+.admin-nav-link:hover,
+.mobile-admin-drawer button:hover,
+.mobile-admin-icon-btn:hover { color: var(--rt-text); background: var(--rt-orange-dim); }
+.admin-nav-link.active,
+.mobile-ledger-tab-btn.is-active {
+  border-color: var(--rt-border-orange);
+  color: var(--rt-orange-warm);
+  background: var(--rt-orange-dim);
+  box-shadow: none;
+}
+.admin-nav-link.active .nav-icon-wrap,
+.admin-nav-link:hover .nav-icon-wrap { color: var(--rt-orange-warm); }
+.admin-nav-group-label,
+.admin-nav-footer,
+.nav-footer-card,
+.nav-footer-card p { color: var(--rt-text-muted); }
+
+.admin-viewport,
+.mobile-admin-viewport { color: var(--rt-text); }
+.view-page-title,
+.admin-view-panel :is(h1, h2, h3),
+.mobile-admin-viewport :is(h1, h2, h3) { color: var(--rt-text); }
+.view-page-desc,
+.admin-view-panel :is(p, label, small),
+.mobile-admin-viewport :is(p, label, small) { color: var(--rt-text-muted); }
+.view-intro-header,
+.workspace-card-heading,
+.admin-banner-alert { border-color: var(--rt-border); }
+
+.workspace-card,
+.admin-table-container,
+.admin-card,
+.member-profile-card,
+.admin-modal-card,
+.admin-dialog,
+.loan-document-modal,
+.member-drawer,
+.mobile-admin-card,
+.kpi-card,
+.metric-card,
+.admin-metric-card,
+.queue-card,
+.admin-section-card,
+.admin-filter-panel,
+.admin-search-panel,
+.terms-editor-card,
+.bulk-import-panel,
+.mobile-admin-drawer-content {
+  border-color: var(--rt-border);
+  border-radius: 16px;
+  color: var(--rt-text);
+  background: var(--rt-surface-glass);
+  box-shadow: var(--admin-shadow-sm);
+}

@@ -1,0 +1,93 @@
+
+.statement-filter-trigger:hover,
+.statement-filter-trigger.has-filters,
+.statement-pagination button:not(:disabled):hover,
+.table-action-button:hover:not(:disabled),
+.statement-filter-reset:hover,
+.member-details-cancel:hover {
+  border-color: var(--rt-border-orange);
+  color: var(--rt-text);
+  background: var(--rt-orange-dim);
+}
+.statement-row { border-color: rgb(255 245 235 / 6%); }
+.statement-row:hover { background: rgb(31 21 63 / 82%); }
+.statement-details > strong,
+.member-table-details strong { color: var(--rt-text); }
+.member-content-savings .statement-amount,
+.member-content-savings .statement-amount.deposit {
+  color: var(--rt-orange-light);
+  font-size: 15px;
+  font-weight: 800;
+  text-shadow: 0 0 16px rgb(245 114 36 / 28%);
+}
+.member-content-activity .repayment-history-section .statement-amount {
+  color: #ffd166;
+  font-size: 15px;
+  font-weight: 800;
+  text-shadow: 0 0 16px rgb(255 209 102 / 28%);
+}
+.statement-icon,
+.member-account-card-heading > span {
+  border: 1px solid var(--rt-border-orange);
+  color: var(--rt-orange-warm);
+  background: var(--rt-orange-dim);
+}
+.statement-filter-dialog,
+.loan-application-dialog-card {
+  border-color: var(--rt-border-orange);
+  color: var(--rt-text);
+  background: var(--rt-surface);
+  box-shadow: var(--rt-shadow-card), 0 24px 70px rgb(0 0 0 / 52%);
+}
+.statement-filter-dialog::backdrop,
+.loan-application-dialog { background: rgb(4 2 13 / 72%); }
+.statement-filter-dialog-heading,
+.statement-filter-actions { border-color: var(--rt-border); }
+.statement-filter-dialog-heading h2,
+.statement-filter-fields label,
+.loan-application-edit-form label,
+.loan-payout-accounts legend,
+.loan-electronic-consent,
+.loan-payout-account { color: var(--rt-text-muted); }
+.statement-filter-fields input,
+.statement-filter-fields select,
+.loan-application-edit-form input,
+.loan-application-edit-form textarea,
+.loan-payout-accounts,
+.loan-payout-account {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background: var(--rt-surface-low);
+}
+.statement-filter-error,
+.statement-error { color: #ffc2ba; }
+.statement-error { background: rgb(147 0 10 / 22%); }
+.statement-pagination {
+  border-color: var(--rt-border);
+  color: var(--rt-text-muted);
+}
+.statement-page-number,
+.empty-statement,
+.member-details-form label { color: var(--rt-text-muted); }
+.member-account-page .member-account-card-heading h2,
+.member-account-page .member-details-form-heading h2 {
+  text-shadow: 0 2px 14px rgb(245 114 36 / 30%);
+}
+.member-contact-row {
+  border-color: var(--rt-border);
+}
+.member-contact-row strong {
+  color: var(--rt-text);
+}
+.member-contact-row span {
+  color: var(--rt-text-muted);
+}
+.member-contact-remove {
+  border-color: rgb(255 113 113 / 30%);
+  color: #ffc2ba;
+  background: rgb(147 0 10 / 22%);
+}
+.member-contact-remove:hover:not(:disabled) {
+  border-color: rgb(255 113 113 / 52%);
+  background: rgb(147 0 10 / 34%);
+}

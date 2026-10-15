@@ -1,0 +1,70 @@
+
+.loan-application-form .amount-input-wrap > span,
+.loan-application-form .months-input-wrap > span {
+  border-color: var(--rt-border);
+  color: var(--rt-text-muted);
+  background: var(--rt-surface-high);
+}
+.loan-application-form .amount-input-wrap input,
+.loan-application-form .months-input-wrap input { color: var(--rt-text); }
+.loan-application-form textarea::placeholder { color: var(--rt-text-dim); }
+.loan-application-form .loan-estimate {
+  border-color: var(--rt-border);
+  border-left-color: var(--rt-orange);
+  color: var(--rt-text);
+  background: var(--rt-surface-high);
+}
+.loan-application-form .loan-estimate > span { color: var(--rt-text-muted); }
+.loan-application-form .loan-estimate > strong { color: var(--rt-orange-light); }
+.loan-application-form .loan-electronic-consent { color: var(--rt-text-muted); }
+.loan-application-form .loan-electronic-consent input { accent-color: var(--rt-orange); }
+.loan-application-form .submit-button {
+  border: 1px solid var(--rt-border-orange);
+  color: #fff;
+  background: linear-gradient(120deg, #ff6b00, #f57224 65%, #e95c10);
+}
+.loan-application-form .submit-button:hover:not(:disabled) {
+  background: linear-gradient(120deg, #ff8838, #f57224);
+}
+
+.join-terms-details summary {
+  color: var(--rt-orange-light);
+  font-size: 12px;
+  font-weight: 800;
+}
+.join-terms-content {
+  color: var(--rt-text);
+  font-size: 12px;
+  line-height: 1.75;
+}
+.join-consent { color: var(--rt-text); }
+.join-consent input { accent-color: var(--rt-orange); }
+.member-terms-content {
+  padding: 18px;
+  border: 1px solid var(--rt-border);
+  border-radius: 14px;
+  color: var(--rt-text);
+  background: var(--rt-surface-low);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+@media (max-width: 720px) {
+  .login-shell .form-content { padding-top: 286px; }
+  .login-shell:not(.join-shell) .form-panel::after { height: 286px; }
+  .join-shell .registration-panel::before,
+  .join-shell .registration-panel::after { height: 200px; }
+  .join-shell .mobile-auth-wordmark { top: 16px; }
+  .join-shell .registration-panel .form-content { padding-top: 222px; }
+  .dashboard-brand .member-nav-logo {
+    width: 42px;
+    height: 38px;
+    flex-basis: 42px;
+  }
+}
+
+@media (max-width: 380px) {
+  .join-shell .registration-panel .form-content { padding-top: 216px; }
+}
+
+.member-bottom-nav { display: none; }

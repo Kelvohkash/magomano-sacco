@@ -1,0 +1,93 @@
+
+.member-contact-field {
+  color: var(--rt-text-muted);
+}
+.member-contact-field input {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background: var(--rt-surface-low);
+}
+.member-contact-field input::placeholder {
+  color: var(--rt-text-dim);
+}
+.member-contact-field input:focus {
+  border-color: var(--rt-orange);
+  box-shadow: 0 0 0 3px rgb(245 114 36 / 18%);
+}
+.member-contact-form .submit-button:hover:not(:disabled) {
+  border-color: var(--rt-border-orange);
+  background: linear-gradient(120deg, #ff8838, #f57224);
+  box-shadow: 0 8px 28px -2px rgb(245 114 36 / 44%);
+}
+.loan-progress-track { background: rgb(255 255 255 / 10%); }
+.loan-progress-track > span { background: linear-gradient(90deg, #7c5bdd, var(--rt-orange)); }
+.single-statement-grid { grid-template-columns: minmax(0, 1fr); }
+.member-section-intro { margin-bottom: 25px; }
+.member-content-savings .statement-section { max-width: 850px; }
+.member-content-activity .repayment-history-section { margin-top: 0; }
+
+.statement-filter-dialog form {
+  color: var(--rt-text);
+  background: var(--rt-surface);
+}
+.statement-filter-dialog-heading > div > span {
+  color: var(--rt-orange-warm);
+}
+.statement-filter-fields input,
+.statement-filter-fields select {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background: var(--rt-surface-low);
+}
+.statement-filter-fields input::placeholder {
+  color: var(--rt-text-dim);
+}
+.statement-filter-close,
+.statement-filter-reset {
+  border-color: var(--rt-border);
+  color: var(--rt-text-muted);
+  background: var(--rt-surface-low);
+}
+.statement-filter-close:hover,
+.statement-filter-reset:hover {
+  border-color: var(--rt-border-orange);
+  color: var(--rt-text);
+  background: var(--rt-orange-dim);
+}
+.statement-filter-actions {
+  border-color: var(--rt-border);
+}
+.statement-filter-error {
+  color: #ffc2ba;
+}
+.application-content .loan-capacity-card {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background: var(--rt-surface-glass);
+  box-shadow: var(--rt-shadow-card);
+}
+.application-content .loan-capacity-main > span,
+.application-content .loan-capacity-breakdown > div > span { color: var(--rt-text-muted); }
+.application-content .loan-capacity-main > strong,
+.application-content .loan-capacity-breakdown > div > strong { color: var(--rt-text); }
+.application-content .loan-capacity-breakdown { border-color: var(--rt-border); }
+.application-content .loan-application-form { border-color: var(--rt-border-orange); }
+.loan-application-form > label { color: var(--rt-text); }
+.loan-application-form .loan-payout-accounts {
+  border-color: var(--rt-border);
+  background: var(--rt-surface-low);
+}
+.loan-application-form .loan-payout-account {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background: var(--rt-surface-card);
+}
+.loan-application-form .loan-payout-account strong { color: var(--rt-text); }
+.loan-application-form .loan-payout-account small { color: var(--rt-text-muted); }
+.loan-application-form .amount-input-wrap,
+.loan-application-form .months-input-wrap,
+.loan-application-form textarea {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background: var(--rt-surface-low);
+}

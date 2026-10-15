@@ -1,0 +1,88 @@
+
+.admin-root-layout .table-btn-view:hover:not(:disabled),
+.admin-root-layout .table-btn-edit:hover:not(:disabled),
+.admin-root-layout .table-btn-role:hover:not(:disabled),
+.mobile-admin-root-layout .table-btn-view:hover:not(:disabled),
+.mobile-admin-root-layout .table-btn-edit:hover:not(:disabled),
+.mobile-admin-root-layout .table-btn-role:hover:not(:disabled) {
+  border-color: var(--rt-border-orange);
+  color: var(--rt-text);
+  background: var(--rt-orange-dim);
+}
+.admin-root-layout .alert-success,
+.mobile-admin-root-layout .alert-success {
+  border-color: rgb(87 181 132 / 32%);
+  color: #a8e5c2;
+  background: rgb(16 120 76 / 20%);
+}
+.admin-root-layout .alert-error,
+.mobile-admin-root-layout .alert-error {
+  border-color: rgb(255 113 113 / 30%);
+  color: #ffc2ba;
+  background: rgb(147 0 10 / 22%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .admin-create-panel,
+  .admin-entry-form,
+  .admin-record-list,
+  .workspace-card,
+  .quick-actions-strip,
+  .admin-table-container,
+  .admin-table-wrap,
+  .kpi-card,
+  .queue-card,
+  .admin-modal-card,
+  .admin-dialog,
+  .modal-dialog-card,
+  .form-section-card,
+  .loan-edit-card,
+  .member-profile-card,
+  .member-drawer,
+  .member-details-drawer,
+  .terms-editor-card,
+  .bulk-import,
+  .bulk-import-panel,
+  .bulk-preview,
+  .bulk-import-guidance,
+  .csv-dropzone,
+  .admin-member-summary,
+  .admin-recent-dividends,
+  .admin-filter-panel,
+  .admin-search-panel,
+  .admin-section-card,
+  .mobile-admin-drawer-panel
+) {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background-color: var(--rt-surface-glass);
+  box-shadow: var(--admin-shadow-sm);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .queue-card.queue-active,
+  .member-drawer-content,
+  .drawer-profile-card,
+  .drawer-footer-actions,
+  .mobile-admin-ledger-bar,
+  .mobile-ledger-segmented-control,
+  .bulk-import-mode,
+  .bulk-import-guidance,
+  .bulk-preview,
+  .csv-dropzone,
+  .form-section-card,
+  .loan-edit-card,
+  .admin-table-wrap,
+  .admin-table-container
+) {
+  border-color: var(--rt-border);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .admin-topbar,
+  .mobile-admin-topbar,
+  .drawer-panel-header
+) {
+  color: var(--rt-text);
+}

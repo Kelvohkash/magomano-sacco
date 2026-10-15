@@ -1,0 +1,92 @@
+/* Sign-in and registration */
+.login-shell {
+  color: var(--rt-text);
+  background:
+    radial-gradient(ellipse at 12% 10%, rgb(245 114 36 / 13%), transparent 42%),
+    radial-gradient(ellipse at 88% 85%, rgb(46 30 92 / 42%), transparent 46%),
+    var(--rt-bg);
+}
+
+.welcome-panel {
+  color: var(--rt-text);
+  background: radial-gradient(ellipse at 15% 12%, #34236c 0%, #1b1142 42%, #0e0921 100%);
+}
+
+.welcome-copy h1,
+.form-heading h2,
+.join-heading h1 {
+  color: var(--rt-text);
+  font-family: 'Plus Jakarta Sans', 'Manrope', sans-serif;
+  font-weight: 700;
+}
+
+.welcome-description,
+.form-subtitle,
+.join-heading > p,
+.join-step-heading p,
+.join-privacy-note,
+.join-subsection-heading p,
+.join-terms-heading p,
+.join-terms-content {
+  color: var(--rt-text-muted);
+}
+
+.form-panel,
+.login-shell .form-panel {
+  border-color: var(--rt-border);
+  background: var(--rt-surface);
+  background-image: none;
+  box-shadow: 0 24px 70px rgb(0 0 0 / 42%);
+}
+
+.login-shell .form-panel::before {
+  display: none;
+}
+
+.login-shell .form-panel::after {
+  top: 0;
+  right: 0;
+  left: 0;
+  width: 100%;
+  height: 220px;
+  border-radius: 0 0 40px 40px;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgb(245 114 36 / 16%), transparent 55%),
+    linear-gradient(145deg, #2b1c58, #17102f 78%);
+  transform: none;
+  animation: none;
+}
+
+.login-shell .mobile-auth-wordmark {
+  top: 48px;
+  gap: 9px;
+  color: var(--rt-text);
+}
+
+.login-shell .mobile-auth-emblem {
+  display: block;
+  width: 122px;
+  height: 104px;
+  margin-bottom: 0;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 14px rgb(0 0 0 / 24%));
+}
+
+.login-shell:not(.join-shell) .mobile-auth-emblem {
+  width: 180px;
+  height: 150px;
+  filter: blur(0.45px) drop-shadow(0 8px 14px rgb(0 0 0 / 24%));
+}
+
+.login-shell:not(.join-shell) .mobile-auth-wordmark {
+  top: 28px;
+}
+
+.login-shell.join-shell .mobile-auth-wordmark {
+  top: 16px;
+}
+
+.login-shell .mobile-auth-wordmark strong {
+  font-family: 'Plus Jakarta Sans', 'Manrope', sans-serif;
+  font-size: clamp(26px, 8vw, 34px);
+}

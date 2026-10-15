@@ -1,0 +1,95 @@
+
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .admin-create-panel-heading h2,
+  .admin-create-estimate,
+  .admin-entry-form > label,
+  .admin-list-heading,
+  .admin-record-main > strong,
+  .admin-member-review-details p strong,
+  .admin-member-summary h2,
+  .admin-current-balance strong,
+  .admin-recent-dividends h2,
+  .dividend-row > div strong,
+  .dividend-row > strong,
+  .workspace-card-heading h3,
+  .form-fields-grid label,
+  .form-sec-heading,
+  .loan-edit-header h3,
+  .edit-field label,
+  .terms-editor-header h3,
+  .drawer-admin-name,
+  .drawer-nav-item,
+  .mobile-admin-viewport .view-page-title,
+  .mobile-admin-viewport .section-title,
+  .mobile-admin-viewport .kpi-value,
+  .mobile-admin-viewport .queue-count,
+  .mobile-admin-viewport .filter-chip.active
+) {
+  color: var(--rt-text);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .admin-create-panel-heading p,
+  .admin-create-note,
+  .admin-record-main > span,
+  .admin-record-main > small,
+  .admin-member-review-details p,
+  .admin-metric-note,
+  .admin-header-actions,
+  .admin-entry-form .optional-tag,
+  .admin-member-summary p,
+  .dividend-row > div span,
+  .workspace-card-heading,
+  .optional-tag,
+  .loan-edit-header p,
+  .terms-editor-header p,
+  .char-counter,
+  .terms-note,
+  .drawer-admin-role,
+  .drawer-nav-section-label,
+  .drawer-legal-note,
+  .mobile-admin-viewport .view-page-desc,
+  .mobile-admin-viewport .kpi-title,
+  .mobile-admin-viewport .kpi-subtext,
+  .mobile-admin-viewport .queue-label,
+  .mobile-admin-viewport .queue-unit,
+  .mobile-admin-viewport .queue-desc
+) {
+  color: var(--rt-text-muted);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .admin-create-panel :is(input, select, textarea),
+  .admin-entry-form :is(input, select, textarea),
+  .form-card :is(input, select, textarea),
+  .form-fields-grid :is(input, select, textarea),
+  .edit-field :is(input, textarea),
+  .terms-textarea,
+  .admin-terms-editor,
+  .mobile-admin-viewport .search-input-wrap input
+) {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .amount-input-wrap,
+  .admin-entry-form .amount-input-wrap,
+  .mobile-admin-viewport .search-input-wrap
+) {
+  border-color: var(--rt-border);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .amount-input-wrap > span,
+  .admin-entry-form .amount-input-wrap > span,
+  .mobile-admin-viewport .filter-chips,
+  .drawer-nav-icon
+) {
+  border-color: var(--rt-border);
+  color: var(--rt-text-muted);
+  background: var(--rt-surface-high);
+}

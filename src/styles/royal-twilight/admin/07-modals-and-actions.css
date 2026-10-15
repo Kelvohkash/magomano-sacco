@@ -1,0 +1,93 @@
+
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .modal-dialog-card,
+  .admin-modal-card,
+  .admin-dialog,
+  .mobile-admin-drawer-panel
+) {
+  border: 1px solid var(--rt-border-orange);
+  background: var(--rt-surface);
+  box-shadow: var(--admin-shadow-lg);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .modal-dialog-header,
+  .modal-actions-bar,
+  .admin-table-detail-row > td,
+  .mobile-admin-viewport .modern-admin-table thead th,
+  .mobile-admin-viewport .modern-admin-table tbody tr:hover,
+  .mobile-admin-viewport .admin-table-container
+) {
+  border-color: var(--rt-border);
+  background-color: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .queue-action-button,
+  .quick-btn,
+  .template-button,
+  .action-btn-cancel,
+  .modal-close-btn,
+  .drawer-refresh-btn,
+  .strip-manage-btn,
+  .loan-ref-pill,
+  .open-loan-item,
+  .mobile-admin-viewport .filter-chip,
+  .mobile-admin-viewport .timestamp-badge,
+  .mobile-admin-viewport .count-pill
+) {
+  border-color: var(--rt-border);
+  color: var(--rt-text-muted);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .queue-action-button:hover,
+  .quick-btn:hover,
+  .template-button:hover,
+  .action-btn-cancel:hover,
+  .modal-close-btn:hover,
+  .drawer-refresh-btn:hover,
+  .mobile-admin-viewport .quick-btn:active,
+  .mobile-admin-viewport .filter-chip.active,
+  .mobile-admin-viewport .bulk-import-mode button.active
+) {
+  border-color: var(--rt-border-orange);
+  color: var(--rt-text);
+  background: var(--rt-orange-dim);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .drawer-nav-item:hover,
+  .drawer-nav-item:active
+) {
+  color: var(--rt-text);
+  background: var(--rt-orange-dim);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-nav-item.is-active {
+  border: 1px solid var(--rt-border-orange);
+  color: var(--rt-orange-warm);
+  background: var(--rt-orange-dim);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-nav-item.is-active .drawer-nav-icon {
+  color: var(--rt-orange-warm);
+  background: rgb(245 114 36 / 18%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .drawer-header,
+  .drawer-profile-card,
+  .drawer-financial-summary > div,
+  .admin-member-review-details > div,
+  .signatories-governance-strip,
+  .open-loan-item,
+  .open-loan-item:hover,
+  .open-loan-item.selected-loan
+) {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background: var(--rt-surface-low);
+}

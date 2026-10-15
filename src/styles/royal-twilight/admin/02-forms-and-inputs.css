@@ -1,0 +1,93 @@
+
+
+.admin-root-layout :is(input, select, textarea),
+.mobile-admin-root-layout :is(input, select, textarea) {
+  border-color: var(--rt-border);
+  border-radius: 10px;
+  color: var(--rt-text);
+  background: var(--rt-surface-low);
+}
+.admin-root-layout :is(input, select, textarea)::placeholder,
+.mobile-admin-root-layout :is(input, select, textarea)::placeholder { color: var(--rt-text-dim); }
+.admin-root-layout :is(input, select, textarea):focus,
+.mobile-admin-root-layout :is(input, select, textarea):focus {
+  border-color: var(--rt-orange);
+  box-shadow: 0 0 0 3px rgb(245 114 36 / 17%);
+  outline: none;
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-search-picker {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 5px;
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-search-picker:focus-within {
+  z-index: 10;
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-search-picker > label {
+  color: var(--rt-text-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-search-picker-results {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 5px);
+  right: 0;
+  left: 0;
+  max-height: 260px;
+  overflow-y: auto;
+  border: 1px solid var(--rt-border-orange);
+  border-radius: 12px;
+  background: var(--rt-surface);
+  box-shadow: 0 14px 32px rgb(5 2 15 / 55%), 0 0 18px rgb(245 114 36 / 10%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-search-picker-option {
+  display: flex;
+  width: 100%;
+  min-height: 54px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 0;
+  border-bottom: 1px solid var(--rt-border);
+  border-radius: 0;
+  color: var(--rt-text);
+  background: transparent;
+  text-align: left;
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-search-picker-option:last-child {
+  border-bottom: 0;
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-search-picker-option:hover,
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-search-picker-option:focus-visible {
+  color: var(--rt-text);
+  background: var(--rt-orange-dim);
+  outline: none;
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-search-picker-option > span {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 3px;
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-search-picker-option strong {
+  color: var(--rt-text);
+  font-size: 12px;
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-search-picker-option small {
+  color: var(--rt-text-muted);
+  font-size: 10px;
+}

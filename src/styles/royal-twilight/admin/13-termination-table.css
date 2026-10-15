@@ -1,0 +1,18 @@
+
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .termination-report-table th {
+  border-color: var(--rt-border);
+  color: var(--rt-text-muted);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .termination-report-table td {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background: transparent;
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .termination-overview-error,
+:is(.admin-root-layout, .mobile-admin-root-layout) .termination-modal-error {
+  color: #ffc2ba;
+}

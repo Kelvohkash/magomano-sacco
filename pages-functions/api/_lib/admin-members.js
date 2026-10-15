@@ -234,8 +234,100 @@ export async function handleAdminMembers(path, request, session, db) {
 
   const deleteMember = path.match(/^\/admin\/members\/(\d+)$/)
   const terminateMember = path.match(/^\/admin\/members\/(\d+)\/terminate$/)
+  const terminationOverview = path.match(/^\/admin\/members\/(\d+)\/termination-overview$/)
+  if (terminationOverview && method === 'GET') {
+    const memberId = Number(terminationOverview[1])
+    const [member, termination, savingsRows, loanRows, repaymentRows] = await Promise.all([
+      db.prepare(`SELECT id, sacco_number AS saccoNumber, national_id AS nationalId,
+        full_name AS fullName, phone_number AS phoneNumber, created_at AS joinedAt, account_status AS accountStatus
+        FROM members WHERE id = ? AND account_status = 'terminated'`).bind(memberId).first(),
+      db.prepare(`SELECT savings_applied AS savingsApplied, loan_balance_settled AS loanBalanceSettled,
+        payout_amount AS payoutAmount, remaining_loan_due AS remainingLoanDue,
+        savings_before AS savingsBefore, charges_json AS chargesJson, settled_at AS settledAt
+        FROM member_terminations WHERE member_id = ? ORDER BY settled_at DESC, id DESC LIMIT 1`).bind(memberId).first(),
+      db.prepare(`SELECT id, entry_type AS entryType, amount, description, occurred_at AS occurredAt
+        FROM savings_transactions WHERE member_id = ? ORDER BY occurred_at, id`).bind(memberId).all(),
+      db.prepare(`SELECT id, loan_reference AS reference, principal_amount AS principalAmount,
+        total_repayable AS totalRepayable, issued_at AS issuedAt
+        FROM member_loans l WHERE l.member_id = ? ORDER BY l.issued_at, l.id`).bind(memberId).all(),
+      db.prepare(`SELECT r.id, l.loan_reference AS loanReference,
+        r.amount, r.description, r.paid_at AS paidAt
+        FROM loan_repayments r JOIN member_loans l ON l.id = r.loan_id
+        WHERE l.member_id = ? ORDER BY r.paid_at, r.id`).bind(memberId).all(),
+    ])
+    if (!member || !termination) throw new ApiError('Terminated member settlement was not found.', 404)
+
+    const statementEntries = [
+      ...loanRows.results.map((loan) => ({
+        occurredAt: loan.issuedAt,
+        description: `Loan issued — ${loan.reference} (principal ${Number(loan.principalAmount).toFixed(2)})`,
+        debit: Number(loan.totalRepayable),
+        credit: 0,
+        sortPriority: 0,
+        sortId: Number(loan.id),
+      })),
+      ...repaymentRows.results.map((repayment) => ({
+        occurredAt: repayment.paidAt,
+        description: `Loan repayment — ${repayment.loanReference}${repayment.description ? `: ${repayment.description}` : ''}`,
+        debit: 0,
+        credit: Number(repayment.amount),
+        sortPriority: 1,
+        sortId: Number(repayment.id),
+      })),
+      ...savingsRows.results.map((entry) => ({
+        occurredAt: entry.occurredAt,
+        description: entry.description || (entry.entryType === 'deposit' ? 'Savings deposit' : 'Savings withdrawal'),
+        debit: entry.entryType === 'withdrawal' ? Number(entry.amount) : 0,
+        credit: entry.entryType === 'deposit' ? Number(entry.amount) : 0,
+        sortPriority: entry.entryType === 'withdrawal' ? 2 : 1,
+        sortId: Number(entry.id),
+      })),
+    ].sort((left, right) => left.occurredAt.localeCompare(right.occurredAt)
+      || left.sortPriority - right.sortPriority
+      || left.sortId - right.sortId)
+
+    let balance = 0
+    const ledger = statementEntries.map((entry) => {
+      balance = Math.round((balance + entry.credit - entry.debit) * 100) / 100
+      return {
+        occurredAt: entry.occurredAt,
+        description: entry.description,
+        debit: entry.debit,
+        credit: entry.credit,
+        balance,
+      }
+    })
+    return json({
+      member,
+      termination: {
+        ...termination,
+        savingsApplied: Number(termination.savingsApplied),
+        loanBalanceSettled: Number(termination.loanBalanceSettled),
+        payoutAmount: Number(termination.payoutAmount),
+        remainingLoanDue: Number(termination.remainingLoanDue),
+        savingsBefore: Number(termination.savingsBefore),
+        charges: JSON.parse(termination.chargesJson),
+      },
+      ledger,
+    })
+  }
   if (terminateMember && method === 'POST') {
     const memberId = Number(terminateMember[1])
+    const body = await readJson(request)
+    if (body.charges !== undefined && !Array.isArray(body.charges)) {
+      throw new ApiError('Termination charges must be a list.')
+    }
+    const charges = (body.charges ?? []).map((charge) => {
+      const description = typeof charge?.description === 'string' ? charge.description.trim() : ''
+      const amount = Number(charge?.amount)
+      if (!description || description.length > 120 || !Number.isFinite(amount) || amount <= 0) {
+        throw new ApiError('Each termination charge needs a description and a positive amount.')
+      }
+      const roundedAmount = Math.round(amount * 100) / 100
+      if (roundedAmount <= 0) throw new ApiError('Termination charge amounts must be at least 0.01.')
+      return { description, amount: roundedAmount }
+    })
+    if (charges.length > 20) throw new ApiError('A termination can include at most 20 custom charges.')
     const member = await db.prepare("SELECT id, full_name AS fullName FROM members WHERE id = ? AND account_status = 'approved'")
       .bind(memberId).first()
     if (!member) throw new ApiError('Active member account was not found.', 404)
@@ -254,35 +346,62 @@ export async function handleAdminMembers(path, request, session, db) {
       return { id: loan.id, balance: Number(loan.balance), paid, remaining: Math.round((Number(loan.balance) - paid) * 100) / 100 }
     }).filter((loan) => loan.paid > 0)
     const applied = Math.round(allocations.reduce((sum, loan) => sum + loan.paid, 0) * 100) / 100
-    const payout = Math.round((savings - applied) * 100) / 100
+    const chargesTotal = Math.round(charges.reduce((sum, charge) => sum + charge.amount, 0) * 100) / 100
+    const savingsAvailableAfterLoans = Math.round((savings - applied) * 100) / 100
+    if (chargesTotal > savingsAvailableAfterLoans) {
+      throw new ApiError('Custom charges cannot exceed the member savings remaining after loan settlement.')
+    }
+    const payout = Math.round((savingsAvailableAfterLoans - chargesTotal) * 100) / 100
     const remainingDue = Math.round((totalDue - applied) * 100) / 100
+    const settlementKey = randomBytes(16).toString('hex')
+    const hasSettlementRecord = 'EXISTS (SELECT 1 FROM member_terminations WHERE member_id = ? AND settlement_key = ?)'
+    const settlementRecordValues = [memberId, settlementKey]
     const statements = [db.prepare(`INSERT INTO member_terminations
-      (member_id, savings_applied, loan_balance_settled, payout_amount, remaining_loan_due, admin_id)
-      SELECT ?, ?, ?, ?, ?, ? WHERE (SELECT account_status FROM members WHERE id = ?) = 'approved'
+      (member_id, savings_applied, loan_balance_settled, payout_amount, remaining_loan_due,
+        savings_before, charges_json, settlement_key, admin_id)
+      SELECT ?, ?, ?, ?, ?, ?, ?, ?, ? WHERE (SELECT account_status FROM members WHERE id = ?) = 'approved'
       AND (SELECT COALESCE(SUM(CASE WHEN entry_type='deposit' THEN amount ELSE -amount END),0)
-        FROM savings_transactions WHERE member_id = ?) = ?`).bind(memberId, applied, applied, payout, remainingDue, session.adminId, memberId, memberId, savingsRow.balance)]
-    if (payout > 0) statements.push(db.prepare(`INSERT INTO savings_transactions (member_id, entry_type, amount, description)
-      VALUES (?, 'withdrawal', ?, 'Member termination payout')`).bind(memberId, payout))
+        FROM savings_transactions WHERE member_id = ?) = ?
+      AND (SELECT COALESCE(SUM(outstanding_balance), 0) FROM member_loans
+        WHERE member_id = ? AND outstanding_balance > 0) = ?`).bind(
+      memberId, applied, applied, payout, remainingDue, savings, JSON.stringify(charges), settlementKey,
+      session.adminId, memberId, memberId, savingsRow.balance, memberId, totalDue)]
     for (const loan of allocations) {
       statements.push(db.prepare(`INSERT INTO loan_repayments (loan_id, admin_id, amount, description)
         SELECT ?, ?, ?, 'Member termination settlement' WHERE EXISTS (
           SELECT 1 FROM member_loans WHERE id = ? AND outstanding_balance = ?
-        )`).bind(loan.id, session.adminId, loan.paid, loan.id, loan.balance))
+        ) AND ${hasSettlementRecord}`).bind(loan.id, session.adminId, loan.paid, loan.id, loan.balance, ...settlementRecordValues))
       statements.push(db.prepare(`UPDATE member_loans SET outstanding_balance = ?, status = ?
-        WHERE id = ? AND outstanding_balance = ?`).bind(loan.remaining, loan.remaining === 0 ? 'paid' : 'active', loan.id, loan.balance))
+        WHERE id = ? AND outstanding_balance = ? AND ${hasSettlementRecord}`)
+        .bind(loan.remaining, loan.remaining === 0 ? 'paid' : 'active', loan.id, loan.balance, ...settlementRecordValues))
     }
     if (savings > 0) statements.push(db.prepare(`INSERT INTO savings_transactions (member_id, entry_type, amount, description)
       SELECT ?, 'withdrawal', ?, 'Member termination: savings applied to outstanding loans'
-      WHERE ? > 0`).bind(memberId, applied, applied))
+      WHERE ? > 0 AND ${hasSettlementRecord}`).bind(memberId, applied, applied, ...settlementRecordValues))
+    for (const charge of charges) {
+      statements.push(db.prepare(`INSERT INTO savings_transactions (member_id, entry_type, amount, description)
+        SELECT ?, 'withdrawal', ?, ? WHERE ${hasSettlementRecord}`)
+        .bind(memberId, charge.amount, `Termination charge: ${charge.description}`, ...settlementRecordValues))
+    }
+    if (payout > 0) statements.push(db.prepare(`INSERT INTO savings_transactions (member_id, entry_type, amount, description)
+      SELECT ?, 'withdrawal', ?, 'Member termination payout' WHERE ${hasSettlementRecord}`)
+      .bind(memberId, payout, ...settlementRecordValues))
     statements.push(db.prepare(`UPDATE members SET account_status = 'terminated'
-      WHERE id = ? AND account_status = 'approved'`).bind(memberId))
-    statements.push(db.prepare("UPDATE loan_applications SET status = 'rejected' WHERE member_id = ? AND status IN ('pending', 'approved')")
-      .bind(memberId))
-    statements.push(db.prepare('DELETE FROM sessions WHERE member_id = ?').bind(memberId))
+      WHERE id = ? AND account_status = 'approved' AND ${hasSettlementRecord}`)
+      .bind(memberId, ...settlementRecordValues))
+    statements.push(db.prepare("UPDATE loan_applications SET status = 'rejected' WHERE member_id = ? AND status IN ('pending', 'approved') AND (SELECT account_status FROM members WHERE id = ?) = 'terminated'")
+      .bind(memberId, memberId))
+    statements.push(db.prepare("DELETE FROM sessions WHERE member_id = ? AND (SELECT account_status FROM members WHERE id = ?) = 'terminated'").bind(memberId, memberId))
     await db.batch(statements)
     const updated = await db.prepare("SELECT account_status FROM members WHERE id = ?").bind(memberId).first()
     if (updated?.account_status !== 'terminated') throw new ApiError('Settlement changed before completion. Refresh and retry.', 409)
-    return json({ message: `${member.fullName} terminated. ${payout.toFixed(2)} paid out; ${remainingDue.toFixed(2)} loan balance remains due.`, savingsApplied: applied, payoutAmount: payout, remainingLoanDue: remainingDue })
+    return json({
+      message: `${member.fullName} terminated. ${payout.toFixed(2)} paid out after ${chargesTotal.toFixed(2)} in custom charges; ${remainingDue.toFixed(2)} loan balance remains due.`,
+      savingsApplied: applied,
+      chargesTotal,
+      payoutAmount: payout,
+      remainingLoanDue: remainingDue,
+    })
   }
   if (deleteMember && method === 'DELETE') {
     const memberId = Number(deleteMember[1])

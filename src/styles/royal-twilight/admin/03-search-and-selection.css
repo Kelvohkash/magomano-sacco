@@ -1,0 +1,92 @@
+
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-search-picker-empty {
+  margin: 0;
+  padding: 14px;
+  color: var(--rt-text-muted);
+  font-size: 12px;
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-table tbody tr:hover {
+  background: rgb(31 21 63 / 76%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-table tbody tr:hover > td {
+  color: var(--rt-text);
+  background: rgb(31 21 63 / 76%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .bulk-import-mode button.active {
+  border: 1px solid var(--rt-border-orange);
+  color: var(--rt-orange-warm);
+  background: var(--rt-orange-dim);
+  box-shadow: 0 0 0 1px rgb(245 114 36 / 10%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .bulk-import-mode button:hover:not(.active),
+:is(.admin-root-layout, .mobile-admin-root-layout) .template-button:hover,
+:is(.admin-root-layout, .mobile-admin-root-layout) .csv-dropzone:hover {
+  border-color: var(--rt-border-orange);
+  color: var(--rt-text);
+  background: rgb(245 114 36 / 10%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .template-button {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .csv-dropzone :is(svg, span) {
+  color: var(--rt-text);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .csv-dropzone small {
+  color: var(--rt-text-muted);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .csv-dropzone:focus-within {
+  border-color: var(--rt-orange);
+  box-shadow: 0 0 0 3px rgb(245 114 36 / 17%);
+  outline: none;
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .mobile-ledger-tab-btn.is-active {
+  border-color: var(--rt-border-orange);
+  color: var(--rt-orange-warm);
+  background: var(--rt-orange-dim);
+  box-shadow: 0 0 0 1px rgb(245 114 36 / 10%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .mobile-ledger-tab-btn:hover:not(.is-active) {
+  color: var(--rt-text);
+  background: rgb(245 114 36 / 10%);
+}
+
+.admin-root-layout :is(.form-card, .form-card label, .workspace-card-heading h3),
+.mobile-admin-root-layout :is(.form-card, .form-card label, .workspace-card-heading h3) { color: var(--rt-text); }
+.amount-input-wrap span {
+  border-color: var(--rt-border);
+  color: var(--rt-text-muted);
+  background: var(--rt-surface-high);
+}
+.modern-admin-table thead th {
+  border-color: var(--rt-border);
+  color: var(--rt-text-muted);
+  background: var(--rt-surface-low);
+}
+.modern-admin-table tbody td {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+}
+.modern-admin-table tbody tr:hover,
+.admin-table-detail-row > td { background: rgb(31 21 63 / 76%); }
+.modern-admin-table tbody tr.row-selected { background: rgb(245 114 36 / 12%); }
+.member-name-text,
+.member-table-details strong,
+.savings-figure { color: var(--rt-text); }
+.member-email-text,
+.member-table-details p { color: var(--rt-text-muted); }
+.member-cell-avatar {
+  background: linear-gradient(135deg, #e55f10, #f57224 65%, #ff914d);
+}

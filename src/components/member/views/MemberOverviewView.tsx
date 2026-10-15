@@ -158,7 +158,32 @@ export function MemberOverviewView({
         </section>}
 
         {/* Loans Taken */}
-        {showActivity && <section className="statement-section">
+        {showActivity && <>
+          <section className="activity-cards">
+            <article className="activity-card admin-charges-card">
+              <div className="activity-card-heading">
+                <span><HandCoins size={18} /></span>
+                <p>Admin Charges</p>
+              </div>
+              <p className="activity-card-amount">
+                <AnimatedFigure value={dashboard?.adminCharges?.total ?? 0} />
+              </p>
+              <p className="activity-card-caption">Charges applied by administrators</p>
+              {dashboard?.adminCharges?.recent && dashboard.adminCharges.recent.length > 0 && (
+                <ul className="admin-charges-list">
+                  {dashboard.adminCharges.recent.map((c) => (
+                    <li key={c.id} className="admin-charge-item">
+                      <span className="admin-charge-date">{formatDate(c.occurredAt)}</span>
+                      <span className="admin-charge-desc">{c.description}</span>
+                      <strong className="admin-charge-amount">-<AnimatedFigure value={c.amount} /></strong>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </article>
+          </section>
+
+          <section className="statement-section">
           <div className="statement-heading">
             <div>
               <p className="section-kicker">BORROWING</p>
@@ -231,7 +256,8 @@ export function MemberOverviewView({
               onPageChange<MemberLoanRecord>('loans', page, loansPage.filters, setLoansPage)
             }
           />
-        </section>}
+        </section>
+        </>}
       </div>}
 
       {/* Loan Repayment History */}

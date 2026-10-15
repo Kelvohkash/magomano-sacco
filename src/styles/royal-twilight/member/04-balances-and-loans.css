@@ -1,0 +1,92 @@
+
+.balance-heading p {
+  font-family: 'Plus Jakarta Sans', 'Manrope', sans-serif;
+  font-size: 13.5px;
+  letter-spacing: .02em;
+}
+.available-panel .balance-heading > span,
+.loans-panel .balance-heading > span {
+  border-color: rgb(255 170 117 / 40%);
+  color: #fff;
+  background: linear-gradient(135deg, #f57224, #ff9142);
+  box-shadow: 0 0 18px rgb(245 114 36 / 45%);
+}
+.savings-panel .balance-heading p,
+.available-panel .balance-heading p,
+.loans-panel .balance-heading p { color: var(--rt-text); }
+.savings-panel .balance-amount,
+.available-panel .balance-amount,
+.loans-panel .balance-amount {
+  color: #fff;
+  font-size: clamp(28px, 2.6vw, 32px);
+  line-height: 1.1;
+}
+.savings-panel .balance-caption,
+.available-panel .balance-caption,
+.loans-panel .balance-caption {
+  color: var(--rt-text-muted);
+  font-size: 12px;
+}
+.available-panel {
+  border-color: rgb(245 114 36 / 30%);
+  background:
+    radial-gradient(circle at 95% 100%, rgb(245 114 36 / 12%), transparent 9rem),
+    radial-gradient(circle at 5% 0%, rgb(93 49 176 / 25%), transparent 8rem),
+    linear-gradient(135deg, rgb(41 28 87 / 96%), rgb(32 21 70 / 96%) 58%, rgb(21 13 50 / 98%));
+  box-shadow: 0 14px 36px rgb(6 3 18 / 55%), 0 0 24px rgb(245 114 36 / 12%);
+}
+.loans-panel {
+  border-color: rgb(245 114 36 / 22%);
+  background:
+    radial-gradient(circle at 95% 100%, rgb(245 114 36 / 8%), transparent 9rem),
+    linear-gradient(135deg, rgb(35 26 74 / 95%), rgb(27 19 61 / 95%) 58%, rgb(19 12 44 / 98%));
+}
+.member-dashboard:not(.admin-dashboard) button:active:not(:disabled) {
+  transform: scale(.97);
+  box-shadow: 0 0 0 3px rgb(245 114 36 / 16%), 0 0 18px rgb(245 114 36 / 28%);
+}
+
+.statement-section,
+.member-account-card,
+.loan-application-form,
+.loan-application-status-card,
+.admin-record-list,
+.admin-entry-form,
+.admin-member-summary,
+.admin-recent-dividends,
+.admin-workspace,
+.admin-metric,
+.admin-queue-item {
+  border-color: var(--rt-border);
+  border-radius: 18px;
+  color: var(--rt-text);
+  background: var(--rt-surface-glass);
+  box-shadow: var(--rt-shadow-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+.statement-section:hover { border-color: var(--rt-border-orange); }
+.statement-heading {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+}
+.statement-heading h2,
+.member-account-card-heading h2,
+.member-details-form-heading h2,
+.loan-application-dialog-heading h2,
+.loan-application-status-card h2 { color: var(--rt-text); }
+.statement-total,
+.statement-details > span,
+.loan-progress-heading,
+.loan-progress > small,
+.member-account-card-heading p { color: var(--rt-text-muted); }
+.statement-filter-trigger,
+.statement-pagination button,
+.table-action-button,
+.statement-filter-close,
+.statement-filter-reset,
+.member-details-cancel {
+  border-color: var(--rt-border);
+  color: var(--rt-text-muted);
+  background: var(--rt-surface-low);
+}

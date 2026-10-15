@@ -4,6 +4,7 @@ import {
   Download,
   FileSpreadsheet,
   FileText,
+  HandCoins,
   Landmark,
   LayoutDashboard,
   LogOut,
@@ -83,6 +84,12 @@ export function MobileAdminDrawer({
       label: 'Savings Deposits Ledger',
       subtitle: 'Monthly member savings history',
       Icon: WalletCards,
+    },
+    {
+      section: 'charges',
+      label: 'Admin Charges',
+      subtitle: 'Issue and review member charges',
+      Icon: HandCoins,
     },
     {
       section: 'bulk',
@@ -226,4 +233,3 @@ export function MobileAdminDrawer({
     </div>
   )
 }
-

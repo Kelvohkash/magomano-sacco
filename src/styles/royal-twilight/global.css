@@ -1,0 +1,20 @@
+
+
+html,
+body {
+  color-scheme: dark;
+  background: var(--rt-bg);
+  color: var(--rt-text);
+}
+
+body {
+  font-family: 'Manrope', 'Plus Jakarta Sans', 'Avenir Next', Avenir, 'Segoe UI', sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+  color-scheme: dark;
+}
+

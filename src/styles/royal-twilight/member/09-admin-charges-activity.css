@@ -1,0 +1,106 @@
+.member-content-activity .activity-cards {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  margin: 28px 0 22px;
+}
+
+.member-content-activity .activity-card {
+  min-width: 0;
+  padding: 21px 23px;
+  border: 1px solid var(--rt-border);
+  border-radius: 17px;
+  color: var(--rt-text);
+  background:
+    radial-gradient(circle at 100% 0, rgb(245 114 36 / 9%), transparent 14rem),
+    linear-gradient(145deg, rgb(35 25 71 / 94%), rgb(25 17 53 / 98%));
+  box-shadow: var(--rt-shadow-card);
+}
+
+.member-content-activity .activity-card-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.member-content-activity .activity-card-heading > span {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid var(--rt-border-orange);
+  border-radius: 10px;
+  color: var(--rt-orange-warm);
+  background: var(--rt-orange-dim);
+}
+
+.member-content-activity .activity-card-heading p {
+  margin: 0;
+  color: var(--rt-text);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.member-content-activity .activity-card-amount {
+  margin: 17px 0 3px;
+  color: var(--rt-orange-light);
+  font-size: 25px;
+  font-weight: 750;
+  font-variant-numeric: tabular-nums;
+}
+
+.member-content-activity .activity-card-caption {
+  margin: 0;
+  color: var(--rt-text-muted);
+  font-size: 11px;
+}
+
+.member-content-activity .admin-charges-list {
+  display: grid;
+  gap: 0;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.member-content-activity .admin-charge-item {
+  display: grid;
+  grid-template-columns: minmax(100px, .6fr) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 0;
+  border-top: 1px solid var(--rt-border);
+}
+
+.member-content-activity .admin-charge-date {
+  color: var(--rt-text-dim);
+  font-size: 10px;
+}
+
+.member-content-activity .admin-charge-desc {
+  overflow: hidden;
+  color: var(--rt-text);
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.member-content-activity .admin-charge-amount {
+  color: #ffc2ba;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 520px) {
+  .member-content-activity .activity-card { padding: 18px 16px; }
+  .member-content-activity .admin-charge-item {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 5px 10px;
+  }
+  .member-content-activity .admin-charge-date { grid-column: 1; }
+  .member-content-activity .admin-charge-desc { grid-column: 1; }
+  .member-content-activity .admin-charge-amount {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+}

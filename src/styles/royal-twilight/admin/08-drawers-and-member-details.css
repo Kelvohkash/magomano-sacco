@@ -1,0 +1,93 @@
+
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .strip-text,
+  .strip-text strong,
+  .strip-names,
+  .drawer-member-title h2,
+  .open-loan-item,
+  .borrower-name,
+  .loan-ref-pill
+) {
+  color: var(--rt-text);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .drawer-id,
+  .drawer-financial-summary span,
+  .dividend-expanded-detail,
+  .term-note
+) {
+  color: var(--rt-text-muted);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .role-display.role-standard,
+  .role-tag
+) {
+  border-color: var(--rt-border);
+  color: var(--rt-text-muted);
+  background: var(--rt-surface-high);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .status-tag.status-approved,
+  .role-display.role-signatory
+) {
+  border-color: rgb(87 181 132 / 32%);
+  color: #a8e5c2;
+  background: rgb(16 120 76 / 20%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .status-tag.status-pending
+) {
+  border-color: var(--rt-border-orange);
+  color: var(--rt-orange-warm);
+  background: var(--rt-orange-dim);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .status-tag.status-rejected
+) {
+  border-color: rgb(255 113 113 / 30%);
+  color: #ffc2ba;
+  background: rgb(147 0 10 / 22%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .role-display.role-standard {
+  border-color: var(--rt-border);
+  color: var(--rt-text-muted);
+  background: var(--rt-surface-high);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .mobile-admin-viewport .savings-icon,
+  .mobile-admin-viewport .loans-icon,
+  .mobile-admin-viewport .pending-icon,
+  .strip-icon-circle,
+  .drawer-nav-item.is-active .drawer-nav-icon
+) {
+  border-color: var(--rt-border-orange);
+  color: var(--rt-orange-warm);
+  background: rgb(245 114 36 / 18%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .mobile-admin-ledger-bar,
+  .mobile-ledger-segmented-control,
+  .filter-chips,
+  .bulk-import-mode
+) {
+  border-color: var(--rt-border);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .admin-record:hover,
+  .modern-admin-table tbody tr:hover,
+  .admin-table-detail-row > td
+) {
+  border-color: var(--rt-border);
+  background: rgb(31 21 63 / 76%);
+}

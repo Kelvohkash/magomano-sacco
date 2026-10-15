@@ -1,0 +1,91 @@
+
+
+.login-shell .mobile-auth-wordmark .mobile-auth-tagline,
+.login-shell .auth-wordmark em {
+  color: var(--rt-orange-warm);
+}
+
+.form-kicker,
+.field-label,
+.join-kicker,
+.join-step-heading h2,
+.join-subsection > h3,
+.join-subsection-heading h3,
+.join-terms-heading h3,
+.join-consent,
+.join-field,
+.join-optional-details summary {
+  color: var(--rt-text-muted);
+}
+
+.form-content form > input,
+.password-field,
+.join-field input,
+.join-shell .password-field,
+.statement-filter-fields input,
+.statement-filter-fields select,
+.loan-application-edit-form input,
+.loan-application-edit-form textarea,
+.member-details-fields input,
+.form-card select,
+.form-card input,
+.amount-input-wrap {
+  border-color: var(--rt-border);
+  border-radius: 12px;
+  color: var(--rt-text);
+  background: #1b152f;
+  box-shadow: none;
+}
+
+.login-shell .form-content form > input,
+.login-shell .password-field,
+.join-shell .password-field,
+.join-shell .join-field input {
+  border: 1px solid var(--rt-border);
+  border-radius: 12px;
+  color: var(--rt-text);
+  background: #1b152f;
+  box-shadow: none;
+}
+
+.form-content form > input,
+.password-field input,
+.join-field input,
+.join-shell .password-field input,
+.statement-filter-fields input,
+.statement-filter-fields select,
+.loan-application-edit-form input,
+.loan-application-edit-form textarea,
+.member-details-fields input {
+  color: var(--rt-text);
+}
+
+.form-content form > input::placeholder,
+.password-field input::placeholder,
+.join-field input::placeholder,
+.join-shell .password-field input::placeholder,
+.member-details-fields input::placeholder {
+  color: var(--rt-text-dim);
+}
+
+.form-content form > input:focus,
+.password-field:focus-within,
+.join-field input:focus,
+.join-shell .password-field:focus-within,
+.statement-filter-fields input:focus,
+.statement-filter-fields select:focus,
+.loan-application-edit-form input:focus,
+.loan-application-edit-form textarea:focus,
+.member-details-fields input:focus,
+.form-card select:focus,
+.form-card input:focus {
+  border-color: var(--rt-orange);
+  box-shadow: 0 0 0 3px rgb(245 114 36 / 18%);
+  outline: none;
+}
+
+.field-icon,
+.visibility-button,
+.join-step-heading > span {
+  color: var(--rt-orange-warm);
+}

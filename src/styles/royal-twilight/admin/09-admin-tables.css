@@ -1,0 +1,91 @@
+
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .modern-admin-table :is(th, td) {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .modern-admin-table thead th {
+  color: var(--rt-text-muted);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .modern-admin-table tbody tr.row-selected {
+  background: rgb(245 114 36 / 12%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .member-drawer-backdrop,
+:is(.admin-root-layout, .mobile-admin-root-layout) .modal-backdrop {
+  background: rgb(4 2 13 / 72%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .preview-valid,
+  .status-pill.status-approved,
+  .status-pill.status-disbursed,
+  .role-tag-signatory
+) {
+  border-color: rgb(87 181 132 / 32%);
+  color: #a8e5c2;
+  background: rgb(16 120 76 / 20%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .preview-invalid,
+  .bulk-errors,
+  .status-pill.status-rejected,
+  .role-tag-admin
+) {
+  border-color: rgb(255 113 113 / 30%);
+  color: #ffc2ba;
+  background: rgb(147 0 10 / 22%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .status-pill.status-pending,
+  .status-tag.status-pending
+) {
+  border-color: var(--rt-border-orange);
+  color: var(--rt-orange-warm);
+  background: var(--rt-orange-dim);
+}
+
+@media (max-width: 768px) {
+  .mobile-admin-bottom-nav {
+    border-top: 1px solid var(--rt-border);
+    background: rgb(19 13 46 / 95%);
+    box-shadow: 0 -8px 24px rgb(7 4 18 / 42%);
+  }
+  .mobile-nav-tab { color: var(--rt-text-dim); }
+  .mobile-nav-tab.is-active { color: var(--rt-orange); }
+  .mobile-nav-tab.is-active .mobile-nav-icon-wrap { color: var(--rt-orange); background: var(--rt-orange-dim); }
+  .mobile-nav-badge { border-color: var(--rt-surface); }
+}
+
+@media (prefers-color-scheme: light), (prefers-color-scheme: dark) {
+  :root,
+  html,
+  body { color-scheme: dark; }
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .member-details-drawer {
+  border-left: 1px solid var(--rt-border);
+  color: var(--rt-text);
+  background: var(--rt-surface);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-active-loan {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-active-loan:hover {
+  border-color: var(--rt-border-orange);
+  background: rgb(245 114 36 / 10%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-active-loan strong,
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-active-loan > span {
+  color: var(--rt-orange-light);
+}

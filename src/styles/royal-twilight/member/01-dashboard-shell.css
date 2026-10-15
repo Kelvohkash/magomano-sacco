@@ -1,0 +1,83 @@
+/* Member portal */
+.member-dashboard {
+  color: var(--rt-text);
+  background:
+    radial-gradient(ellipse at 10% 8%, rgb(245 114 36 / 9%), transparent 34rem),
+    radial-gradient(ellipse at 88% 28%, rgb(52 36 125 / 22%), transparent 38rem),
+    linear-gradient(160deg, #130d2e 0%, #0e0921 66%, #080517 100%);
+}
+
+.member-dashboard::before,
+.member-dashboard::after { background: rgb(78 53 145 / 13%); }
+.member-dashboard::after { background: rgb(245 114 36 / 8%); }
+
+.dashboard-header {
+  height: 72px;
+  border-bottom: 1px solid var(--rt-border);
+  background: rgb(19 13 46 / 88%);
+  box-shadow: 0 4px 30px rgb(7 4 18 / 60%);
+}
+
+.dashboard-brand,
+.dashboard-brand .brand-name,
+.member-greeting { color: var(--rt-text); }
+.dashboard-brand .member-nav-logo {
+  display: block;
+  width: 52px;
+  height: 44px;
+  flex: 0 0 52px;
+  object-fit: contain;
+  filter: drop-shadow(0 3px 8px rgb(0 0 0 / 24%));
+}
+.dashboard-brand .brand-mark,
+.member-avatar {
+  border: 1px solid rgb(255 170 117 / 34%);
+  border-radius: 12px;
+  color: #fff;
+  background: linear-gradient(135deg, #e55f10, #f57224 65%, #ff914d);
+  box-shadow: 0 0 16px rgb(245 114 36 / 26%);
+}
+.dashboard-brand .brand-name > span { color: var(--rt-orange-warm); }
+
+.member-desktop-nav button {
+  border-radius: 12px;
+  color: var(--rt-text-muted);
+}
+.member-desktop-nav button:hover,
+.member-desktop-nav button.active {
+  border-color: var(--rt-border-orange);
+  color: var(--rt-orange-warm);
+  background: var(--rt-orange-dim);
+  box-shadow: none;
+}
+
+.member-desktop-nav { gap: 2px; }
+.member-desktop-nav button {
+  gap: 6px;
+  padding-inline: 9px;
+  font-size: 11px;
+}
+
+.menu-toggle {
+  border-color: var(--rt-border);
+  color: var(--rt-orange-warm);
+  background: var(--rt-surface-low);
+  box-shadow: none;
+}
+.menu-toggle:hover {
+  border-color: var(--rt-border-orange);
+  color: var(--rt-text);
+  background: var(--rt-orange-dim);
+}
+.member-menu-backdrop {
+  position: fixed;
+  z-index: 40;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: rgb(0 0 0 / 40%);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  cursor: default;
+}

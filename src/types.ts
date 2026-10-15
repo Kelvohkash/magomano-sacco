@@ -52,6 +52,15 @@ export interface DashboardData {
       issuedAt: string
     }[]
   }
+  adminCharges?: {
+    total: number
+    recent: {
+      id: number
+      amount: number
+      description: string
+      occurredAt: string
+    }[]
+  }
 }
 
 export interface MemberPopupMessage {
@@ -291,6 +300,6 @@ export interface AdminOpenLoan {
   fullName: string
 }
 
-export type AdminView = 'overview' | 'members' | 'loans' | 'repayments' | 'savings' | 'bulk' | 'terms'
+export type AdminView = 'overview' | 'members' | 'loans' | 'repayments' | 'savings' | 'charges' | 'bulk' | 'terms'
 export type AuthMode = 'login' | 'register' | 'admin-login'
 export type MemberView = 'overview' | 'apply-loan' | 'loan-status' | 'savings' | 'activity' | 'account-info' | 'terms'

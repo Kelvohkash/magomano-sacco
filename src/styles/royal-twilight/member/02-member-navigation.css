@@ -1,0 +1,92 @@
+
+.dashboard-menu {
+  position: fixed;
+  z-index: 50;
+  top: 68px;
+  right: 12px;
+  width: min(256px, calc(100vw - 24px));
+  display: grid;
+  gap: 2px;
+  padding: 6px;
+  overflow: hidden;
+  border-color: var(--rt-border-orange);
+  border-radius: 16px;
+  background: linear-gradient(180deg, #1d182f, #151026);
+  box-shadow: 0 16px 40px rgb(5 2 15 / 80%), 0 0 20px rgb(245 114 36 / 15%);
+}
+.dashboard-menu::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, rgb(245 114 36 / 60%), transparent);
+  content: '';
+  pointer-events: none;
+}
+.dashboard-menu button {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-height: 40px;
+  align-items: center;
+  gap: 12px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 12px;
+  color: var(--rt-text-muted);
+  background: transparent;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+  transition: transform 160ms ease, color 160ms ease, background 160ms ease, box-shadow 160ms ease;
+}
+.dashboard-menu button:hover {
+  color: var(--rt-text);
+  background: var(--rt-orange-dim);
+}
+.dashboard-menu button[aria-current='page'] {
+  color: #ffb693;
+}
+.dashboard-menu button > svg {
+  flex: 0 0 auto;
+  color: var(--rt-orange-warm);
+  transition: transform 160ms ease, color 160ms ease;
+}
+.dashboard-menu button[aria-current='page'] > svg {
+  color: var(--rt-orange);
+}
+.dashboard-menu button:hover:not(:disabled) > svg {
+  transform: scale(1.1);
+  color: var(--rt-orange-light);
+}
+.dashboard-menu button:active:not(:disabled) {
+  transform: scale(.98);
+  color: #fff;
+  background: rgb(245 114 36 / 22%);
+  box-shadow: inset 0 0 0 1px rgb(255 136 56 / 25%), 0 0 18px rgb(245 114 36 / 24%);
+}
+.dashboard-menu button:disabled {
+  opacity: .65;
+  cursor: not-allowed;
+}
+.dashboard-menu > button:last-child {
+  color: #ffb4ab;
+}
+.dashboard-menu > button:last-child > svg {
+  color: #ffb4ab;
+}
+.dashboard-menu > button:last-child:hover:not(:disabled) {
+  color: #ffe1dc;
+  background: rgb(244 63 94 / 18%);
+}
+.dashboard-menu > button:last-child:active:not(:disabled) {
+  background: rgb(244 63 94 / 24%);
+  box-shadow: inset 0 0 0 1px rgb(255 180 171 / 24%), 0 0 18px rgb(244 63 94 / 20%);
+}
+.dashboard-menu .member-menu-sync-btn > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

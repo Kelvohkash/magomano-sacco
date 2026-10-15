@@ -1,0 +1,90 @@
+
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-active-loan small,
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-active-loans-heading span,
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-pending-loans-note,
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-no-active-loans {
+  color: var(--rt-text-muted);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-action-callout {
+  border-color: var(--rt-border-orange);
+  background: rgb(245 114 36 / 9%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-action-callout p {
+  color: var(--rt-orange-light);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-bank-card {
+  border-color: var(--rt-border);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-bank-card strong {
+  color: var(--rt-text);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-bank-card p {
+  color: var(--rt-orange-light);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-bank-card small,
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-contacts-sublist,
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-contacts-sublist .sublist-title {
+  color: var(--rt-text-muted);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-dl dd {
+  color: var(--rt-text);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-contacts-sublist strong {
+  color: var(--rt-text);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-footer {
+  border-color: var(--rt-border);
+  background: var(--rt-surface);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-edit-btn,
+:is(.admin-root-layout, .mobile-admin-root-layout) .role-pill-btn {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-edit-btn:hover:not(:disabled),
+:is(.admin-root-layout, .mobile-admin-root-layout) .role-pill-btn:hover:not(:disabled) {
+  border-color: var(--rt-border-orange);
+  color: var(--rt-text);
+  background: var(--rt-orange-dim);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .role-pill-btn.active {
+  border-color: var(--rt-border-orange);
+  color: var(--rt-orange-light);
+  background: var(--rt-orange-dim);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-delete-btn {
+  border-color: rgb(255 113 113 / 38%);
+  color: #ffc2ba;
+  background: rgb(147 0 10 / 22%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .drawer-delete-btn:hover:not(:disabled) {
+  border-color: rgb(255 113 113 / 65%);
+  background: rgb(147 0 10 / 38%);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-statement-panel {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background: var(--rt-surface-glass);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .admin-statement-title h2 {
+  color: var(--rt-text);
+}

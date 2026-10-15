@@ -24,7 +24,7 @@ export function MobileAdminBottomNav({
   onOpenMore,
 }: MobileAdminBottomNavProps) {
   const isLedgerActive = currentView === 'repayments' || currentView === 'savings'
-  const isMoreActive = currentView === 'bulk' || currentView === 'terms'
+  const isMoreActive = currentView === 'charges' || currentView === 'bulk' || currentView === 'terms'
 
   return (
     <nav className="mobile-admin-bottom-nav" aria-label="Quick admin navigation">
@@ -102,4 +102,3 @@ export function MobileAdminBottomNav({
     </nav>
   )
 }
-

@@ -9,6 +9,7 @@ import { AdminMembersView } from './views/AdminMembersView'
 import { AdminLoansView } from './views/AdminLoansView'
 import { AdminRepaymentsView } from './views/AdminRepaymentsView'
 import { AdminSavingsView } from './views/AdminSavingsView'
+import { AdminChargesView } from './views/AdminChargesView'
 import { AdminTermsView } from './views/AdminTermsView'
 import { AdminBulkImportView } from './views/AdminBulkImportView'
 import { MemberProfileDrawer } from './modals/MemberProfileDrawer'
@@ -320,6 +321,8 @@ export function MobileAdminPortal({
             submitting={submitting}
           />
         )}
+
+        {view === 'charges' && <AdminChargesView members={members} onRefresh={onRefresh} />}
 
         {view === 'bulk' && <AdminBulkImportView onImported={onRefresh} />}
 

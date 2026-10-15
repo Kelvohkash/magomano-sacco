@@ -45,6 +45,23 @@ export async function memberDashboard(session, env) {
       ORDER BY created_at ASC, id ASC
     `).bind(memberId, memberId).all(),
   ])
+
+  // Only applied admin charges belong in the member-facing debit summary.
+  const [adminChargeTotal, recentAdminCharges] = await Promise.all([
+    env.DB.prepare(`
+      SELECT COALESCE(SUM(amount), 0) AS total
+      FROM admin_charge_applications WHERE member_id = ? AND status = 'applied'
+    `).bind(memberId).first(),
+    env.DB.prepare(`
+      SELECT c.id, c.amount, c.description, a.applied_at AS occurredAt
+      FROM admin_charge_applications a
+      JOIN admin_charges c ON c.id = a.charge_id
+      WHERE a.member_id = ? AND a.status = 'applied'
+      ORDER BY a.applied_at DESC, a.charge_id DESC
+      LIMIT 3
+    `).bind(memberId).all(),
+  ])
+
   return json({
     member: {
       national_id: member.national_id,
@@ -77,6 +94,10 @@ export async function memberDashboard(session, env) {
       outstandingBalance: loanTotals.balance,
       statement: [],
       repayments: [],
+    },
+    adminCharges: {
+      total: Number(adminChargeTotal.total ?? 0),
+      recent: recentAdminCharges.results,
     },
   })
 }

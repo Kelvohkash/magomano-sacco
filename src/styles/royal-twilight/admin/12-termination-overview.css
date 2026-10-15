@@ -1,0 +1,92 @@
+
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .termination-charge-modal,
+  .termination-overview-modal
+) {
+  border-color: var(--rt-border-orange);
+  color: var(--rt-text);
+  background: var(--rt-surface);
+  box-shadow: var(--rt-shadow-card);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .termination-overview-header {
+  border-color: var(--rt-border);
+  background: var(--rt-surface);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .termination-charge-heading h2,
+  .termination-overview-header h2,
+  .termination-charge-lines-heading h3,
+  .termination-report-section h3,
+  .termination-repayments-title,
+  .termination-member-details dd,
+  .termination-settlement-summary dd,
+  .termination-payout-preview strong,
+  .termination-charge-list strong
+) {
+  color: var(--rt-text);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) :is(
+  .termination-charge-summary,
+  .termination-member-details dt,
+  .termination-settlement-summary dt,
+  .termination-no-charges,
+  .termination-payout-preview,
+  .termination-charge-list li,
+  .termination-overview-header > div:first-child > p:last-child,
+  .termination-overview-loading
+) {
+  color: var(--rt-text-muted);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .termination-charge-line label {
+  color: var(--rt-text-muted);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .termination-charge-line input {
+  border-color: var(--rt-border);
+  color: var(--rt-text);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .termination-charge-line input::placeholder {
+  color: var(--rt-text-dim);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .termination-add-charge,
+:is(.admin-root-layout, .mobile-admin-root-layout) .termination-overview-close,
+:is(.admin-root-layout, .mobile-admin-root-layout) .termination-remove-charge {
+  border-color: var(--rt-border);
+  color: var(--rt-text-muted);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .termination-add-charge:hover:not(:disabled),
+:is(.admin-root-layout, .mobile-admin-root-layout) .termination-overview-close:hover:not(:disabled) {
+  border-color: var(--rt-border-orange);
+  color: var(--rt-orange-light);
+  background: var(--rt-orange-dim);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .termination-remove-charge {
+  color: #ffc2ba;
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .termination-no-charges,
+:is(.admin-root-layout, .mobile-admin-root-layout) .termination-payout-preview,
+:is(.admin-root-layout, .mobile-admin-root-layout) .termination-member-details > div,
+:is(.admin-root-layout, .mobile-admin-root-layout) .termination-settlement-summary > div {
+  border-color: var(--rt-border);
+  background: var(--rt-surface-low);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .termination-charge-list li {
+  border-color: var(--rt-border);
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .termination-report-table-wrap {
+  border-color: var(--rt-border);
+}

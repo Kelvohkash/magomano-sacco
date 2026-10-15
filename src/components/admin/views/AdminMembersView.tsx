@@ -11,9 +11,12 @@ import {
   UsersRound,
   UserPlus,
   X,
+  FileText,
+  Plus,
 } from 'lucide-react'
 import { RowActionDropdown } from '../RowActionDropdown'
 import { AnimatedFigure } from '../../AnimatedFigure'
+import { TerminationOverviewModal } from '../TerminationOverviewModal'
 import type { AdminMember, AdminMemberCreate } from '../../../types'
 
 interface AdminMembersViewProps {
@@ -59,18 +62,49 @@ export function AdminMembersView({
   const [newMember, setNewMember] = useState<AdminMemberCreate>({ saccoNumber: '', fullName: '', nationalId: '' })
   const [terminatingId, setTerminatingId] = useState<number | null>(null)
   const [settlementMessage, setSettlementMessage] = useState('')
+  const [settlementError, setSettlementError] = useState(false)
+  const [terminationTarget, setTerminationTarget] = useState<AdminMember | null>(null)
+  const [terminationCharges, setTerminationCharges] = useState<{ description: string; amount: string }[]>([])
+  const [overviewMemberId, setOverviewMemberId] = useState<number | null>(null)
 
-  async function terminateMember(member: AdminMember) {
-    const net = member.savingsBalance - member.activeLoanBalance
-    if (!window.confirm(`Terminate ${member.fullName} and settle the account? Savings ${member.savingsBalance.toFixed(2)} will be applied against loans due ${member.activeLoanBalance.toFixed(2)}.Payout: ${Math.max(0, net).toFixed(2)}; remaining loan due: ${Math.max(0, -net).toFixed(2)}.`)) return
-    setTerminatingId(member.id); setSettlementMessage('')
+  async function terminateMember(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    if (!terminationTarget) return
+    const member = terminationTarget
+    const charges = terminationCharges.map((charge) => ({
+      description: charge.description.trim(),
+      amount: Number(charge.amount),
+    }))
+    if (charges.some((charge) => !charge.description || !Number.isFinite(charge.amount) || charge.amount <= 0)) {
+      setSettlementMessage('Enter a description and a positive amount for every custom charge.')
+      setSettlementError(true)
+      return
+    }
+    const chargesTotal = Math.round(charges.reduce((sum, charge) => sum + charge.amount, 0) * 100) / 100
+    const availableAfterLoans = Math.max(0, member.savingsBalance - member.activeLoanBalance)
+    if (chargesTotal > availableAfterLoans) {
+      setSettlementMessage('Custom charges cannot exceed the member savings remaining after loan settlement.')
+      setSettlementError(true)
+      return
+    }
+    setTerminatingId(member.id); setSettlementMessage(''); setSettlementError(false)
     try {
-      const response = await fetch(`/api/admin/members/${member.id}/terminate`, { method: 'POST' })
+      const response = await fetch(`/api/admin/members/${member.id}/terminate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ charges }),
+      })
       const result = await response.json() as { message?: string; error?: string }
       if (!response.ok) throw new Error(result.error ?? 'Could not settle this member account.')
       setSettlementMessage(result.message ?? 'Member account settled and terminated.')
+      setSettlementError(false)
+      setTerminationTarget(null)
+      setTerminationCharges([])
       await onRefresh()
-    } catch (error) { setSettlementMessage(error instanceof Error ? error.message : 'Could not settle this member account.') }
+    } catch (error) {
+      setSettlementMessage(error instanceof Error ? error.message : 'Could not settle this member account.')
+      setSettlementError(true)
+    }
     finally { setTerminatingId(null) }
   }
 
@@ -113,7 +147,38 @@ export function AdminMembersView({
           <button type="submit" className="submit-button" disabled={reviewingId === 'create-member'}>{reviewingId === 'create-member' ? 'Adding member…' : 'Add member'}</button>
         </div>
       </form>}
-      {settlementMessage && <div className="admin-banner-alert alert-success" role="status">{settlementMessage}</div>}
+      {settlementMessage && <div className={`admin-banner-alert ${settlementError ? 'alert-error' : 'alert-success'}`} role={settlementError ? 'alert' : 'status'}>{settlementMessage}</div>}
+      {terminationTarget && <div className="termination-charge-backdrop" onMouseDown={(event) => {
+        if (event.target === event.currentTarget && terminatingId !== terminationTarget.id) setTerminationTarget(null)
+      }}>
+        <form className="termination-charge-modal" onSubmit={(event) => void terminateMember(event)}>
+          <div className="termination-charge-heading">
+            <div><p>MEMBERSHIP CLOSURE</p><h2>Terminate {terminationTarget.fullName}</h2></div>
+            <button type="button" className="termination-overview-close" disabled={terminatingId === terminationTarget.id} onClick={() => setTerminationTarget(null)} aria-label="Close termination form"><X size={19} /></button>
+          </div>
+          <p className="termination-charge-summary">
+            Savings of <strong>{terminationTarget.savingsBalance.toFixed(2)}</strong> will first be applied to outstanding loans of <strong>{terminationTarget.activeLoanBalance.toFixed(2)}</strong>. Add any custom admin charges below; the remaining amount is paid out as a withdrawal without interest.
+          </p>
+          <div className="termination-charge-lines-heading"><h3>Custom admin charges</h3><button type="button" className="termination-add-charge" disabled={terminationCharges.length >= 20} onClick={() => setTerminationCharges((charges) => [...charges, { description: '', amount: '' }])}><Plus size={15} /> Add charge</button></div>
+          {terminationCharges.length > 0 ? <div className="termination-charge-lines">
+            {terminationCharges.map((charge, index) => <div className="termination-charge-line" key={index}>
+              <label>Charge description<input required maxLength={120} value={charge.description} onChange={(event) => setTerminationCharges((current) => current.map((item, itemIndex) => itemIndex === index ? { ...item, description: event.target.value } : item))} placeholder="e.g. Membership closure fee" /></label>
+              <label>Amount<input required type="number" min="0.01" step="0.01" value={charge.amount} onChange={(event) => setTerminationCharges((current) => current.map((item, itemIndex) => itemIndex === index ? { ...item, amount: event.target.value } : item))} /></label>
+              <button type="button" className="termination-remove-charge" onClick={() => setTerminationCharges((current) => current.filter((_, itemIndex) => itemIndex !== index))} aria-label={`Remove charge ${index + 1}`}><Trash2 size={16} /></button>
+            </div>)}
+          </div> : <p className="termination-no-charges">No custom charges added. Add charges only when they apply.</p>}
+          <div className="termination-payout-preview">
+            <span>Estimated payout after loans and charges</span>
+            <strong>{Math.max(0, terminationTarget.savingsBalance - terminationTarget.activeLoanBalance - terminationCharges.reduce((sum, charge) => sum + (Number(charge.amount) || 0), 0)).toFixed(2)}</strong>
+          </div>
+          {settlementError && settlementMessage && <p className="termination-modal-error" role="alert">{settlementMessage}</p>}
+          <div className="termination-charge-actions">
+            <button type="button" className="action-btn-cancel" disabled={terminatingId === terminationTarget.id} onClick={() => setTerminationTarget(null)}>Cancel</button>
+            <button type="submit" className="submit-button" disabled={terminatingId === terminationTarget.id}>{terminatingId === terminationTarget.id ? 'Settling account…' : 'Confirm termination'}</button>
+          </div>
+        </form>
+      </div>}
+      {overviewMemberId !== null && <TerminationOverviewModal memberId={overviewMemberId} onClose={() => setOverviewMemberId(null)} />}
 
       {/* Search & Filter Controls */}
       <div className="table-controls-bar">
@@ -275,14 +340,29 @@ export function AdminMembersView({
                           ? [
                               {
                                 id: `terminate-${member.id}`,
-                                label: terminatingId === member.id ? 'Settling…' : 'Terminate Membership',
-                                sublabel: 'Settle savings & active loans, close account',
+                                label: 'Terminate Membership',
+                                sublabel: 'Settle savings, loans & custom charges',
                                 icon: <AlertTriangle size={15} />,
                                 variant: 'danger' as const,
                                 disabled: terminatingId === member.id,
-                                onClick: () => void terminateMember(member),
+                                onClick: () => {
+                                  setTerminationTarget(member)
+                                  setTerminationCharges([])
+                                  setSettlementMessage('')
+                                  setSettlementError(false)
+                                },
                               },
                             ]
+                          : []),
+                        ...(member.accountStatus === 'terminated'
+                          ? [{
+                              id: `member-overview-${member.id}`,
+                              label: 'Member overview',
+                              sublabel: 'View savings, loans & final settlement',
+                              icon: <FileText size={15} />,
+                              variant: 'primary' as const,
+                              onClick: () => setOverviewMemberId(member.id),
+                            }]
                           : []),
                         {
                           id: `delete-${member.id}`,
@@ -311,4 +391,3 @@ export function AdminMembersView({
     </div>
   )
 }
-

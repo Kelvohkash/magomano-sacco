@@ -133,7 +133,7 @@ export function AdminTermsView({
             </label>
             {popupTargetType === 'member' && <div className="popup-member-picker">
               <label>Search members
-                <input type="search" value={memberSearch} onChange={(event) => setMemberSearch(event.target.value)} placeholder="Search name or SACCO number" />
+                <input type="search" value={memberSearch} onChange={(event) => setMemberSearch(event.target.value)} placeholder="Search name or Sacco number" />
               </label>
               <div className="popup-member-picker-results">
                 {approvedMembers.filter((member) => `${member.fullName} ${member.saccoNumber ?? ''}`.toLowerCase().includes(memberSearch.toLowerCase()))

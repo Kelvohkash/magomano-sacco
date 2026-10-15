@@ -3,6 +3,7 @@ import {
   ChevronRight,
   FileSpreadsheet,
   FileText,
+  HandCoins,
   LayoutDashboard,
   RefreshCcw,
   UsersRound,
@@ -37,6 +38,7 @@ export function AdminSidebar({
     { section: 'loans', label: 'Loan Applications', Icon: FileText, badge: pendingApplicationsCount },
     { section: 'repayments', label: 'Repayments', Icon: RefreshCcw },
     { section: 'savings', label: 'Savings Ledger', Icon: WalletCards },
+    { section: 'charges', label: 'Admin Charges', Icon: HandCoins },
     { section: 'bulk', label: 'Bulk Statements', Icon: FileSpreadsheet },
     { section: 'terms', label: 'Terms & Conditions', Icon: FileText },
   ]
@@ -70,4 +72,3 @@ export function AdminSidebar({
     </aside>
   )
 }
-

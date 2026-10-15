@@ -180,6 +180,7 @@ export function TerminationOverviewModal({ memberId, onClose }: TerminationOverv
                 <h3>Member details</h3>
               </div>
               <dl className="termination-member-details">
+                <div className="termination-member-name"><dt>Member name</dt><dd>{report.member.fullName}</dd></div>
                 <div><dt>SACCO number</dt><dd>{report.member.saccoNumber || '—'}</dd></div>
                 <div><dt>National ID</dt><dd>{report.member.nationalId || '—'}</dd></div>
                 <div><dt>Phone</dt><dd>{report.member.phoneNumber || '—'}</dd></div>

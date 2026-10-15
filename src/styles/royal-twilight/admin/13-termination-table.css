@@ -16,3 +16,15 @@
 :is(.admin-root-layout, .mobile-admin-root-layout) .termination-modal-error {
   color: #ffc2ba;
 }
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .termination-overview-modal .termination-report-document .termination-report-table th {
+  border-color: #dbe4ec;
+  color: #315f91;
+  background: #eaf2fa;
+}
+
+:is(.admin-root-layout, .mobile-admin-root-layout) .termination-overview-modal .termination-report-document .termination-report-table td {
+  border-color: #e7edf0;
+  color: #334155;
+  background: #fff;
+}

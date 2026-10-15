@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import { createPortal } from 'react-dom'
 import { MoreVertical } from 'lucide-react'
 
 export interface RowActionItem {
@@ -26,12 +27,19 @@ export function RowActionDropdown({
 }: RowActionDropdownProps) {
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
+  const [menuStyle, setMenuStyle] = useState<CSSProperties>({ visibility: 'hidden' })
 
   useEffect(() => {
     if (!isOpen) return
 
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      const target = event.target as Node
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(target) &&
+        !menuRef.current?.contains(target)
+      ) {
         setIsOpen(false)
       }
     }
@@ -50,26 +58,78 @@ export function RowActionDropdown({
     }
   }, [isOpen])
 
-  return (
-    <div className="row-action-dropdown-wrap" ref={dropdownRef}>
-      <button
-        type="button"
-        className={`row-action-trigger-btn ${isOpen ? 'is-active' : ''}`}
-        onClick={(event) => {
-          event.stopPropagation()
-          setIsOpen((prev) => !prev)
-        }}
-        aria-expanded={isOpen}
-        aria-haspopup="menu"
-        title={label ? `${label} actions` : 'More actions'}
-      >
-        <MoreVertical size={16} />
-        {label && <span className="trigger-label">{label}</span>}
-      </button>
+  useLayoutEffect(() => {
+    if (!isOpen) return
 
-      {isOpen && (
+    function positionMenu() {
+      const trigger = dropdownRef.current?.querySelector('.row-action-trigger-btn')
+      const menu = menuRef.current
+      if (!(trigger instanceof HTMLElement) || !menu) return
+
+      const triggerRect = trigger.getBoundingClientRect()
+      const menuRect = menu.getBoundingClientRect()
+      const viewportPadding = 8
+      const gap = 6
+      const roomBelow = window.innerHeight - triggerRect.bottom - viewportPadding
+      const roomAbove = triggerRect.top - viewportPadding
+      const opensUp = direction === 'up' || (menuRect.height > roomBelow && roomAbove > roomBelow)
+      const availableHeight = Math.max(80, opensUp ? roomAbove : roomBelow)
+      const height = Math.min(menuRect.height, availableHeight)
+      const top = opensUp
+        ? Math.max(viewportPadding, triggerRect.top - height - gap)
+        : Math.min(window.innerHeight - height - viewportPadding, triggerRect.bottom + gap)
+      const left = align === 'left'
+        ? triggerRect.left
+        : triggerRect.right - menuRect.width
+      const boundedLeft = Math.max(
+        viewportPadding,
+        Math.min(left, window.innerWidth - menuRect.width - viewportPadding),
+      )
+
+      setMenuStyle({
+        position: 'fixed',
+        top,
+        left: boundedLeft,
+        bottom: 'auto',
+        maxHeight: availableHeight,
+        zIndex: 10000,
+        visibility: 'visible',
+      })
+    }
+
+    positionMenu()
+    window.addEventListener('resize', positionMenu)
+    window.addEventListener('scroll', positionMenu, true)
+    return () => {
+      window.removeEventListener('resize', positionMenu)
+      window.removeEventListener('scroll', positionMenu, true)
+    }
+  }, [align, direction, isOpen, items.length])
+
+  return (
+    <>
+      <div className="row-action-dropdown-wrap" ref={dropdownRef}>
+        <button
+          type="button"
+          className={`row-action-trigger-btn ${isOpen ? 'is-active' : ''}`}
+          onClick={(event) => {
+            event.stopPropagation()
+            setIsOpen((prev) => !prev)
+          }}
+          aria-expanded={isOpen}
+          aria-haspopup="menu"
+          title={label ? `${label} actions` : 'More actions'}
+        >
+          <MoreVertical size={16} />
+          {label && <span className="trigger-label">{label}</span>}
+        </button>
+      </div>
+
+      {isOpen && createPortal(
         <div
+          ref={menuRef}
           className={`row-action-popup-menu align-${align} direction-${direction}`}
+          style={menuStyle}
           onClick={(event) => event.stopPropagation()}
           role="menu"
         >
@@ -97,9 +157,9 @@ export function RowActionDropdown({
               </button>
             ))}
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
-    </div>
+    </>
   )
 }
-

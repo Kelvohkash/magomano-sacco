@@ -156,7 +156,9 @@ export function TerminationOverviewModal({ memberId, signatories, onClose }: Ter
             <header className="termination-report-letterhead">
               <div className="termination-report-brand">
                 <span className="termination-report-crest">
-                  <img src={countyLogo} alt="Magomano County Sacco" />
+                  <span className="termination-report-crest-card">
+                    <img src={countyLogo} alt="Magomano County Sacco" />
+                  </span>
                 </span>
                 <div>
                   <h1>MAGOMANO COUNTY SACCO</h1>

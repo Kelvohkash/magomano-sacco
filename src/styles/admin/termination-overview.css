@@ -342,7 +342,7 @@
 
 .termination-custom-charges h4 {
   margin: 0;
-  color: #193a61;
+  color: #06177f;
   font-size: 11px;
   font-weight: 800;
 }
@@ -360,7 +360,7 @@
 }
 
 .termination-charge-list strong {
-  color: #193a61;
+  color: #06177f;
   font-weight: 800;
   white-space: nowrap;
 }
@@ -394,7 +394,7 @@
   width: min(100%, 900px);
   margin: 0 auto;
   padding: 30px 34px 22px;
-  border-top: 5px solid #315f91;
+  border-top: 5px solid #06177f;
   border-radius: 4px;
   background: #fff;
   color: #0f172a;
@@ -408,7 +408,7 @@
   justify-content: space-between;
   gap: 22px;
   padding-bottom: 18px;
-  border-bottom: 2px solid #315f91;
+  border-bottom: 2px solid #06177f;
 }
 
 .termination-report-brand {
@@ -424,13 +424,25 @@
   height: 72px;
   flex: 0 0 auto;
   place-items: center;
+  box-sizing: border-box;
+  padding: 5px;
   overflow: hidden;
-  border: 1px solid #315f91;
+  border: 1px solid #06177f;
   border-radius: 12px;
-  background: #315f91;
+  background: #06177f;
 }
 
-.termination-report-crest img {
+.termination-report-crest-card {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 7px;
+  background: #fff;
+}
+
+.termination-report-crest-card img {
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -438,7 +450,7 @@
 
 .termination-report-brand h1 {
   margin: 0;
-  color: #193a61;
+  color: #06177f;
   font-size: 20px;
   font-weight: 850;
   letter-spacing: -.02em;
@@ -446,7 +458,7 @@
 
 .termination-report-brand p {
   margin: 4px 0;
-  color: #315f91;
+  color: #06177f;
   font-size: 10px;
   font-weight: 800;
   letter-spacing: .12em;
@@ -478,7 +490,7 @@
   border: 1px solid #e7d28a;
   border-radius: 6px;
   background: #fff9e8;
-  color: #193a61;
+  color: #06177f;
   font-family: monospace;
   font-size: 13px;
 }
@@ -497,7 +509,7 @@
   margin: 17px 0 22px;
   padding: 11px 14px;
   border-radius: 5px;
-  background: #193a61;
+  background: #06177f;
   color: #fff;
 }
 
@@ -535,7 +547,7 @@
 }
 
 .termination-section-heading h3 {
-  color: #193a61;
+  color: #06177f;
   font-size: 14px;
 }
 
@@ -559,7 +571,7 @@
 }
 
 .termination-report-document .termination-member-name dd {
-  color: #193a61;
+  color: #06177f;
   font-size: 14px;
   font-weight: 850;
 }
@@ -570,7 +582,7 @@
 }
 
 .termination-report-document .termination-settlement-summary > div:nth-child(4) dd {
-  color: #193a61;
+  color: #06177f;
   font-size: 14px;
 }
 
@@ -585,7 +597,7 @@
 
 .termination-report-document .termination-report-table th {
   background: #f1f5f9;
-  color: #315f91;
+  color: #06177f;
 }
 
 .termination-report-document .termination-report-table td {
@@ -614,7 +626,7 @@
 .termination-disbursement-note > strong {
   grid-column: 2;
   grid-row: 1 / span 2;
-  color: #193a61;
+  color: #06177f;
   font-size: 20px;
   font-variant-numeric: tabular-nums;
 }
@@ -641,7 +653,7 @@
 }
 
 .termination-signature-block > span {
-  color: #315f91;
+  color: #06177f;
   font-size: 8px;
   font-weight: 800;
   letter-spacing: .06em;
@@ -663,7 +675,7 @@
 .termination-signature-block > strong {
   display: block;
   margin-top: 5px;
-  color: #193a61;
+  color: #06177f;
   font-size: 10px;
 }
 
@@ -694,13 +706,13 @@
   gap: 12px;
   margin-top: 8px;
   padding-top: 10px;
-  border-top: 1px solid #315f91;
+  border-top: 1px solid #06177f;
   color: #64748b;
   font-size: 9px;
 }
 
 .termination-report-footer strong {
-  color: #315f91;
+  color: #06177f;
   font-family: monospace;
 }
 
@@ -775,6 +787,10 @@
   .termination-report-crest {
     width: 58px;
     height: 58px;
+  }
+
+  .termination-report-crest-card {
+    border-radius: 6px;
   }
 
   .termination-report-document .termination-member-details,
@@ -904,7 +920,7 @@
 
   .termination-charge-list li strong,
   .termination-custom-charges h4 {
-    color: #193a61 !important;
+    color: #06177f !important;
   }
 
   .termination-report-letterhead {
@@ -915,7 +931,12 @@
   .termination-report-crest {
     width: 16mm;
     height: 16mm;
+    padding: 1mm;
     border-radius: 2mm;
+  }
+
+  .termination-report-crest-card {
+    border-radius: 1.2mm;
   }
 
   .termination-report-brand h1 {

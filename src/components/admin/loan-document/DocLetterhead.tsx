@@ -13,7 +13,9 @@ export function DocLetterhead({ application, refCode }: DocLetterheadProps) {
       <header className="doc-letterhead">
         <div className="doc-brand-block">
           <div className="doc-crest-icon">
-            <img src={countyLogo} alt="Magomano County Sacco" />
+            <span className="doc-crest-card">
+              <img src={countyLogo} alt="Magomano County Sacco" />
+            </span>
           </div>
           <div className="doc-org-text">
             <h1 className="doc-org-name">MAGOMANO COUNTY SACCO</h1>

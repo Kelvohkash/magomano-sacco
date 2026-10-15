@@ -34,7 +34,7 @@
   padding: 1.4mm 2.8mm;
   background: #eaf2fa;
   border-bottom: 0.6pt solid #d5e1ec;
-  color: #315f91;
+  color: #06177f;
   font-size: 6.8pt;
   font-weight: 850;
   letter-spacing: 0.07em;
@@ -104,7 +104,7 @@
 
 .cell-val.highlight-val {
   font-weight: 850;
-  color: #315f91;
+  color: #06177f;
 }
 
 /* Section 2: Loan Facility particulars */

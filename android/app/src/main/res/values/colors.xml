@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Magomano SACCO brand colours -->
-    <color name="colorPrimary">#153d3a</color>
-    <color name="colorPrimaryDark">#0d2928</color>
-    <color name="colorAccent">#c8a96b</color>
-    <color name="splashBackground">#153d3a</color>
+    <!-- Magomano County purple and orange brand colours -->
+    <color name="colorPrimary">#241468</color>
+    <color name="colorPrimaryDark">#1b1142</color>
+    <color name="colorAccent">#f57224</color>
+    <color name="splashBackground">#241468</color>
+    <color name="statusBarBackground">#1b1142</color>
+    <color name="navigationBarBackground">#130d2e</color>
 </resources>

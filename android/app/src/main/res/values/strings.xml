@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Magomano SACCO</string>
-    <string name="title_activity_main">Magomano SACCO</string>
+    <string name="app_name">Magomano</string>
+    <string name="title_activity_main">Magomano</string>
     <string name="package_name">rw.magomano.sacco</string>
     <string name="custom_url_scheme">rw.magomano.sacco</string>
 </resources>

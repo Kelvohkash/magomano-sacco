@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'pwa-icon.svg', 'pwa-icon-192.png', 'pwa-icon-512.png', 'pwa-icon-maskable-512.png', 'apple-touch-icon.png'],
+      includeAssets: ['favicon.svg', 'pwa-icon.svg', 'Logo.webp', 'pwa-icon-192.png', 'pwa-icon-512.png', 'pwa-icon-maskable-512.png', 'apple-touch-icon.png'],
       manifest: {
         id: 'magomano-sacco-pwa',
         name: 'Magomano SACCO',

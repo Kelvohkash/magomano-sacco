@@ -1,5 +1,6 @@
 /* Member portal */
 .member-dashboard {
+  padding-top: env(safe-area-inset-top, 0px);
   color: var(--rt-text);
   background:
     radial-gradient(ellipse at 10% 8%, rgb(245 114 36 / 9%), transparent 34rem),

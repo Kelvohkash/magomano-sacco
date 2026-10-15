@@ -1,7 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" fill="#153d3a"/>
-  <path d="M94 207 256 105l162 102" fill="none" stroke="#d9e7c5" stroke-linecap="round" stroke-linejoin="round" stroke-width="24"/>
-  <path d="M118 222h276M128 382h256M108 414h296" fill="none" stroke="#d9e7c5" stroke-linecap="round" stroke-width="24"/>
-  <path d="M158 237v133m65-133v133m65-133v133m65-133v133" fill="none" stroke="#d9e7c5" stroke-linecap="round" stroke-width="24"/>
-  <path d="M256 76v-18" fill="none" stroke="#c8a96b" stroke-linecap="round" stroke-width="18"/>
+  <rect width="512" height="512" fill="#241468"/>
+  <rect x="42" y="42" width="428" height="428" rx="58" fill="#fffdf6" stroke="#f2d35e" stroke-width="8"/>
+  <image href="/Logo.webp" x="80" y="138" width="352" height="235" preserveAspectRatio="xMidYMid meet"/>
 </svg>

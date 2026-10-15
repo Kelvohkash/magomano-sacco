@@ -50,6 +50,16 @@ All API modules use the D1 binding `env.DB`. Database schema changes belong in o
 - `npm run demo` — local D1 migrations, demo data, and Pages preview.
 - `npm run deploy` — build and deploy to Cloudflare Pages; only run when deployment is requested.
 
+## Android app
+
+The Android app is a Capacitor wrapper around the web app. From the repository root:
+
+1. Install the JavaScript dependencies with `npm install`.
+2. Install and configure the Android SDK. Set `ANDROID_HOME` (and optionally `ANDROID_SDK_ROOT`) to the SDK directory, or configure `sdk.dir` in `android/local.properties`.
+3. Run `npm run android:apk` to build the web app, sync it into the Android project, and assemble a debug APK.
+
+The APK is written to `android/app/build/outputs/apk/debug/app-debug.apk`. To only update the Android project with the latest web build, run `npm run android:sync`. The Android project can also be opened in Android Studio from the `android/` directory.
+
 ## Navigation tips
 
 - Find API callers: search for `/api/` under `src/`.

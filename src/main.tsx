@@ -27,3 +27,7 @@ async function startApp() {
 }
 
 void startApp()
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(() => {})
+}

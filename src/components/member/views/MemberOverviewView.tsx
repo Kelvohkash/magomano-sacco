@@ -190,7 +190,9 @@ export function MemberOverviewView({
                   <div className="statement-details">
                     <strong><AnimatedFigure value={loan.principalAmount} /></strong>
                     <span>
-                      <CalendarDays size={13} /> {formatDate(loan.issuedAt)} · {loan.repaymentMonths} months · {loan.status}
+                      <CalendarDays size={13} /> {loan.legacyImported
+                        ? `Historical import · issue date and term not recorded · ${loan.status}`
+                        : `${formatDate(loan.issuedAt ?? '')} · ${loan.repaymentMonths} months · ${loan.status}`}
                     </span>
                     <div className="loan-progress" role="group" aria-label={`Loan of ${loan.principalAmount} repayment progress`}>
                       <div className="loan-progress-heading">

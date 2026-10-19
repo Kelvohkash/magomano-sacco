@@ -67,6 +67,7 @@
   -webkit-backdrop-filter: blur(18px);
 }
 .loan-application-form > label { color: #334155; }
+.loan-application-form .form-field-hint { margin: -8px 0 0; color: #64748b; font-size: 10px; }
 .loan-application-form textarea,
 .loan-application-form .amount-input-wrap,
 .loan-application-form .months-input-wrap { border-color: rgb(203 213 225 / 80%); border-radius: 11px; background: rgb(255 255 255 / 90%); }

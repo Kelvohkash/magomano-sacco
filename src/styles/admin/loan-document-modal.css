@@ -162,6 +162,31 @@
   border-bottom: 1px solid var(--admin-dark-border);
 }
 
+.loan-modal-cheque-entry {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 22px;
+  color: #e2e8f0;
+  background: #0f1c3d;
+  border-bottom: 1px solid var(--admin-dark-border);
+}
+
+.loan-modal-cheque-entry label {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.loan-modal-cheque-entry input {
+  min-width: 0;
+  width: 220px;
+  padding: 8px 10px;
+  color: #f8fafc;
+  background: #070e1e;
+  border: 1px solid #475569;
+  border-radius: 6px;
+}
+
 @media (max-width: 768px) {
   .loan-modal-overlay {
     padding: 0;
@@ -178,8 +203,18 @@
 
   .loan-modal-toolbar {
     padding: 10px 12px;
-    gap: 8px;
-    flex-wrap: wrap;
+  }
+
+  .loan-modal-cheque-entry {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px 12px;
+  }
+
+  .loan-modal-cheque-entry input {
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .loan-modal-toolbar-meta {

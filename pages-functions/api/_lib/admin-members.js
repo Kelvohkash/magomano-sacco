@@ -27,9 +27,13 @@ export async function handleAdminMembers(path, request, session, db) {
     const saccoNumber = typeof body.saccoNumber === 'string' ? body.saccoNumber.trim().toUpperCase() : ''
     const fullName = typeof body.fullName === 'string' ? body.fullName.trim().replace(/\s+/g, ' ') : ''
     const nationalId = typeof body.nationalId === 'string' ? body.nationalId.trim() : ''
+    const jobTitle = typeof body.jobTitle === 'string' ? body.jobTitle.trim() : ''
+    const workBranch = typeof body.workBranch === 'string' ? body.workBranch.trim() : ''
     if (!/^[A-Z]+\/\d+$/.test(saccoNumber)) throw new ApiError('SACCO number must look like A/005.')
     if (fullName.length < 2 || fullName.length > 100) throw new ApiError('Enter a member name up to 100 characters.')
     if (nationalId && !/^\d{6,12}$/.test(nationalId)) throw new ApiError('National ID must be blank or 6 to 12 digits.')
+    if (jobTitle.length > 100) throw new ApiError('Job title must be 100 characters or fewer.')
+    if (workBranch.length > 100) throw new ApiError('Work branch must be 100 characters or fewer.')
     const nameParts = fullName.split(/\s+/)
     const firstName = nameParts.shift() ?? ''
     const lastName = nameParts.length > 1 ? nameParts.pop() ?? '' : ''
@@ -40,9 +44,9 @@ export async function handleAdminMembers(path, request, session, db) {
       await db.prepare(`
         INSERT INTO members (
           sacco_number, national_id, full_name, first_name, second_name, last_name,
-          account_status, password_salt, password_hash
-        ) VALUES (?, ?, ?, ?, ?, ?, 'approved', ?, ?)
-      `).bind(saccoNumber, nationalId, fullName, firstName, secondName, lastName, salt, passwordHash).run()
+          job_title, work_branch, account_status, password_salt, password_hash
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'approved', ?, ?)
+      `).bind(saccoNumber, nationalId, fullName, firstName, secondName, lastName, jobTitle, workBranch, salt, passwordHash).run()
     } catch (error) {
       if (String(error).includes('UNIQUE constraint failed')) {
         throw new ApiError('That SACCO number or National ID is already assigned to another member.', 409)
@@ -66,7 +70,8 @@ export async function handleAdminMembers(path, request, session, db) {
         m.bank_two_account_number AS bankTwoAccountNumber,
         m.location, m.marital_status AS maritalStatus,
         m.next_kin_name AS nextKinName, m.next_kin_relationship AS nextKinRelationship,
-        m.next_kin_phone AS nextKinPhone, m.member_role AS memberRole,
+        m.next_kin_phone AS nextKinPhone, m.job_title AS jobTitle,
+        m.work_branch AS workBranch, m.member_role AS memberRole,
         (SELECT accepted_at FROM member_terms_acceptances ta WHERE ta.member_id = m.id) AS termsAcceptedAt,
         COALESCE(SUM(CASE WHEN s.entry_type = 'deposit' THEN s.amount ELSE -s.amount END), 0) AS savingsBalance,
         (SELECT COALESCE(SUM(l.outstanding_balance), 0) FROM member_loans l
@@ -82,7 +87,9 @@ export async function handleAdminMembers(path, request, session, db) {
       db.prepare(`
         SELECT id, member_id AS memberId, loan_reference AS reference,
           principal_amount AS principalAmount, outstanding_balance AS outstandingBalance,
-          repayment_months AS repaymentMonths, status, issued_at AS issuedAt
+          CASE WHEN legacy_imported = 1 THEN NULL ELSE repayment_months END AS repaymentMonths,
+          status, CASE WHEN legacy_imported = 1 THEN NULL ELSE issued_at END AS issuedAt,
+          legacy_imported AS legacyImported
         FROM member_loans WHERE outstanding_balance > 0
         ORDER BY member_id, issued_at DESC, id DESC
       `).all(),
@@ -105,6 +112,7 @@ export async function handleAdminMembers(path, request, session, db) {
         repaymentMonths: loan.repaymentMonths,
         status: loan.status,
         issuedAt: loan.issuedAt,
+        legacyImported: Boolean(loan.legacyImported),
       })
       loansByMember.set(loan.memberId, loans)
     }
@@ -164,6 +172,18 @@ export async function handleAdminMembers(path, request, session, db) {
         throw new ApiError(`${label} must be ${min ? `${min} to ` : 'no more than '}${max} characters.`)
       }
     }
+    let jobTitle = null
+    if (body.jobTitle !== undefined) {
+      if (typeof body.jobTitle !== 'string') throw new ApiError('Job title must be text.')
+      jobTitle = body.jobTitle.trim()
+      if (jobTitle.length > 100) throw new ApiError('Job title must be 100 characters or fewer.')
+    }
+    let workBranch = null
+    if (body.workBranch !== undefined) {
+      if (typeof body.workBranch !== 'string') throw new ApiError('Work branch must be text.')
+      workBranch = body.workBranch.trim()
+      if (workBranch.length > 100) throw new ApiError('Work branch must be 100 characters or fewer.')
+    }
     if (values.saccoNumber && !/^[A-Za-z]+\/\d+$/.test(values.saccoNumber)) {
       throw new ApiError('SACCO member number must look like A/005.')
     }
@@ -190,14 +210,16 @@ export async function handleAdminMembers(path, request, session, db) {
           phone_number = ?, email = ?, county = ?, sub_county = ?, bank_name = ?, bank_branch = ?,
           bank_account_name = ?, bank_account_number = ?, bank_two_name = ?, bank_two_branch = ?,
           bank_two_account_name = ?, bank_two_account_number = ?, location = ?,
-          marital_status = ?, next_kin_name = ?, next_kin_relationship = ?, next_kin_phone = ?
+          marital_status = ?, job_title = COALESCE(?, job_title),
+          work_branch = COALESCE(?, work_branch),
+          next_kin_name = ?, next_kin_relationship = ?, next_kin_phone = ?
         WHERE id = ?
       `).bind(
         values.saccoNumber, values.nationalId, values.fullName, firstName, secondName, lastName, values.phoneNumber, values.email,
         values.county, values.subCounty, values.bankName, values.bankBranch,
         values.bankAccountName, values.bankAccountNumber, values.bankTwoName, values.bankTwoBranch,
         values.bankTwoAccountName, values.bankTwoAccountNumber, values.location,
-        maritalStatus, values.nextKinName, values.nextKinRelationship, values.nextKinPhone,
+        maritalStatus, jobTitle, workBranch, values.nextKinName, values.nextKinRelationship, values.nextKinPhone,
         memberId,
       ).run()
     } catch (error) {
@@ -471,5 +493,56 @@ export async function handleAdminMembers(path, request, session, db) {
     }
     return json({ message: `Member account ${nextStatus}.`, status: nextStatus })
   }
+  // GET /admin/profile-changes — list pending profile change requests
+  if (path === '/admin/profile-changes' && method === 'GET') {
+    const rows = await db.prepare(`
+      SELECT p.id, p.member_id AS memberId, m.full_name AS memberName,
+        m.sacco_number AS saccoNumber, p.changes_json AS changesJson,
+        p.status, p.submitted_at AS submittedAt
+      FROM pending_profile_changes p
+      JOIN members m ON m.id = p.member_id
+      WHERE p.status = 'pending'
+      ORDER BY p.submitted_at DESC
+    `).all()
+    return json({
+      changes: rows.results.map((r) => ({ ...r, changes: JSON.parse(r.changesJson), changesJson: undefined }))
+    })
+  }
+
+  // POST /admin/profile-changes/:id/approve
+  const approveMatch = path.match(/^\/admin\/profile-changes\/(\d+)\/approve$/)
+  if (approveMatch && method === 'POST') {
+    const changeId = Number(approveMatch[1])
+    const row = await db.prepare(`SELECT * FROM pending_profile_changes WHERE id=? AND status='pending'`).bind(changeId).first()
+    if (!row) throw new ApiError('Pending change not found.', 404)
+    const changes = JSON.parse(row.changes_json)
+    await db.prepare(`UPDATE members SET phone_number=?, email=?, job_title=?, work_branch=?, county=?, sub_county=?, location=?,
+      bank_name=?, bank_branch=?, bank_account_name=?, bank_account_number=?,
+      bank_two_name=?, bank_two_branch=?, bank_two_account_name=?, bank_two_account_number=?,
+      next_kin_name=?, next_kin_relationship=?, next_kin_phone=? WHERE id=?`
+    ).bind(
+      changes.phoneNumber, changes.email, changes.jobTitle ?? '', changes.workBranch ?? '', changes.county, changes.subCounty, changes.location,
+      changes.bankName, changes.bankBranch, changes.bankAccountName, changes.bankAccountNumber,
+      changes.bankTwoName, changes.bankTwoBranch, changes.bankTwoAccountName, changes.bankTwoAccountNumber,
+      changes.nextKinName, changes.nextKinRelationship, changes.nextKinPhone,
+      row.member_id
+    ).run()
+    await db.prepare(`UPDATE pending_profile_changes SET status='approved', reviewed_at=datetime('now') WHERE id=?`)
+      .bind(changeId).run()
+    return json({ message: 'Profile change approved and applied to member account.' })
+  }
+
+  // POST /admin/profile-changes/:id/reject
+  const rejectMatch = path.match(/^\/admin\/profile-changes\/(\d+)\/reject$/)
+  if (rejectMatch && method === 'POST') {
+    const changeId = Number(rejectMatch[1])
+    const body2 = await readJson(request)
+    const note = typeof body2.note === 'string' ? body2.note.trim() : ''
+    const result = await db.prepare(`UPDATE pending_profile_changes SET status='rejected', reviewed_at=datetime('now'), admin_note=? WHERE id=? AND status='pending'`)
+      .bind(note, changeId).run()
+    if (!result.meta.changes) throw new ApiError('Pending change not found.', 404)
+    return json({ message: 'Profile change rejected.' })
+  }
+
   return null
 }

@@ -4,6 +4,7 @@ import type { AdminMember, MemberProfileUpdate } from '../../../types'
 
 interface MemberEditModalProps {
   member: AdminMember
+  workBranches: string[]
   memberForm: MemberProfileUpdate
   setMemberForm: Dispatch<SetStateAction<MemberProfileUpdate>>
   onSave: FormEventHandler<HTMLFormElement>
@@ -14,6 +15,7 @@ interface MemberEditModalProps {
 
 export function MemberEditModal({
   member,
+  workBranches,
   memberForm,
   setMemberForm,
   onSave,
@@ -64,6 +66,28 @@ export function MemberEditModal({
                   maxLength={100}
                   required
                 />
+              </label>
+              <label>
+                Job Title / Staff Role
+                <input
+                  value={memberForm.jobTitle}
+                  onChange={(e) => setMemberForm((c) => ({ ...c, jobTitle: e.target.value }))}
+                  placeholder="e.g. Line attendant"
+                  maxLength={100}
+                />
+              </label>
+              <label>
+                Staff Work Branch
+                <input
+                  list="member-work-branches"
+                  value={memberForm.workBranch}
+                  onChange={(e) => setMemberForm((c) => ({ ...c, workBranch: e.target.value }))}
+                  placeholder="Select or enter a branch"
+                  maxLength={100}
+                />
+                <datalist id="member-work-branches">
+                  {workBranches.map((branch) => <option key={branch} value={branch} />)}
+                </datalist>
               </label>
               <label>
                 Phone Number
@@ -256,4 +280,3 @@ export function MemberEditModal({
     </div>
   )
 }
-

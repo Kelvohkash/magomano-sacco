@@ -5,6 +5,7 @@ import { handleAdminMembers } from './admin-members.js'
 import { handleAdminLoans } from './admin-loans.js'
 import { handleAdminFinances } from './admin-finances.js'
 import { importRows } from './admin-imports.js'
+import { handleAdminNotifications } from './push-notifications.js'
 
 export async function handleAdmin(path, request, env) {
   if (!path.startsWith('/admin/')) return null
@@ -16,6 +17,7 @@ export async function handleAdmin(path, request, env) {
     ?? await handleAdminMembers(path, request, session, db)
     ?? await handleAdminLoans(path, request, session, db)
     ?? await handleAdminFinances(path, request, session, db)
+    ?? await handleAdminNotifications(path, request, session, env)
   if (result) return result
 
   const importMatch = path.match(/^\/admin\/imports\/(members|savings|repayments)$/)

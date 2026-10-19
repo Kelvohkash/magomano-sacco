@@ -121,7 +121,7 @@ export function MemberLoanApplicationView({
             id="loan-amount"
             name="requestedAmount"
             type="number"
-            min="1"
+            min="2000"
             max={dashboard.borrowingCapacity.availableBalance}
             step="1"
             value={loanAmount}
@@ -129,6 +129,7 @@ export function MemberLoanApplicationView({
             required
           />
         </div>
+        <p className="form-field-hint">The minimum loan application is KES 2,000.</p>
 
         <label htmlFor="repayment-months">Repayment period</label>
         <div className="months-input-wrap">
@@ -159,15 +160,17 @@ export function MemberLoanApplicationView({
           </strong>
         </div>
 
-        <label htmlFor="loan-purpose">Purpose of the loan (optional)</label>
+        <label htmlFor="loan-purpose">Purpose of the loan</label>
         <textarea
           id="loan-purpose"
           name="purpose"
           rows={3}
+          minLength={3}
           maxLength={500}
           value={loanPurpose}
           onChange={(event) => setLoanPurpose(event.target.value)}
-          placeholder="Optional: Tell us what the loan is for"
+          placeholder="Tell us what the loan is for"
+          required
         />
 
         <label className="loan-electronic-consent">
@@ -189,4 +192,3 @@ export function MemberLoanApplicationView({
     </section>
   )
 }
-

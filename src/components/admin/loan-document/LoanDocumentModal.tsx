@@ -25,7 +25,7 @@ export interface LoanDocumentModalProps {
   onSaveApplication: FormEventHandler<HTMLFormElement>
   saving: boolean
   onClose: () => void
-  onApprove?: () => void
+  onApprove?: (chequeNumber: string) => void
   onReject?: () => void
   isActionLoading?: boolean
 }
@@ -47,6 +47,7 @@ export function LoanDocumentModal({
 }: LoanDocumentModalProps) {
   const [isPrinting, setIsPrinting] = useState(false)
   const [hashVerification, setHashVerification] = useState('')
+  const [chequeNumber, setChequeNumber] = useState('')
 
   const requestedAmount = Number(application.requestedAmount) || 0
   const repaymentMonths = Number(application.repaymentMonths) || 1
@@ -117,8 +118,8 @@ export function LoanDocumentModal({
                   <button
                     type="button"
                     className="action-btn-approve"
-                    onClick={onApprove}
-                    disabled={isActionLoading}
+                    onClick={() => onApprove(chequeNumber.trim())}
+                    disabled={isActionLoading || !chequeNumber.trim()}
                     title="Approve this application; disbursement is a separate step"
                   >
                     <Check size={15} />
@@ -186,6 +187,20 @@ export function LoanDocumentModal({
         </header>
         {hashVerification && <div className="admin-banner-alert" role="status">{hashVerification}</div>}
 
+        {application.status === 'pending' && !isEditing && (
+          <div className="loan-modal-cheque-entry">
+            <label htmlFor="loan-cheque-number">Cheque number (required before approval)</label>
+            <input
+              id="loan-cheque-number"
+              value={chequeNumber}
+              onChange={(event) => setChequeNumber(event.target.value)}
+              maxLength={50}
+              required
+              autoComplete="off"
+            />
+          </div>
+        )}
+
         {!isEditing && (
           <div className="loan-modal-scroll-hint">
             <span>↔ Pan &amp; scroll to inspect the full A4 agreement</span>
@@ -220,4 +235,3 @@ export function LoanDocumentModal({
     </div>
   )
 }
-

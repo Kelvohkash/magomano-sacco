@@ -15,6 +15,18 @@ Member portal built with React, Vite, Cloudflare Pages Functions, and Cloudflare
 
 This repository is connected to the `magomano-sacco` Cloudflare Pages project on the `master` branch. Pushing changes to `master` triggers the Pages build and deployment. The D1 database is `magomano-db` and the binding name is `DB`.
 
+### Sign in and deploy from the command line
+
+Run these commands in a terminal from the project directory. Each login command opens an interactive sign-in flow; select the GitHub and Cloudflare accounts that should be used:
+
+```sh
+gh auth login
+npx wrangler login
+npm run deploy
+```
+
+`gh auth login` signs in the GitHub CLI, for example to manage or push to the repository. `wrangler login` authorizes Cloudflare Pages deployment in the browser. If the Cloudflare account has not created the Pages project yet, create `magomano-sacco` in that account before deploying. Check the account and project with `npx wrangler whoami` and `npx wrangler pages project list` if needed. `npm run deploy` builds the app and deploys it to Pages.
+
 ## Install the app
 
 Magomano SACCO is an installable Progressive Web App. On desktop, open the deployed HTTPS site in Chrome or Edge and use the install icon in the address bar (or the browser menu's **Install Magomano SACCO** action). On Android, use the browser menu's **Install app** or **Add to Home screen** action. On iPhone or iPad, open the site in Safari, tap **Share**, then **Add to Home Screen**.
@@ -25,23 +37,30 @@ The PWA shell and static assets are cached for offline startup. In the Android a
 
 The Android app uses Capacitor 8 and `@capacitor-community/sqlite` with SQLCipher encryption. The default API origin is `https://magomano-sacco.pages.dev`; set `VITE_API_BASE_URL` at build time if the Pages deployment uses another hostname. The native API bridge sends session cookies to that origin and the Pages Function allows credentialed requests from the Capacitor Android origin (`https://localhost`).
 
-Apply migration `0017_sync_revisions.sql` to the remote D1 database before deploying the updated API. Then build a debug APK with:
+Apply all pending migrations to the remote D1 database before deploying the updated API. Then build a debug APK with:
 
 ```sh
-npx wrangler d1 migrations apply magomano-db --remote
+npm run db:migrate -- --remote
 npm run android:apk
 ```
 
 The APK is written to `android/app/build/outputs/apk/debug/app-debug.apk`. Building requires Android Studio command line tools, an Android SDK, and JDK 21 (required by Capacitor 8). A release APK should be built and signed separately for distribution.
 
-Apply the migration to the existing remote database before deploying these API changes:
+## D1 database schema
 
-```powershell
-npm install
-npx wrangler d1 migrations apply magomano-db --remote
+The complete D1 schema is maintained in order in `migrations/`. Apply every pending migration to create or update all tables and indexes:
+
+```sh
+npm run db:migrate -- --local
 ```
 
-The migrations use `IF NOT EXISTS` for existing tables and add the missing `loan_applications` and persistent `sessions` tables. The second migration adds administrator roles and links promoted member accounts to their admin identity. Later migrations add statement indexes, member profiles and contacts, administrator-managed terms and conditions, and database-enforced savings-only loan security. Migration `0006` adds full registration details and an immutable snapshot of the terms accepted when a member applies. Existing members, administrators, and password hashes are preserved. Apply and verify migrations before deploying the Pages Function.
+Use `--remote` instead of `--local` to apply them to the configured Cloudflare D1 database:
+
+```sh
+npm run db:migrate -- --remote
+```
+
+Wrangler tracks which migrations have already run, so this command applies only pending migrations and preserves existing data. Run it before deploying Pages Function changes that depend on a new schema.
 
 Member savings, loan, and repayment statements are fetched from `/api/member/transactions` in pages of 10 records. The API returns each page with its total record count so the portal can show progress and request older entries without loading the full transaction history at once.
 
@@ -63,16 +82,16 @@ $env:ADMIN_DISPLAY_NAME = "SACCO Admin"
 npm run seed:admin
 ```
 
-To run locally, apply the migration to local D1, then start the Pages Functions runtime and Vite frontend together:
+To run locally, apply all pending migrations to local D1, then start the Pages Functions runtime and Vite frontend together:
 
 ```powershell
-npx wrangler d1 migrations apply magomano-db --local
+npm run db:migrate -- --local
 npm run dev
 ```
 
 Local D1 data is separate from remote D1. Seed a local administrator by setting `$env:ADMIN_D1_LOCAL = "1"` before `npm run seed:admin`. `npm run deploy` builds and deploys the Pages project directly when needed.
 
-For a complete local preview with sample members, transactions, loans, repayments, pending requests, and dividends, run `npm run demo`. It applies local migrations, seeds only local D1, and serves the Cloudflare Pages app at `http://localhost:8788`. Local demo sign-in: admin `demo-admin` / `DemoAdmin-2026!`; approved member `99000101` / `DemoMember-2026!`. These credentials are for local preview only.
+For a complete local preview with sample members, transactions, loans, repayments, pending requests, and dividends, run `npm run demo`. It applies local migrations, seeds only local D1, and serves the Cloudflare Pages app at `http://localhost:8788`. Local demo sign-in: admin `Ken` / `1234`; approved member (National ID) `37765731` / `1234`. These credentials are for local preview only.
 
 To explicitly seed clearly labelled demo records into remote D1, set `ALLOW_REMOTE_DEMO_DATA=1` and run `npm run seed:demo:remote`. This adds sample account balances and pending applications to live SACCO totals and admin queues. The command prints generated, one-time demo login credentials; use them to inspect the live portal, and remove the `DEMO -` accounts and associated records when finished. Do not seed live demo records into a database whose balances or queues are being used as official financial records.
 

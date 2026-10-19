@@ -162,7 +162,7 @@ export async function handleAdminOverview(path, request, session, db) {
         from: 'l.issued_at',
         fromTable: 'member_loans l JOIN members m ON m.id = l.member_id',
         where: [],
-        fields: 'l.id, l.loan_reference AS reference, l.principal_amount AS principalAmount, l.interest_rate AS interestRate, l.repayment_months AS repaymentMonths, l.total_repayable AS totalRepayable, l.outstanding_balance AS outstandingBalance, l.security_type AS securityType, l.status, l.issued_at AS issuedAt, m.full_name AS fullName, m.national_id AS nationalId',
+        fields: 'l.id, l.loan_reference AS reference, l.principal_amount AS principalAmount, l.interest_rate AS interestRate, CASE WHEN l.legacy_imported = 1 THEN NULL ELSE l.repayment_months END AS repaymentMonths, l.total_repayable AS totalRepayable, l.outstanding_balance AS outstandingBalance, l.security_type AS securityType, l.status, CASE WHEN l.legacy_imported = 1 THEN NULL ELSE l.issued_at END AS issuedAt, l.legacy_imported AS legacyImported, m.full_name AS fullName, m.national_id AS nationalId',
         order: 'l.issued_at DESC, l.id DESC',
         search: '(m.full_name LIKE ? OR m.national_id LIKE ? OR l.loan_reference LIKE ? OR l.status LIKE ?)',
       },

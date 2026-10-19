@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useState, type Dispatch, type FormEventHandler, type SetStateAction } from 'react'
 import { MemberAccountInfoPage } from './MemberAccountInfoPage'
+import { MemberChangePasswordPage } from './MemberChangePasswordPage'
 import { MemberTermsPage } from './MemberTermsPage'
 import type { StatementFilterValues } from '../StatementFilterPopover'
 import type {
@@ -299,6 +300,8 @@ export function MemberPortal({
         />
       ) : view === 'account-info' ? (
         <MemberAccountInfoPage />
+      ) : view === 'change-password' ? (
+        <MemberChangePasswordPage />
       ) : view === 'terms' ? (
         <MemberTermsPage />
       ) : (

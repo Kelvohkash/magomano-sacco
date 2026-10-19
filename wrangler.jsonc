@@ -8,7 +8,7 @@
     {
       "binding": "DB",
       "database_name": "magomano-db",
-      "database_id": "354377e1-fea7-4e32-bc6c-118b4f533d33",
+      "database_id": "be164bcd-76fd-4845-8778-3386ba942b22",
       "migrations_dir": "migrations"
     }
   ]

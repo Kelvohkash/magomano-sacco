@@ -1,11 +1,13 @@
 import type { Dispatch, SetStateAction } from 'react'
 import {
+  Bell,
   ChevronRight,
   FileSpreadsheet,
   FileText,
   HandCoins,
   LayoutDashboard,
   RefreshCcw,
+  ShieldAlert,
   UsersRound,
   WalletCards,
 } from 'lucide-react'
@@ -17,6 +19,7 @@ interface AdminSidebarProps {
   setView: Dispatch<SetStateAction<AdminView>>
   pendingMembersCount: number
   pendingApplicationsCount: number
+  pendingAuthorizationsCount?: number
 }
 
 interface NavItem {
@@ -31,14 +34,17 @@ export function AdminSidebar({
   setView,
   pendingMembersCount,
   pendingApplicationsCount,
+  pendingAuthorizationsCount = 0,
 }: AdminSidebarProps) {
   const navigationItems: NavItem[] = [
     { section: 'overview', label: 'Dashboard', Icon: LayoutDashboard },
     { section: 'members', label: 'Members Directory', Icon: UsersRound, badge: pendingMembersCount },
+    { section: 'authorizations', label: 'Profile Authorizations', Icon: ShieldAlert, badge: pendingAuthorizationsCount },
     { section: 'loans', label: 'Loan Applications', Icon: FileText, badge: pendingApplicationsCount },
     { section: 'repayments', label: 'Repayments', Icon: RefreshCcw },
     { section: 'savings', label: 'Savings Ledger', Icon: WalletCards },
     { section: 'charges', label: 'Admin Charges', Icon: HandCoins },
+    { section: 'notifications', label: 'Push Notifications', Icon: Bell },
     { section: 'bulk', label: 'Bulk Statements', Icon: FileSpreadsheet },
     { section: 'terms', label: 'Terms & Conditions', Icon: FileText },
   ]

@@ -5,6 +5,7 @@ export interface DashboardData {
   }
   memberMessages: MemberPopupMessage[]
   member: {
+    id?: number
     national_id: string
     full_name: string
     bankAccounts: {
@@ -43,13 +44,14 @@ export interface DashboardData {
       reference: string
       principalAmount: number
       interestRate: number
-      repaymentMonths: number
+      repaymentMonths: number | null
       totalRepayable: number
       paidAmount: number
       outstandingBalance: number
       securityType: 'savings'
       status: string
-      issuedAt: string
+      issuedAt: string | null
+      legacyImported: boolean
     }[]
   }
   adminCharges?: {
@@ -98,13 +100,14 @@ export interface MemberLoanRecord {
   reference: string
   principalAmount: number
   interestRate: number
-  repaymentMonths: number
+  repaymentMonths: number | null
   totalRepayable: number
   paidAmount: number
   outstandingBalance: number
   securityType: 'savings'
   status: string
-  issuedAt: string
+  issuedAt: string | null
+  legacyImported: boolean
 }
 
 export interface LoanRepayment {
@@ -177,10 +180,13 @@ export interface AdminMember {
     reference: string
     principalAmount: number
     outstandingBalance: number
-    repaymentMonths: number
+    repaymentMonths: number | null
     status: string
-    issuedAt: string
+    issuedAt: string | null
+    legacyImported: boolean
   }[]
+  jobTitle: string
+  workBranch: string
   memberRole: 'member' | 'signatory'
   isAdmin: boolean
 }
@@ -206,12 +212,16 @@ export interface MemberProfileUpdate {
   nextKinName: string
   nextKinRelationship: string
   nextKinPhone: string
+  jobTitle: string
+  workBranch: string
 }
 
 export interface AdminMemberCreate {
   saccoNumber: string
   fullName: string
   nationalId: string
+  jobTitle: string
+  workBranch: string
 }
 
 export interface AdminLoanCreate {
@@ -278,6 +288,7 @@ export interface AdminLoanApplication {
   payoutBankBranch: string
   payoutAccountName: string
   payoutAccountNumber: string
+  chequeNumber: string | null
   electronicSignatureName: string
   electronicallySignedAt: string | null
   disbursedAt: string | null
@@ -300,6 +311,27 @@ export interface AdminOpenLoan {
   fullName: string
 }
 
-export type AdminView = 'overview' | 'members' | 'loans' | 'repayments' | 'savings' | 'charges' | 'bulk' | 'terms'
+export interface PendingProfileChange {
+  id: number
+  memberId: number
+  memberName: string
+  saccoNumber: string
+  status: 'pending' | 'approved' | 'rejected' | 'cancelled'
+  submittedAt: string
+  changes: Record<string, string>
+}
+
+export interface AdminNotification {
+  id: number
+  title: string
+  body: string
+  targetType: 'all' | 'member'
+  targetMemberId: number | null
+  targetMemberName: string | null
+  createdAt: string
+  sentCount: number
+}
+
+export type AdminView = 'overview' | 'members' | 'authorizations' | 'loans' | 'repayments' | 'savings' | 'charges' | 'notifications' | 'bulk' | 'terms'
 export type AuthMode = 'login' | 'register' | 'admin-login'
-export type MemberView = 'overview' | 'apply-loan' | 'loan-status' | 'savings' | 'activity' | 'account-info' | 'terms'
+export type MemberView = 'overview' | 'apply-loan' | 'loan-status' | 'savings' | 'activity' | 'account-info' | 'change-password' | 'terms'

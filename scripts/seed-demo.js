@@ -13,18 +13,18 @@ if (remote && process.env.ALLOW_REMOTE_DEMO_DATA !== '1') {
 }
 
 const demoAdmin = {
-  username: 'demo-admin',
+  username: remote ? 'demo-admin' : 'Ken',
   displayName: 'DEMO - SACCO Administrator',
-  password: remote ? randomBytes(24).toString('base64url') : 'DemoAdmin-2026!',
+  password: remote ? randomBytes(24).toString('base64url') : '1234',
 }
 const demoMemberPassword = remote ? randomBytes(24).toString('base64url') : 'DemoMember-2026!'
 const demoMembers = [
   {
-    nationalId: '99000101',
+    nationalId: remote ? '99000101' : '37765731',
     fullName: 'DEMO - Amina Wanjiku',
     phoneNumber: '+254 700 000 101',
     accountStatus: 'approved',
-    password: demoMemberPassword,
+    password: remote ? demoMemberPassword : '1234',
   },
   {
     nationalId: '99000102',

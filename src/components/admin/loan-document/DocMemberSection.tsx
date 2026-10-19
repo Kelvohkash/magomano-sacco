@@ -14,11 +14,6 @@ export function DocMemberSection({ application, member }: DocMemberSectionProps)
     ? `${application.payoutBankName}${application.payoutBankBranch ? ` (${application.payoutBankBranch})` : ''}`
     : 'Primary Registered Account'
 
-  const payoutAccountInfo =
-    application.payoutAccountName || application.payoutAccountNumber
-      ? `${application.payoutAccountName || application.fullName} · A/C ${application.payoutAccountNumber || '—'}`
-      : 'To be disbursed to registered member bank account'
-
   return (
     <section className="doc-section doc-section-member">
       <div className="doc-sec-header">
@@ -50,6 +45,14 @@ export function DocMemberSection({ application, member }: DocMemberSectionProps)
               <span className="cell-label">County &amp; Location</span>
               <span className="cell-val">{locationString}</span>
             </div>
+            <div className="doc-member-field">
+              <span className="cell-label">Job Title / Role</span>
+              <span className="cell-val">{member?.jobTitle || '—'}</span>
+            </div>
+            <div className="doc-member-field">
+              <span className="cell-label">Work Branch</span>
+              <span className="cell-val">{member?.workBranch || '—'}</span>
+            </div>
           </div>
         </div>
 
@@ -61,8 +64,8 @@ export function DocMemberSection({ application, member }: DocMemberSectionProps)
               <span className="cell-val">{payoutBankInfo}</span>
             </div>
             <div className="doc-member-field">
-              <span className="cell-label">Account Holder &amp; Number</span>
-              <span className="cell-val">{payoutAccountInfo}</span>
+              <span className="cell-label">Account Number</span>
+              <span className="cell-val">{application.payoutAccountNumber || '—'}</span>
             </div>
           </div>
         </div>
@@ -70,4 +73,3 @@ export function DocMemberSection({ application, member }: DocMemberSectionProps)
     </section>
   )
 }
-

@@ -60,6 +60,10 @@ export function DocFacilitySection({
           <span className="calc-k">LOAN SECURITY:</span>
           <strong className="calc-v">Member Savings</strong>
         </div>
+        <div className="calc-item">
+          <span className="calc-k">CHEQUE NUMBER:</span>
+          <strong className="calc-v">{application.chequeNumber || 'Pending approval'}</strong>
+        </div>
       </div>
 
       <div className="doc-purpose-box">
@@ -69,4 +73,3 @@ export function DocFacilitySection({
     </section>
   )
 }
-

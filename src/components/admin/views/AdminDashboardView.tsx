@@ -8,6 +8,7 @@ import {
   Landmark,
   Printer,
   RefreshCcw,
+  ShieldAlert,
   UserCheck,
   WalletCards,
 } from 'lucide-react'
@@ -19,6 +20,7 @@ interface AdminDashboardViewProps {
   approvedMembersCount: number
   pendingMembers: AdminMember[]
   pendingApplications: AdminLoanApplication[]
+  pendingAuthorizationsCount?: number
   setView: Dispatch<SetStateAction<AdminView>>
   setMemberFilter: Dispatch<SetStateAction<'all' | 'pending' | 'approved' | 'signatory' | 'admin'>>
   setLoanFilter: Dispatch<SetStateAction<'all' | 'pending' | 'decision' | 'disbursed'>>
@@ -29,6 +31,7 @@ export function AdminDashboardView({
   approvedMembersCount,
   pendingMembers,
   pendingApplications,
+  pendingAuthorizationsCount = 0,
   setView,
   setMemberFilter,
   setLoanFilter,
@@ -160,6 +163,32 @@ export function AdminDashboardView({
               }}
             >
               <span>Review Applications</span>
+              <ArrowRight size={16} />
+            </button>
+          </div>
+
+          <div className={`queue-card ${pendingAuthorizationsCount > 0 ? 'queue-active' : ''}`}>
+            <div className="queue-icon-circle" style={{ background: 'rgba(245, 114, 36, 0.15)', color: 'var(--rt-orange, #f57224)' }}>
+              <ShieldAlert size={22} />
+            </div>
+            <div className="queue-content">
+              <span className="queue-label">PROFILE AUTHORIZATIONS</span>
+              <div className="queue-count-row">
+                <strong className="queue-count">
+                  <AnimatedFigure
+                    value={pendingAuthorizationsCount}
+                    format="number"
+                  />
+                </strong>
+                <span className="queue-unit">member updates pending</span>
+              </div>
+            </div>
+            <button
+              type="button"
+              className="queue-action-button"
+              onClick={() => setView('authorizations')}
+            >
+              <span>Review Changes</span>
               <ArrowRight size={16} />
             </button>
           </div>

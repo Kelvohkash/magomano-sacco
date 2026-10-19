@@ -8,6 +8,7 @@ import { MemberPopupLayer } from './components/member/MemberPopupLayer'
 import { useAdminOperations } from './hooks/useAdminOperations'
 import { useAuthSession } from './hooks/useAuthSession'
 import { useMemberOperations } from './hooks/useMemberOperations'
+import { usePushNotifications } from './hooks/usePushNotifications'
 import './App.css'
 import './Portal.css'
 import './Admin.css'
@@ -18,6 +19,8 @@ function App() {
   const admin = useAdminOperations()
   const { refreshDashboard, resetMemberState } = member
   const { setSignedInAdmin, refreshAdminData, resetAdminState } = admin
+
+  usePushNotifications(member.dashboard?.member.id)
 
   useEffect(() => {
     if (!member.dashboard) return
@@ -105,6 +108,7 @@ function App() {
         members={admin.adminMembers}
         applications={admin.adminApplications}
         openLoans={admin.adminOpenLoans}
+        pendingAuthorizationsCount={admin.pendingAuthorizationsCount}
         onCreateMember={admin.createMember}
         onIssueLoan={admin.issueLoan}
         memberId={admin.adminMemberId}
@@ -159,6 +163,7 @@ function App() {
         members={admin.adminMembers}
         applications={admin.adminApplications}
         openLoans={admin.adminOpenLoans}
+        pendingAuthorizationsCount={admin.pendingAuthorizationsCount}
         onCreateMember={admin.createMember}
         onIssueLoan={admin.issueLoan}
         memberId={admin.adminMemberId}

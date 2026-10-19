@@ -123,7 +123,11 @@ export function MemberProfileDrawer({
                 <article className="drawer-active-loan" key={loan.id}>
                   <div>
                     <strong>Loan of {currency.format(loan.principalAmount)}</strong>
-                    <small>{formatDate(loan.issuedAt ?? '')} · {loan.repaymentMonths} months</small>
+                    <small>
+                      {loan.legacyImported
+                        ? 'Historical workbook import · issue date and term not recorded'
+                        : `${formatDate(loan.issuedAt ?? '')} · ${loan.repaymentMonths} months`}
+                    </small>
                   </div>
                   <span>{currency.format(loan.outstandingBalance)} due</span>
                 </article>
@@ -158,6 +162,14 @@ export function MemberProfileDrawer({
               <div>
                 <dt>Location</dt>
                 <dd>{locationString}</dd>
+              </div>
+              <div>
+                <dt>Staff Job Title</dt>
+                <dd>{member.jobTitle || '—'}</dd>
+              </div>
+              <div>
+                <dt>Staff Work Branch</dt>
+                <dd>{member.workBranch || '—'}</dd>
               </div>
               <div>
                 <dt>Marital Status</dt>
@@ -280,4 +292,3 @@ export function MemberProfileDrawer({
     </div>
   )
 }
-

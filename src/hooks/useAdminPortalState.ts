@@ -37,7 +37,7 @@ export function useAdminPortalState(
 
   // Edit forms
   const [memberForm, setMemberForm] = useState<MemberProfileUpdate>({
-    saccoNumber: '', nationalId: '', fullName: '', phoneNumber: '', email: '', county: '', subCounty: '',
+    saccoNumber: '', nationalId: '', fullName: '', phoneNumber: '', email: '', county: '', subCounty: '', jobTitle: '', workBranch: '',
     bankName: '', bankBranch: '', bankAccountName: '', bankAccountNumber: '',
     bankTwoName: '', bankTwoBranch: '', bankTwoAccountName: '', bankTwoAccountNumber: '',
     location: '', maritalStatus: '', nextKinName: '', nextKinRelationship: '', nextKinPhone: '',
@@ -111,6 +111,8 @@ export function useAdminPortalState(
       bankAccountNumber: member.bankAccountNumber ?? '', bankTwoName: member.bankTwoName ?? '',
       bankTwoBranch: member.bankTwoBranch ?? '', bankTwoAccountName: member.bankTwoAccountName ?? '',
       bankTwoAccountNumber: member.bankTwoAccountNumber ?? '', location: member.location ?? '',
+      jobTitle: member.jobTitle ?? '',
+      workBranch: member.workBranch ?? '',
       maritalStatus: member.maritalStatus ?? '', nextKinName: member.nextKinName ?? '',
       nextKinRelationship: member.nextKinRelationship ?? '', nextKinPhone: member.nextKinPhone ?? '',
     })

@@ -3,8 +3,9 @@ import { ApiError, hashPassword, json, readJson } from './shared.js'
 
 async function memberProfile(request, session, env) {
   if (request.method === 'GET') {
-    const profile = await env.DB.prepare(`SELECT phone_number AS phoneNumber, email, county,
-      sub_county AS subCounty, location, bank_name AS bankName, bank_branch AS bankBranch,
+    const profile = await env.DB.prepare(`SELECT phone_number AS phoneNumber, email,
+      job_title AS jobTitle, work_branch AS workBranch,
+      county, sub_county AS subCounty, location, bank_name AS bankName, bank_branch AS bankBranch,
       bank_account_name AS bankAccountName, bank_account_number AS bankAccountNumber,
       bank_two_name AS bankTwoName, bank_two_branch AS bankTwoBranch,
       bank_two_account_name AS bankTwoAccountName, bank_two_account_number AS bankTwoAccountNumber,
@@ -15,11 +16,11 @@ async function memberProfile(request, session, env) {
   }
   if (request.method !== 'PUT') return null
   const body = await readJson(request)
-  const keys = ['phoneNumber','email','county','subCounty','location','bankName','bankBranch',
+  const keys = ['phoneNumber','email','jobTitle','workBranch','county','subCounty','location','bankName','bankBranch',
     'bankAccountName','bankAccountNumber','bankTwoName','bankTwoBranch','bankTwoAccountName',
     'bankTwoAccountNumber','nextKinName','nextKinRelationship','nextKinPhone']
   const values = Object.fromEntries(keys.map((key) => [key, typeof body[key] === 'string' ? body[key].trim() : '']))
-  const limits = { phoneNumber: 32, email: 254, county: 100, subCounty: 100, location: 160,
+  const limits = { phoneNumber: 32, email: 254, jobTitle: 100, workBranch: 100, county: 100, subCounty: 100, location: 160,
     bankName: 100, bankBranch: 100, bankAccountName: 120, bankAccountNumber: 64,
     bankTwoName: 100, bankTwoBranch: 100, bankTwoAccountName: 120, bankTwoAccountNumber: 64,
     nextKinName: 100, nextKinRelationship: 60, nextKinPhone: 32 }
@@ -28,11 +29,11 @@ async function memberProfile(request, session, env) {
   }
   if (values.phoneNumber.length < 5) throw new ApiError('Enter a valid phone number.')
   if (values.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) throw new ApiError('Enter a valid email address, or leave it blank.')
-  await env.DB.prepare(`UPDATE members SET phone_number=?, email=?, county=?, sub_county=?, location=?,
-    bank_name=?, bank_branch=?, bank_account_name=?, bank_account_number=?, bank_two_name=?, bank_two_branch=?,
-    bank_two_account_name=?, bank_two_account_number=?, next_kin_name=?, next_kin_relationship=?, next_kin_phone=?
-    WHERE id=?`).bind(...keys.map((key) => values[key]), session.memberId).run()
-  return json({ profile: values, message: 'Account information updated.' })
+  // Cancel any existing pending change for this member, then insert new one
+  await env.DB.prepare(`UPDATE pending_profile_changes SET status='cancelled' WHERE member_id=? AND status='pending'`).bind(session.memberId).run()
+  await env.DB.prepare(`INSERT INTO pending_profile_changes (member_id, changes_json) VALUES (?, ?)`)
+    .bind(session.memberId, JSON.stringify(values)).run()
+  return json({ message: 'Your changes have been submitted for admin review. They will take effect once approved.' })
 }
 
 async function changePassword(request, session, env) {
@@ -85,6 +86,17 @@ async function memberContacts(request, session, env) {
 
   return null
 }
+async function pendingProfileChange(request, session, env) {
+  if (request.method !== 'GET') return null
+  const row = await env.DB.prepare(
+    `SELECT id, changes_json AS changesJson, status, submitted_at AS submittedAt, admin_note AS adminNote
+     FROM pending_profile_changes WHERE member_id=? AND status='pending'
+     ORDER BY submitted_at DESC LIMIT 1`
+  ).bind(session.memberId).first()
+  if (!row) return json({ pending: null })
+  return json({ pending: { id: row.id, status: row.status, submittedAt: row.submittedAt, adminNote: row.adminNote, changes: JSON.parse(row.changesJson) } })
+}
+
 export async function handleMemberAccount(path, request, session, env) {
   if (path === '/member/profile') return memberProfile(request, session, env)
   if (path === '/member/password') return changePassword(request, session, env)
@@ -103,5 +115,6 @@ export async function handleMemberAccount(path, request, session, env) {
     const terms = await env.DB.prepare('SELECT content, updated_at AS updatedAt FROM sacco_terms WHERE id = 1').first()
     return json({ terms: terms?.content ?? '', updatedAt: terms?.updatedAt ?? null })
   }
+  if (path === '/member/profile/pending' && request.method === 'GET') return pendingProfileChange(request, session, env)
   return null
 }

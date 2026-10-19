@@ -41,7 +41,7 @@ export function LoanEditForm({
               <input
                 id="edit-requested-amount"
                 type="number"
-                min="500"
+                min="2000"
                 step="100"
                 value={applicationForm.requestedAmount}
                 onChange={(e) =>
@@ -94,4 +94,3 @@ export function LoanEditForm({
     </div>
   )
 }
-

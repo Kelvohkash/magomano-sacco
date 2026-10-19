@@ -1,0 +1,2 @@
+ALTER TABLE members
+  ADD COLUMN work_branch TEXT NOT NULL DEFAULT '';

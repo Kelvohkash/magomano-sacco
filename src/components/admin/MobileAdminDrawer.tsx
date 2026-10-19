@@ -1,5 +1,6 @@
 import type { Dispatch, SetStateAction } from 'react'
 import {
+  Bell,
   ChevronRight,
   Download,
   FileSpreadsheet,
@@ -9,6 +10,7 @@ import {
   LayoutDashboard,
   LogOut,
   RefreshCcw,
+  ShieldAlert,
   ShieldCheck,
   UsersRound,
   WalletCards,
@@ -22,6 +24,7 @@ interface MobileAdminDrawerProps {
   setView: Dispatch<SetStateAction<AdminView>>
   pendingMembersCount: number
   pendingApplicationsCount: number
+  pendingAuthorizationsCount?: number
   signedInAdmin: string
   isRefreshing: boolean
   isOpen: boolean
@@ -43,6 +46,7 @@ export function MobileAdminDrawer({
   setView,
   pendingMembersCount,
   pendingApplicationsCount,
+  pendingAuthorizationsCount = 0,
   signedInAdmin,
   isRefreshing,
   isOpen,
@@ -68,6 +72,13 @@ export function MobileAdminDrawer({
       badge: pendingMembersCount,
     },
     {
+      section: 'authorizations',
+      label: 'Profile Authorizations',
+      subtitle: 'Review & authorize member updates',
+      Icon: ShieldAlert,
+      badge: pendingAuthorizationsCount,
+    },
+    {
       section: 'loans',
       label: 'Loan Applications',
       subtitle: 'Credit requests & official agreements',
@@ -91,6 +102,12 @@ export function MobileAdminDrawer({
       label: 'Admin Charges',
       subtitle: 'Issue and review member charges',
       Icon: HandCoins,
+    },
+    {
+      section: 'notifications',
+      label: 'Push Notifications',
+      subtitle: 'Broadcast notifications to members',
+      Icon: Bell,
     },
     {
       section: 'bulk',

@@ -11,6 +11,8 @@ import { AdminRepaymentsView } from './views/AdminRepaymentsView'
 import { AdminSavingsView } from './views/AdminSavingsView'
 import { AdminChargesView } from './views/AdminChargesView'
 import { AdminTermsView } from './views/AdminTermsView'
+import { AdminNotificationsView } from './views/AdminNotificationsView'
+import { AdminAuthorizationsView } from './views/AdminAuthorizationsView'
 import { AdminBulkImportView } from './views/AdminBulkImportView'
 import { MemberProfileDrawer } from './modals/MemberProfileDrawer'
 import { MemberEditModal } from './modals/MemberEditModal'
@@ -39,6 +41,7 @@ export interface MobileAdminPortalProps {
   members: AdminMember[]
   applications: AdminLoanApplication[]
   openLoans: AdminOpenLoan[]
+  pendingAuthorizationsCount?: number
   onCreateMember: (input: AdminMemberCreate) => Promise<boolean>
   onIssueLoan: (input: AdminLoanCreate) => Promise<boolean>
   memberId: string
@@ -64,7 +67,7 @@ export interface MobileAdminPortalProps {
   onSetMemberRole: (memberId: number, role: AdminMember['memberRole']) => void
   onResetMemberPassword: (memberId: number) => void
   onDeleteMember: (memberId: number) => Promise<boolean>
-  onReviewLoan: (applicationId: number, decision: 'approve' | 'reject') => void
+  onReviewLoan: (applicationId: number, decision: 'approve' | 'reject', chequeNumber?: string) => void
   onDisburseLoan: (applicationId: number, bankName: string, accountNumber: string) => void
   onUpdateLoanApplication: (
     applicationId: number,
@@ -133,6 +136,7 @@ export function MobileAdminPortal({
   onSavingsEntry,
   repaymentLoanId, setRepaymentLoanId, repaymentAmount, setRepaymentAmount,
   repaymentDescription, setRepaymentDescription, onLoanRepayment, submitting,
+  pendingAuthorizationsCount = 0,
 }: MobileAdminPortalProps) {
   const ui = useAdminPortalState(
     members,
@@ -241,6 +245,7 @@ export function MobileAdminPortal({
             approvedMembersCount={ui.approvedMembers.length}
             pendingMembers={ui.pendingMembers}
             pendingApplications={ui.pendingApplications}
+            pendingAuthorizationsCount={pendingAuthorizationsCount}
             setView={setView}
             setMemberFilter={ui.setMemberFilter}
             setLoanFilter={ui.setLoanFilter}
@@ -322,7 +327,11 @@ export function MobileAdminPortal({
           />
         )}
 
+        {view === 'authorizations' && <AdminAuthorizationsView onRefresh={onRefresh} />}
+
         {view === 'charges' && <AdminChargesView members={members} onRefresh={onRefresh} />}
+
+        {view === 'notifications' && <AdminNotificationsView members={members} />}
 
         {view === 'bulk' && <AdminBulkImportView onImported={onRefresh} />}
 
@@ -365,6 +374,7 @@ export function MobileAdminPortal({
         setView={setView}
         pendingMembersCount={ui.pendingMembers.length}
         pendingApplicationsCount={ui.pendingApplications.length}
+        pendingAuthorizationsCount={pendingAuthorizationsCount}
         signedInAdmin={signedInAdmin}
         isRefreshing={ui.isRefreshing}
         isOpen={drawerOpen}
@@ -393,6 +403,7 @@ export function MobileAdminPortal({
       {ui.editingMember && (
         <MemberEditModal
           member={ui.editingMember}
+          workBranches={[...new Set(members.map((member) => member.workBranch.trim()).filter(Boolean))]}
           memberForm={ui.memberForm}
           setMemberForm={ui.setMemberForm}
           onSave={ui.saveMemberDetails}
@@ -404,6 +415,7 @@ export function MobileAdminPortal({
 
       {ui.viewingApplication && (
         <LoanDocumentModal
+          key={ui.viewingApplication.id}
           application={ui.viewingApplication}
           member={ui.viewingApplicationMember}
           signatories={ui.signatories}
@@ -420,7 +432,7 @@ export function MobileAdminPortal({
             ui.setViewingApplicationId(null)
             ui.setEditingApplicationId(null)
           }}
-          onApprove={() => onReviewLoan(ui.viewingApplication!.id, 'approve')}
+          onApprove={(chequeNumber) => onReviewLoan(ui.viewingApplication!.id, 'approve', chequeNumber)}
           onReject={() => onReviewLoan(ui.viewingApplication!.id, 'reject')}
           isActionLoading={reviewingId === `loan-${ui.viewingApplication.id}`}
         />

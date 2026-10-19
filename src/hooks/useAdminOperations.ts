@@ -24,6 +24,7 @@ export function useAdminOperations() {
   const [adminPopupMessages, setAdminPopupMessages] = useState<AdminPopupMessage[]>([])
   const [adminSummary, setAdminSummary] = useState<AdminSummary | null>(null)
   const [adminStatementRefreshKey, setAdminStatementRefreshKey] = useState(0)
+  const [pendingAuthorizationsCount, setPendingAuthorizationsCount] = useState(0)
 
   const [adminMemberId, setAdminMemberId] = useState('')
   const [adminAmount, setAdminAmount] = useState('')
@@ -37,7 +38,7 @@ export function useAdminOperations() {
   const [adminReviewingId, setAdminReviewingId] = useState<string | null>(null)
 
   const refreshAdminData = useCallback(async () => {
-    const [summaryRes, membersRes, appsRes, repayRes, termsRes, maintenanceRes, popupMessagesRes] = await Promise.all([
+    const [summaryRes, membersRes, appsRes, repayRes, termsRes, maintenanceRes, popupMessagesRes, profileChangesRes] = await Promise.all([
       fetch('/api/admin/dashboard'),
       fetch('/api/admin/members'),
       fetch('/api/admin/loan-applications'),
@@ -45,6 +46,7 @@ export function useAdminOperations() {
       fetch('/api/admin/terms'),
       fetch('/api/admin/maintenance'),
       fetch('/api/admin/member-messages'),
+      fetch('/api/admin/profile-changes'),
     ])
     const [summaryResult, membersResult, applicationsResult, repaymentsResult, termsResult, maintenanceResult, popupMessagesResult] =
       await Promise.all([
@@ -84,6 +86,17 @@ export function useAdminOperations() {
     setAdminOpenLoans(openLoans)
     setRepaymentLoanId((curr) => (openLoans.some((loan) => String(loan.id) === curr) ? curr : ''))
     setAdminMemberId((curr) => (members.some((member) => String(member.id) === curr) ? curr : ''))
+
+    if (profileChangesRes.ok) {
+      try {
+        const changesData = await profileChangesRes.json() as { changes?: unknown[] }
+        setPendingAuthorizationsCount(changesData.changes?.length ?? 0)
+      } catch {
+        setPendingAuthorizationsCount(0)
+      }
+    } else {
+      setPendingAuthorizationsCount(0)
+    }
   }, [])
 
   const ledgerOperations = useAdminLedgerOperations({
@@ -120,6 +133,7 @@ export function useAdminOperations() {
     setAdminApplications([])
     setAdminOpenLoans([])
     setAdminSummary(null)
+    setPendingAuthorizationsCount(0)
     setAdminView('overview')
   }, [])
 
@@ -130,6 +144,7 @@ export function useAdminOperations() {
     adminTerms, setAdminTerms, adminTermsUpdatedAt, adminSummary, adminStatementRefreshKey,
     adminMaintenanceEnabled, adminMaintenanceMessage, setAdminMaintenanceMessage,
     adminPopupMessages,
+    pendingAuthorizationsCount,
     adminMemberId, setAdminMemberId,
     adminAmount, setAdminAmount,
     adminDescription, setAdminDescription,

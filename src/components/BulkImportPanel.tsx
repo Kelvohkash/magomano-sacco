@@ -108,8 +108,7 @@ export function BulkImportPanel({ onImported }: BulkImportPanelProps) {
           && parseSaccoNumber(row).length > 0
           && parseStatementAmount(row).length > 0)
 
-        if (hasStatementRows) {
-          setKind('savings')
+        if (kind !== 'members' && hasStatementRows) {
           const convertedRows = rawRows.flatMap((row): CsvRow[] => {
             const date = row.map(parseStatementDate).find(Boolean) ?? ''
             const memberIdentifier = parseSaccoNumber(row)
@@ -120,16 +119,18 @@ export function BulkImportPanel({ onImported }: BulkImportPanelProps) {
               nationalId: '',
               saccoNumber: '',
               fullName: '',
-              entryType: 'deposit',
+              entryType: kind === 'savings' ? 'deposit' : '',
               amount,
-              description: 'Savings',
+              description: kind === 'savings' ? 'Savings' : 'Loan repayment',
               date,
               loanReference: '',
             }]
           })
-          setRows(normalizeRows('savings', convertedRows))
+          setRows(normalizeRows(kind, convertedRows))
           setSkippedRows(rawRows.length - convertedRows.length)
-          setErrors(validateRows('savings', convertedRows))
+          setErrors(convertedRows.length
+            ? validateRows(kind, convertedRows)
+            : ['No rows contained a valid date, member identifier, and amount.'])
           return
         }
 

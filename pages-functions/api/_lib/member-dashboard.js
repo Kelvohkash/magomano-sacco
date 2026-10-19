@@ -64,6 +64,7 @@ export async function memberDashboard(session, env) {
 
   return json({
     member: {
+      id: memberId,
       national_id: member.national_id,
       full_name: member.full_name,
       bankAccounts: [
@@ -162,11 +163,13 @@ export async function memberTransactions(request, session, env) {
     `).bind(...params)
     itemsQuery = env.DB.prepare(`
       SELECT loan_reference AS reference, principal_amount AS principalAmount,
-        interest_rate AS interestRate, repayment_months AS repaymentMonths,
+        interest_rate AS interestRate,
+        CASE WHEN legacy_imported = 1 THEN NULL ELSE repayment_months END AS repaymentMonths,
         total_repayable AS totalRepayable,
         MAX(0, total_repayable - outstanding_balance) AS paidAmount,
         outstanding_balance AS outstandingBalance, security_type AS securityType,
-        status, issued_at AS issuedAt
+        status, CASE WHEN legacy_imported = 1 THEN NULL ELSE issued_at END AS issuedAt,
+        legacy_imported AS legacyImported
       FROM member_loans WHERE ${where.join(' AND ')}
       ORDER BY issued_at DESC, id DESC LIMIT ? OFFSET ?
     `).bind(...params, pageSize, offset)
@@ -192,5 +195,8 @@ export async function memberTransactions(request, session, env) {
   }
 
   const [count, items] = await Promise.all([countQuery.first(), itemsQuery.all()])
-  return json({ items: items.results, total: count.total, page: requestedPage, pageSize })
+  const results = type === 'loans'
+    ? items.results.map((item) => ({ ...item, legacyImported: Boolean(item.legacyImported) }))
+    : items.results
+  return json({ items: results, total: count.total, page: requestedPage, pageSize })
 }

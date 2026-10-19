@@ -49,6 +49,7 @@ export async function handleAdminLoans(path, request, session, db) {
         a.applied_at AS appliedAt, m.national_id AS nationalId, m.full_name AS fullName,
         a.payout_bank_name AS payoutBankName, a.payout_bank_branch AS payoutBankBranch,
         a.payout_account_name AS payoutAccountName, a.payout_account_number AS payoutAccountNumber,
+        a.cheque_number AS chequeNumber,
         a.disbursed_at AS disbursedAt, a.disbursed_loan_reference AS disbursedLoanReference,
         a.disbursement_message AS disbursementMessage,
         a.electronic_signature_name AS electronicSignatureName,
@@ -97,8 +98,8 @@ export async function handleAdminLoans(path, request, session, db) {
     const requestedAmount = Number(body.requestedAmount)
     const repaymentMonths = Number(body.repaymentMonths)
     const purpose = typeof body.purpose === 'string' ? body.purpose.trim() : ''
-    if (!Number.isFinite(requestedAmount) || requestedAmount <= 0 || requestedAmount > 100000000) {
-      throw new ApiError('Enter a valid loan amount.')
+    if (!Number.isFinite(requestedAmount) || requestedAmount < 2000 || requestedAmount > 100000000) {
+      throw new ApiError('Enter a loan amount of at least KES 2,000.')
     }
     if (!Number.isInteger(repaymentMonths) || repaymentMonths < 1 || repaymentMonths > 120) {
       throw new ApiError('Repayment term must be between 1 and 120 months.')
@@ -138,9 +139,14 @@ export async function handleAdminLoans(path, request, session, db) {
   const applicationDecision = path.match(/^\/admin\/loan-applications\/(\d+)\/decision$/)
   if (applicationDecision && method === 'POST') {
     const applicationId = Number(applicationDecision[1])
-    const decision = (await readJson(request)).decision
+    const body = await readJson(request)
+    const decision = body.decision
     if (!['approve', 'reject'].includes(decision)) {
       throw new ApiError('Choose approve or reject for this loan application.')
+    }
+    const chequeNumber = typeof body.chequeNumber === 'string' ? body.chequeNumber.trim() : ''
+    if (decision === 'approve' && (!chequeNumber || chequeNumber.length > 50)) {
+      throw new ApiError('Enter a cheque number of 1 to 50 characters before approving this loan.')
     }
     const application = await db.prepare(`
       SELECT id, member_id AS memberId, requested_amount AS requestedAmount, status
@@ -153,9 +159,12 @@ export async function handleAdminLoans(path, request, session, db) {
         .bind(applicationId).run()
       return json({ message: 'Loan application rejected.', status: 'rejected' })
     }
+    if (Number(application.requestedAmount) < 2000) {
+      throw new ApiError('This application is below the KES 2,000 minimum. Edit it before approval.')
+    }
 
     const result = await db.prepare(`
-      UPDATE loan_applications SET status = 'approved'
+      UPDATE loan_applications SET status = 'approved', cheque_number = ?
       WHERE id = ? AND status = 'pending'
         AND requested_amount <= MAX(0,
           COALESCE((SELECT SUM(CASE WHEN entry_type = 'deposit' THEN amount ELSE -amount END)
@@ -165,7 +174,7 @@ export async function handleAdminLoans(path, request, session, db) {
           - COALESCE((SELECT SUM(requested_amount * 1.1) FROM loan_applications
             WHERE member_id = ? AND status IN ('pending', 'approved') AND id != ?), 0)
         ) * 0.9
-    `).bind(applicationId, application.memberId, application.memberId,
+    `).bind(chequeNumber, applicationId, application.memberId, application.memberId,
       application.memberId, applicationId).run()
     if (!result.meta.changes) {
       throw new ApiError('Approval blocked: available savings changed or this application was already reviewed.', 409)

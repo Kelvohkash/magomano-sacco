@@ -18,7 +18,9 @@ export function DocSignatoriesSection({ signatories }: DocSignatoriesSectionProp
           <div className="signatory-block" key={signatory.id}>
             <div className="signatory-title-row">
               <strong>{signatory.fullName}</strong>
-              <span className="signatory-role">Authorized Signatory</span>
+              <span className="signatory-role">
+                {[signatory.jobTitle || 'Authorized Signatory', signatory.workBranch].filter(Boolean).join(' · ')}
+              </span>
             </div>
             <div className="signatory-signing-zone">
               <div className="sign-line" />
@@ -35,4 +37,3 @@ export function DocSignatoriesSection({ signatories }: DocSignatoriesSectionProp
     </section>
   )
 }
-

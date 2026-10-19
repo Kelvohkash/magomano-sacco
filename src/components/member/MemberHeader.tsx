@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from 'react'
-import { Activity, Clock3, FileText, HandCoins, LogOut, Menu, PiggyBank, RefreshCw, UserRound, Wallet, X } from 'lucide-react'
+import { Activity, Clock3, FileText, HandCoins, KeyRound, LogOut, Menu, PiggyBank, RefreshCw, UserRound, Wallet, X } from 'lucide-react'
 import type { MemberView } from '../../types'
 import countyLogo from '../../../Logo.webp'
 
@@ -86,6 +86,14 @@ export function MemberHeader({
         </button>
         <button
           type="button"
+          aria-current={view === 'change-password' ? 'page' : undefined}
+          className={view === 'change-password' ? 'active' : ''}
+          onClick={() => setView('change-password')}
+        >
+          <KeyRound size={17} /> Change password
+        </button>
+        <button
+          type="button"
           aria-current={view === 'terms' ? 'page' : undefined}
           className={view === 'terms' ? 'active' : ''}
           onClick={() => setView('terms')}
@@ -137,6 +145,9 @@ export function MemberHeader({
             </button>
             <button type="button" aria-current={view === 'account-info' ? 'page' : undefined} onClick={() => { setView('account-info'); setMenuOpen(false) }}>
               <UserRound size={17} /> Account info
+            </button>
+            <button type="button" aria-current={view === 'change-password' ? 'page' : undefined} onClick={() => { setView('change-password'); setMenuOpen(false) }}>
+              <KeyRound size={17} /> Change password
             </button>
             <div className="dashboard-menu-divider" />
             <button type="button" aria-current={view === 'terms' ? 'page' : undefined} onClick={() => { setView('terms'); setMenuOpen(false) }}>

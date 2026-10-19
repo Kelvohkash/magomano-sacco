@@ -236,7 +236,10 @@ export function AdminLoansView({
                                 icon: <Check size={15} />,
                                 variant: 'success' as const,
                                 disabled: reviewingId === `loan-${app.id}`,
-                                onClick: () => onReviewLoan(app.id, 'approve'),
+                                onClick: () => {
+                                  setViewingApplicationId(app.id)
+                                  setEditingApplicationId(null)
+                                },
                               },
                               {
                                 id: `reject-loan-${app.id}`,
@@ -301,4 +304,3 @@ export function AdminLoansView({
     </div>
   )
 }
-

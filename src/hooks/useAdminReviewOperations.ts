@@ -105,15 +105,24 @@ export function useAdminReviewOperations(options: AdminReviewOperationsOptions) 
     return runAdminMutation(`/api/admin/loan-applications/${applicationId}`, 'DELETE', undefined, `delete-loan-${applicationId}`, 'Could not delete this loan application.')
   }
 
-  async function reviewLoanApplication(applicationId: number, decision: 'approve' | 'reject') {
-    if (!window.confirm(`Do you want to ${decision} loan application #${applicationId}?${decision === 'approve' ? ' Approval confirms the request; funds will be handled in a separate disbursement step.' : ''}`)) return
+  async function reviewLoanApplication(applicationId: number, decision: 'approve' | 'reject', chequeNumber?: string) {
+    const normalizedChequeNumber = chequeNumber?.trim() ?? ''
+    if (decision === 'approve' && !normalizedChequeNumber) {
+      setMessage('Enter a cheque number before approving this loan.')
+      setMessageSuccess(false)
+      return
+    }
+    if (!window.confirm(`Do you want to ${decision} loan application #${applicationId}?${decision === 'approve' ? ` Cheque number: ${normalizedChequeNumber}. Funds will be handled in a separate disbursement step.` : ''}`)) return
     setReviewingId(`loan-${applicationId}`)
     setMessage('')
     try {
       const response = await fetch(`/api/admin/loan-applications/${applicationId}/decision`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ decision }),
+        body: JSON.stringify({
+          decision,
+          ...(decision === 'approve' ? { chequeNumber: normalizedChequeNumber } : {}),
+        }),
       })
       const result = await readJsonResponse<{ message?: string; error?: string }>(response)
       if (!response.ok) throw new Error(result.error ?? 'Could not update loan application.')

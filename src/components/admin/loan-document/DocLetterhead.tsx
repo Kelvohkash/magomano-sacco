@@ -18,9 +18,9 @@ export function DocLetterhead({ application, refCode }: DocLetterheadProps) {
             </span>
           </div>
           <div className="doc-org-text">
-            <h1 className="doc-org-name">MAGOMANO COUNTY SACCO</h1>
+            <h1 className="doc-org-name">MAGOMANO VISION COUNTY SACCO</h1>
             <p className="doc-org-address">
-              Head Office: P.O. Box 482-00100 Thika, Kenya · Tel: +254 700 000 000 · Email: info@magomanosacco.co.ke
+              Head Office: P.O. Box 2417-01000 Thika, Kenya · Tel: +254 726 692 210 · Email: info@countysupermarkets.co.ke
             </p>
           </div>
         </div>

@@ -21,14 +21,14 @@ async function applyForLoan(request, session, env) {
   if (body.securityType !== undefined && body.securityType !== 'savings') {
     throw new ApiError('Savings is the only accepted loan security.')
   }
-  if (!Number.isFinite(requestedAmount) || requestedAmount <= 0 || requestedAmount > 1_000_000_000) {
-    throw new ApiError('Enter a loan amount greater than zero.')
+  if (!Number.isFinite(requestedAmount) || requestedAmount < 2000 || requestedAmount > 1_000_000_000) {
+    throw new ApiError('Enter a loan amount of at least KES 2,000.')
   }
   if (!Number.isInteger(repaymentMonths) || repaymentMonths < 1 || repaymentMonths > 120) {
     throw new ApiError('Choose a repayment period from 1 to 120 months.')
   }
-  if (purpose && purpose.length > 500) {
-    throw new ApiError('Describe the purpose in 500 characters or fewer.')
+  if (purpose.length < 3 || purpose.length > 500) {
+    throw new ApiError('Enter a loan purpose between 3 and 500 characters.')
   }
   if (!['primary', 'secondary'].includes(payoutAccount)) {
     throw new ApiError('Choose the bank account where loan funds should be deposited.')
@@ -58,7 +58,7 @@ async function applyForLoan(request, session, env) {
   }
 
   const signatureName = standardizeName(member.fullName)
-  const effectivePurpose = purpose || 'Personal'
+  const effectivePurpose = purpose
   const signedAt = new Date().toISOString().replace('T', ' ').slice(0, 19)
 
   // Recheck borrowing capacity in the insert itself so concurrent applications

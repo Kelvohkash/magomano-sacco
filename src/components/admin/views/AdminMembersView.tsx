@@ -1,6 +1,7 @@
-import { useState, type Dispatch, type FormEvent, type SetStateAction } from 'react'
+import { useState, useEffect, type Dispatch, type FormEvent, type SetStateAction } from 'react'
 import {
   AlertTriangle,
+  Bell,
   Check,
   Clock,
   Eye,
@@ -17,7 +18,7 @@ import {
 import { RowActionDropdown } from '../RowActionDropdown'
 import { AnimatedFigure } from '../../AnimatedFigure'
 import { TerminationOverviewModal } from '../TerminationOverviewModal'
-import type { AdminMember, AdminMemberCreate } from '../../../types'
+import type { AdminMember, AdminMemberCreate, PendingProfileChange } from '../../../types'
 
 interface AdminMembersViewProps {
   members: AdminMember[]
@@ -59,13 +60,78 @@ export function AdminMembersView({
   onRefresh,
 }: AdminMembersViewProps) {
   const [showCreateForm, setShowCreateForm] = useState(false)
-  const [newMember, setNewMember] = useState<AdminMemberCreate>({ saccoNumber: '', fullName: '', nationalId: '' })
+  const [newMember, setNewMember] = useState<AdminMemberCreate>({ saccoNumber: '', fullName: '', nationalId: '', jobTitle: '', workBranch: '' })
+  const workBranches = [...new Set(members.map((member) => member.workBranch.trim()).filter(Boolean))]
   const [terminatingId, setTerminatingId] = useState<number | null>(null)
   const [settlementMessage, setSettlementMessage] = useState('')
   const [settlementError, setSettlementError] = useState(false)
   const [terminationTarget, setTerminationTarget] = useState<AdminMember | null>(null)
   const [terminationCharges, setTerminationCharges] = useState<{ description: string; amount: string }[]>([])
   const [overviewMemberId, setOverviewMemberId] = useState<number | null>(null)
+
+  const [pendingProfileChanges, setPendingProfileChanges] = useState<PendingProfileChange[]>([])
+  const [workingChangeId, setWorkingChangeId] = useState<number | null>(null)
+  const [rejectingChangeId, setRejectingChangeId] = useState<number | null>(null)
+  const [rejectNote, setRejectNote] = useState('')
+  const [profileActionMessage, setProfileActionMessage] = useState('')
+  const [profileActionError, setProfileActionError] = useState('')
+
+  async function loadPendingProfileChanges() {
+    try {
+      const res = await fetch('/api/admin/profile-changes')
+      if (res.ok) {
+        const data = await res.json() as { changes: PendingProfileChange[] }
+        setPendingProfileChanges(data.changes ?? [])
+      }
+    } catch {
+      // Ignore
+    }
+  }
+
+  useEffect(() => {
+    void loadPendingProfileChanges()
+  }, [])
+
+  async function handleApproveProfileChange(id: number) {
+    setWorkingChangeId(id)
+    setProfileActionMessage('')
+    setProfileActionError('')
+    try {
+      const res = await fetch(`/api/admin/profile-changes/${id}/approve`, { method: 'POST' })
+      const data = await res.json() as { message?: string; error?: string }
+      if (!res.ok) throw new Error(data.error ?? 'Failed to approve profile change.')
+      setProfileActionMessage(data.message ?? 'Profile change authorized.')
+      await loadPendingProfileChanges()
+      await onRefresh()
+    } catch (e) {
+      setProfileActionError(e instanceof Error ? e.message : 'Failed to approve change.')
+    } finally {
+      setWorkingChangeId(null)
+    }
+  }
+
+  async function handleRejectProfileChange(id: number) {
+    setWorkingChangeId(id)
+    setProfileActionMessage('')
+    setProfileActionError('')
+    try {
+      const res = await fetch(`/api/admin/profile-changes/${id}/reject`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ note: rejectNote }),
+      })
+      const data = await res.json() as { message?: string; error?: string }
+      if (!res.ok) throw new Error(data.error ?? 'Failed to reject profile change.')
+      setProfileActionMessage(data.message ?? 'Profile change declined.')
+      setRejectingChangeId(null)
+      setRejectNote('')
+      await loadPendingProfileChanges()
+    } catch (e) {
+      setProfileActionError(e instanceof Error ? e.message : 'Failed to reject change.')
+    } finally {
+      setWorkingChangeId(null)
+    }
+  }
 
   async function terminateMember(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -111,7 +177,7 @@ export function AdminMembersView({
   async function createMember(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (await onCreateMember(newMember)) {
-      setNewMember({ saccoNumber: '', fullName: '', nationalId: '' })
+      setNewMember({ saccoNumber: '', fullName: '', nationalId: '', jobTitle: '', workBranch: '' })
       setShowCreateForm(false)
     }
   }
@@ -122,7 +188,7 @@ export function AdminMembersView({
         <div>
           <h1 className="view-page-title">Member Accounts </h1>
           <p className="view-page-desc">
-            Manage member verification, contact details, bank accounts and role permissions.
+            Manage member verification, contact details, job titles and role permissions.
           </p>
         </div>
         <div className="view-intro-meta">
@@ -141,6 +207,9 @@ export function AdminMembersView({
           <label>SACCO number<input required maxLength={20} placeholder="A/005" value={newMember.saccoNumber} onChange={(event) => setNewMember((current) => ({ ...current, saccoNumber: event.target.value.toUpperCase() }))} /></label>
           <label>Full name<input required minLength={2} maxLength={100} value={newMember.fullName} onChange={(event) => setNewMember((current) => ({ ...current, fullName: event.target.value }))} /></label>
           <label>National ID (optional)<input inputMode="numeric" maxLength={12} value={newMember.nationalId} onChange={(event) => setNewMember((current) => ({ ...current, nationalId: event.target.value }))} /></label>
+          <label>Job title (optional)<input maxLength={100} placeholder="e.g. Line attendant" value={newMember.jobTitle} onChange={(event) => setNewMember((current) => ({ ...current, jobTitle: event.target.value }))} /></label>
+          <label>Staff work branch (optional)<input list="new-member-work-branches" maxLength={100} placeholder="Select or enter a branch" value={newMember.workBranch} onChange={(event) => setNewMember((current) => ({ ...current, workBranch: event.target.value }))} /></label>
+          <datalist id="new-member-work-branches">{workBranches.map((branch) => <option key={branch} value={branch} />)}</datalist>
         </div>
         <div className="modal-actions-bar">
           <button type="button" className="action-btn-cancel" onClick={() => setShowCreateForm(false)}>Cancel</button>
@@ -179,6 +248,111 @@ export function AdminMembersView({
         </form>
       </div>}
       {overviewMemberId !== null && <TerminationOverviewModal memberId={overviewMemberId} signatories={signatories} onClose={() => setOverviewMemberId(null)} />}
+
+      {profileActionMessage && (
+        <div className="admin-banner-alert alert-success" role="status">
+          <Check size={16} />
+          <span>{profileActionMessage}</span>
+        </div>
+      )}
+      {profileActionError && (
+        <div className="admin-banner-alert alert-error" role="alert">
+          <AlertTriangle size={16} />
+          <span>{profileActionError}</span>
+        </div>
+      )}
+
+      {pendingProfileChanges.length > 0 && (
+        <section className="admin-pending-changes-section" aria-labelledby="pending-changes-heading">
+          <div className="admin-section-header">
+            <div className="pending-header-title">
+              <Bell size={18} className="pending-bell-icon" />
+              <h2 id="pending-changes-heading">Pending Profile Authorizations</h2>
+              <span className="pending-count-badge">{pendingProfileChanges.length}</span>
+            </div>
+            <p>
+              Members submitted these account updates. Review the proposed changes below and authorize or decline them before they take effect.
+            </p>
+          </div>
+
+          <div className="pending-changes-list">
+            {pendingProfileChanges.map((change) => (
+              <div key={change.id} className="pending-change-card">
+                <div className="pending-change-header">
+                  <div className="pending-change-member">
+                    <strong>{change.memberName}</strong>
+                    <span className="badge-id">{change.saccoNumber || 'Member'}</span>
+                  </div>
+                  <span className="pending-change-time">
+                    Submitted: {new Date(change.submittedAt).toLocaleString()}
+                  </span>
+                </div>
+
+                <div className="pending-change-fields">
+                  {Object.entries(change.changes).filter(([, v]) => v).map(([key, val]) => (
+                    <div key={key} className="pending-change-field">
+                      <span className="pending-field-key">
+                        {key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())}
+                      </span>
+                      <span className="pending-field-value">{val}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="pending-change-actions">
+                  {rejectingChangeId === change.id ? (
+                    <div className="pending-reject-form">
+                      <input
+                        type="text"
+                        placeholder="Decline note for member (optional)"
+                        value={rejectNote}
+                        onChange={(e) => setRejectNote(e.target.value)}
+                        className="pending-reject-input"
+                      />
+                      <button
+                        type="button"
+                        className="pending-action-btn is-reject"
+                        disabled={workingChangeId === change.id}
+                        onClick={() => void handleRejectProfileChange(change.id)}
+                      >
+                        {workingChangeId === change.id ? 'Declining…' : 'Confirm Decline'}
+                      </button>
+                      <button
+                        type="button"
+                        className="pending-action-btn"
+                        onClick={() => { setRejectingChangeId(null); setRejectNote('') }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <button
+                        type="button"
+                        className="pending-action-btn is-approve"
+                        disabled={workingChangeId === change.id}
+                        onClick={() => void handleApproveProfileChange(change.id)}
+                      >
+                        <Check size={14} />
+                        <span>{workingChangeId === change.id ? 'Authorizing…' : 'Authorize Changes'}</span>
+                      </button>
+                      <button
+                        type="button"
+                        className="pending-action-btn is-reject"
+                        disabled={workingChangeId === change.id}
+                        onClick={() => setRejectingChangeId(change.id)}
+                      >
+                        <X size={14} />
+                        <span>Decline</span>
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Search & Filter Controls */}
       <div className="table-controls-bar">
@@ -241,6 +415,8 @@ export function AdminMembersView({
               <th>SAVINGS BALANCE</th>
               <th>STATUS</th>
               <th>ROLE</th>
+              <th>JOB TITLE / STAFF ROLE</th>
+              <th>WORK BRANCH</th>
               <th className="actions-col">ACTIONS</th>
             </tr>
           </thead>
@@ -292,6 +468,8 @@ export function AdminMembersView({
                     </span>
                   )}
                 </td>
+                <td>{member.jobTitle || '—'}</td>
+                <td>{member.workBranch || '—'}</td>
                 <td className="actions-col">
                   <div className="row-actions-group">
                     <button

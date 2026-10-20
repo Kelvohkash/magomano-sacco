@@ -57,7 +57,8 @@ export function LoanDocumentModal({
   const monthlyInstallment = repaymentMonths > 0 ? totalRepayable / repaymentMonths : totalRepayable
 
   const appNumber = String(application.id).padStart(5, '0')
-  const refCode = `MAG-LN-2026-${appNumber}`
+  const refCode = application.disbursedLoanReference || `MAG-LN-2026-${appNumber}`
+  const isAdminIssued = !application.electronicSignatureName && !application.electronicallySignedAt
 
   async function verifyHash() {
     setHashVerification('Verifying…')
@@ -65,7 +66,9 @@ export function LoanDocumentModal({
       const response = await fetch(`/api/admin/loan-applications/${application.id}/verify-hash`, { method: 'POST' })
       const result = await response.json() as { valid?: boolean; error?: string }
       if (!response.ok) throw new Error(result.error ?? 'Verification failed.')
-      setHashVerification(result.valid ? 'Hash verified. Application details match the signed record.' : 'Hash mismatch. Application details may have changed.')
+      setHashVerification(result.valid
+        ? `Hash verified. Loan details match the ${isAdminIssued ? 'issued record' : 'signed record'}.`
+        : 'Hash mismatch. Application details may have changed.')
     } catch (error) { setHashVerification(error instanceof Error ? error.message : 'Verification failed.') }
   }
 
@@ -74,7 +77,7 @@ export function LoanDocumentModal({
     const originalTitle = document.title
     try {
       const sanitizedName = application.fullName.trim().replace(/\s+/g, '_')
-      document.title = `Loan_Application_${appNumber}_${sanitizedName}`
+      document.title = `${isAdminIssued ? 'Loan_Record' : 'Loan_Application'}_${appNumber}_${sanitizedName}`
       await new Promise((resolve) => setTimeout(resolve, 80))
       window.print()
     } finally {
@@ -95,7 +98,7 @@ export function LoanDocumentModal({
         <header className="loan-modal-toolbar">
           <div className="loan-modal-toolbar-meta">
             <div className="loan-modal-ref-pill">
-              <span className="ref-prefix">FACILITY APPLICATION</span>
+              <span className="ref-prefix">{isAdminIssued ? 'ADMIN-ISSUED LOAN' : 'FACILITY APPLICATION'}</span>
               <strong className="ref-number">#{appNumber}</strong>
             </div>
             <div className="loan-modal-applicant">

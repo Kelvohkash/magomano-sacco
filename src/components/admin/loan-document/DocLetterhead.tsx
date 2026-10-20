@@ -8,6 +8,8 @@ interface DocLetterheadProps {
 }
 
 export function DocLetterhead({ application, refCode }: DocLetterheadProps) {
+  const isAdminIssued = !application.electronicSignatureName && !application.electronicallySignedAt
+
   return (
     <>
       <header className="doc-letterhead">
@@ -31,14 +33,14 @@ export function DocLetterhead({ application, refCode }: DocLetterheadProps) {
             <strong className="ref-code">{refCode}</strong>
           </div>
           <div className="doc-date-box">
-            <span className="date-label">DATE SUBMITTED</span>
+            <span className="date-label">{isAdminIssued ? 'DATE ISSUED' : 'DATE SUBMITTED'}</span>
             <span className="date-val">{formatDate(application.appliedAt)}</span>
           </div>
         </div>
       </header>
 
       <div className="doc-banner-strip">
-        <span className="banner-title">LOAN APPLICATION</span>
+        <span className="banner-title">{isAdminIssued ? 'ADMIN-ISSUED LOAN RECORD' : 'LOAN APPLICATION'}</span>
         <span className={`banner-status banner-status-${application.status}`}>
           STATUS: {application.status.toUpperCase()}
         </span>

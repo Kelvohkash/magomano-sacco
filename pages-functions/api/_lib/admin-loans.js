@@ -18,7 +18,12 @@ export async function handleAdminLoans(path, request, session, db) {
       throw new ApiError('Repayment term must be between 1 and 120 months.')
     }
     if (purpose.length < 3 || purpose.length > 500) throw new ApiError('Loan purpose must be between 3 and 500 characters.')
-    const member = await db.prepare("SELECT id, full_name AS fullName FROM members WHERE id = ? AND account_status = 'approved'")
+    const member = await db.prepare(`
+      SELECT id, full_name AS fullName, national_id AS nationalId,
+        bank_name AS bankName, bank_branch AS bankBranch,
+        bank_account_name AS bankAccountName, bank_account_number AS bankAccountNumber
+      FROM members WHERE id = ? AND account_status = 'approved'
+    `)
       .bind(memberId).first()
     if (!member) throw new ApiError('Choose an approved member for this loan.')
     const capacity = await getMemberBorrowingCapacity({ DB: db }, memberId)
@@ -27,17 +32,63 @@ export async function handleAdminLoans(path, request, session, db) {
     }
     const totalRepayable = Math.round(principalAmount * 1.1 * 100) / 100
     const reference = `LN-${Date.now()}-${randomBytes(4).toString('hex').toUpperCase()}`
-    await db.prepare(`
-      INSERT INTO member_loans (
-        member_id, loan_reference, principal_amount, interest_rate, repayment_months,
-        total_repayable, outstanding_balance, status, issued_at, security_type
-      ) VALUES (?, ?, ?, 10, ?, ?, ?, 'active', CURRENT_TIMESTAMP, 'savings')
-    `).bind(memberId, reference, principalAmount, repaymentMonths, totalRepayable, totalRepayable).run()
+    const disbursementMessage = 'Issued directly by an administrator.'
+    const results = await db.batch([
+      db.prepare(`
+        INSERT INTO member_loans (
+          member_id, loan_reference, principal_amount, interest_rate, repayment_months,
+          total_repayable, outstanding_balance, status, issued_at, security_type
+        )
+        SELECT ?, ?, ?, 10, ?, ?, ?, 'active', CURRENT_TIMESTAMP, 'savings'
+        WHERE ? <= MAX(0,
+          COALESCE((SELECT SUM(CASE WHEN entry_type = 'deposit' THEN amount ELSE -amount END)
+            FROM savings_transactions WHERE member_id = ?), 0)
+          - COALESCE((SELECT SUM(outstanding_balance)
+            FROM member_loans WHERE member_id = ? AND outstanding_balance > 0), 0)
+          - COALESCE((SELECT SUM(requested_amount * 1.1) FROM loan_applications
+            WHERE member_id = ? AND status IN ('pending', 'approved')), 0)
+        ) * 0.9
+      `).bind(memberId, reference, principalAmount, repaymentMonths, totalRepayable,
+        totalRepayable, principalAmount, memberId, memberId, memberId),
+      db.prepare(`
+        INSERT INTO loan_applications (
+          member_id, requested_amount, repayment_months, purpose, status, applied_at,
+          security_type, payout_bank_name, payout_bank_branch, payout_account_name,
+          payout_account_number, electronic_signature_name, electronically_signed_at,
+          disbursed_at, disbursed_loan_reference, disbursement_message
+        )
+        SELECT ?, ?, ?, ?, 'disbursed', CURRENT_TIMESTAMP, 'savings', ?, ?, ?, ?, '', NULL,
+          CURRENT_TIMESTAMP, ?, ?
+        WHERE EXISTS (SELECT 1 FROM member_loans WHERE loan_reference = ?)
+      `).bind(memberId, principalAmount, repaymentMonths, purpose, member.bankName ?? '',
+        member.bankBranch ?? '', member.bankAccountName ?? '', member.bankAccountNumber ?? '',
+        reference, disbursementMessage, reference),
+    ])
+    if (!results[0].meta.changes || !results[1].meta.changes) {
+      throw new ApiError('Loan issuance blocked: available savings changed or the loan could not be recorded.', 409)
+    }
+    const applicationId = results[1].meta.last_row_id
+    const securityHash = loanApplicationHash({
+      id: applicationId,
+      memberId,
+      requestedAmount: principalAmount,
+      repaymentMonths,
+      purpose,
+      payoutBankName: member.bankName ?? '',
+      payoutBankBranch: member.bankBranch ?? '',
+      payoutAccountName: member.bankAccountName ?? '',
+      payoutAccountNumber: member.bankAccountNumber ?? '',
+      electronicSignatureName: '',
+      electronicallySignedAt: null,
+    })
+    await db.prepare('UPDATE loan_applications SET security_hash = ? WHERE id = ?')
+      .bind(securityHash, applicationId).run()
     return json({
-      message: `Loan ${reference} was issued to ${member.fullName}. Total repayment including 10% interest is ${totalRepayable.toFixed(2)}.`,
+      message: `Loan ${reference} was issued to ${member.fullName} and added to loan records for printing. Total repayment including 10% interest is ${totalRepayable.toFixed(2)}.`,
       reference,
       principalAmount,
       totalRepayable,
+      applicationId,
     }, 201)
   }
 

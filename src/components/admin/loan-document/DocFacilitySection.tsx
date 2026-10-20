@@ -61,8 +61,10 @@ export function DocFacilitySection({
           <strong className="calc-v">Member Savings</strong>
         </div>
         <div className="calc-item">
-          <span className="calc-k">CHEQUE NUMBER:</span>
-          <strong className="calc-v">{application.chequeNumber || 'Pending approval'}</strong>
+          <span className="calc-k">CHEQUE / LOAN REFERENCE:</span>
+          <strong className="calc-v">
+            {application.chequeNumber || application.disbursedLoanReference || 'Pending approval'}
+          </strong>
         </div>
       </div>
 
